@@ -201,6 +201,71 @@
             .large-stat h3 {
                 font-size: 28px !important;
             }
+
+            /* --- Mobile Specific Tweaks --- */
+
+            /* 1. Make images slightly larger */
+            .section-split img {
+                width: 100% !important;
+                max-width: 500px !important;
+                transform: scale(1.05);
+                /* slightly larger */
+            }
+
+            /* 2. Main Hero image: Cut bottom half */
+            img[alt="Hero Image"] {
+                object-position: top;
+                height: 40vh !important;
+                object-fit: cover !important;
+            }
+
+            /* 3. Facebook, WhatsApp, and Theme Buttons (Same width/height and aligned) */
+            #fb-floating-btn,
+            #whatsapp-floating-btn,
+            #theme-toggle-btn,
+            #floating-admin-btn-static {
+                width: 55px !important;
+                height: 55px !important;
+                font-size: 26px !important;
+            }
+
+            #whatsapp-floating-btn {
+                bottom: 20px !important;
+                right: 20px !important;
+            }
+
+            #fb-floating-btn {
+                bottom: 85px !important;
+                right: 20px !important;
+            }
+
+            /* slightly above WhatsApp */
+
+            #floating-admin-btn-static {
+                bottom: 20px !important;
+                left: 20px !important;
+            }
+
+            #theme-toggle-btn {
+                bottom: 85px !important;
+                left: 20px !important;
+            }
+
+            /* horizontal alignment with fb */
+
+            /* 4. Top buttons bigger and clearer */
+            .btn-discover,
+            .btn-login {
+                padding: 12px 25px !important;
+                font-size: 18px !important;
+                font-weight: 900 !important;
+            }
+
+            .cart-icon {
+                width: 50px !important;
+                height: 50px !important;
+                font-size: 22px !important;
+            }
         }
 
 
@@ -547,7 +612,8 @@
                     style="width: 200px; border-radius: 50%; filter: drop-shadow(0 20px 40px rgba(18,184,197,0.3)); border: 8px solid #fff;">
             </div>
             <h2 style="font-size: 40px; font-weight: 900; color: #132644; margin-top: 15px;">منصة محمد حسني التعلمية
-                <br> <span class="highlight" style="font-size: 32px; color: #1e3c72;">طريقك للمستقبل</span></h2>
+                <br> <span class="highlight" style="font-size: 32px; color: #1e3c72;">طريقك للمستقبل</span>
+            </h2>
         </div>
     </section>
 
