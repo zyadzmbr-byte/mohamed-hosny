@@ -1650,7 +1650,7 @@ window.injectFBButton = function () {
     btn.target = '_blank';
     btn.title = 'تابعنا على فيسبوك';
     btn.innerHTML = '<i class=\"fab fa-facebook-f\"></i>';
-    btn.style.cssText = 'position:fixed; bottom:100px; right:20px; z-index:99999; background:linear-gradient(135deg, #1877f2, #3b5998); color:#fff; width:65px; height:65px; border-radius:50%; font-size:35px; display:flex; align-items:center; justify-content:center; box-shadow:0 10px 20px rgba(24,119,242,0.4); transition:0.3s; text-decoration:none;';
+    btn.style.cssText = 'position:fixed; bottom:85px; right:20px; z-index:99999; background:linear-gradient(135deg, #1877f2, #3b5998); color:#fff; width:60px; height:60px; border-radius:50%; font-size:35px; display:flex; align-items:center; justify-content:center; box-shadow:0 10px 20px rgba(24,119,242,0.4); transition:0.3s; text-decoration:none;';
     btn.onmouseover = () => btn.style.transform = 'scale(1.1)';
     btn.onmouseout = () => btn.style.transform = 'scale(1)';
     document.body.appendChild(btn);
@@ -1665,7 +1665,7 @@ window.injectWhatsAppButton = function () {
     btn.target = '_blank';
     btn.title = 'تواصل معنا عبر واتساب';
     btn.innerHTML = '<i class=\"fab fa-whatsapp\"></i>';
-    btn.style.cssText = 'position:fixed; bottom:20px; right:20px; z-index:99999; background:linear-gradient(135deg, #25d366, #128c7e); color:#fff; width:65px; height:65px; border-radius:50%; font-size:35px; display:flex; align-items:center; justify-content:center; box-shadow:0 10px 20px rgba(37,211,102,0.4); transition:0.3s; animation: pulse-gentle 2s infinite; text-decoration:none;';
+    btn.style.cssText = 'position:fixed; bottom:20px; right:20px; z-index:99999; background:linear-gradient(135deg, #25d366, #128c7e); color:#fff; width:60px; height:60px; border-radius:50%; font-size:35px; display:flex; align-items:center; justify-content:center; box-shadow:0 10px 20px rgba(37,211,102,0.4); transition:0.3s; animation: pulse-gentle 2s infinite; text-decoration:none;';
     btn.onmouseover = () => btn.style.transform = 'scale(1.1)';
     btn.onmouseout = () => btn.style.transform = 'scale(1)';
     document.body.appendChild(btn);
