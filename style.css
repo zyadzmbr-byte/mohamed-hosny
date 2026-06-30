@@ -1600,6 +1600,7 @@ section {
         /* ارفع الزر قليلاً */
     }
 
+    #fb-floating-btn,
     #whatsapp-floating-btn,
     a[href*="wa.me"],
     .whatsapp,
