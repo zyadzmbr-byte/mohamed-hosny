@@ -1,30 +1,52 @@
-import re
+import shutil
 import os
+import re
 
-files_to_check = ['subjects.html', 'my-subscriptions.html', 'login.html', 'grade.html', 'dashboard.html', 'admin.html']
+# 1. نسخ الصور من المجلد المؤقت إلى مجلد الويب الخاص بك
+src_dir = r"C:\Users\Support\.gemini\antigravity\brain\3f9a66e9-1428-4424-b41a-3945575f7a17"
+dest_dir = r"c:\webs\مستر محمد حسني"
 
-for file in files_to_check:
-    if os.path.exists(file):
-        with open(file, 'r', encoding='utf-8') as f:
-            content = f.read()
-        
-        # Replace image
-        content = content.replace('media__1782732982554.jpg', 'img_logo.jpg')
-        
-        # Replace Text
-        content = content.replace('منصة حصون', 'منصة محمد حسني التعلمية')
-        content = content.replace('حصون', 'منصة محمد حسني التعلمية')
-        content = content.replace('Husoon', 'Mohamed Hosny')
-        content = content.replace('HUSOON', 'Mohamed Hosny')
-        
-        # Remove country container
-        content = re.sub(r'<div class="country-container">[\s\S]*?</div>\s*</div>\s*<a href="#" class="nav-icon-circle cart-icon"', '<a href="#" class="nav-icon-circle cart-icon"', content)
-        content = re.sub(r'<div class="country-container"[\s\S]*?</div>\s*<!-- Cart -->', '<!-- Cart -->', content)
-        
-        # Remove country select in login.html if exists
-        content = re.sub(r'<div class="form-group">\s*<label>الدولة</label>[\s\S]*?</select>\s*</div>', '', content)
-        
-        with open(file, 'w', encoding='utf-8') as f:
-            f.write(content)
+img1_src = "media__1782855291628.jpg"
+img1_dest = "img_excellence_final.jpg"  # صورة الرجل والشاب
 
-print("Done all replacements")
+img2_src = "media__1782855402658.jpg" 
+img2_dest = "img_students_final.jpg"    # صورة الطلاب مع الشهادات
+
+try:
+    shutil.copy2(os.path.join(src_dir, img1_src), os.path.join(dest_dir, img1_dest))
+    print(f"تم بنجاح نسخ {img1_dest}")
+except Exception as e:
+    print("خطأ في نسخ الصورة الأولى:", e)
+
+try:
+    shutil.copy2(os.path.join(src_dir, img2_src), os.path.join(dest_dir, img2_dest))
+    print(f"تم بنجاح نسخ {img2_dest}")
+except Exception as e:
+    print("خطأ في نسخ الصورة الثانية:", e)
+
+# 2. تعديل ملف index.html لتفعيل هذه الصور
+html_path = os.path.join(dest_dir, 'index.html')
+if os.path.exists(html_path):
+    with open(html_path, 'r', encoding='utf-8') as f:
+        content = f.read()
+    
+    # تغيير صورة تفوق استثنائي
+    content = re.sub(
+        r'<img src="[^"]*" alt="Excellence"[^>]*>', 
+        f'<img src="{img1_dest}" alt="Excellence" style="max-width:100%; border-radius:30px; width:450px; border:10px solid #fff; filter:drop-shadow(0 30px 40px rgba(255,193,7,0.3)); transition:0.3s;" onmouseover="this.style.transform=\'scale(1.05)\'" onmouseout="this.style.transform=\'scale(1)\'">', 
+        content
+    )
+    
+    # تغيير صورة الطلاب المتفوقين
+    content = re.sub(
+        r'<img src="[^"]*" alt="Students"[^>]*>', 
+        f'<img src="{img2_dest}" alt="Students" style="max-width:100%; border-radius:30px; width:450px; border:10px solid #fff; filter:drop-shadow(0 30px 40px rgba(18,184,197,0.2)); transition:0.3s;" onmouseover="this.style.transform=\'scale(1.05)\'" onmouseout="this.style.transform=\'scale(1)\'">', 
+        content
+    )
+
+    with open(html_path, 'w', encoding='utf-8') as f:
+        f.write(content)
+    
+    print("تم تحديث الكود في index.html بنجاح ليقرأ الصور الجديدة!")
+else:
+    print("لم يتم العثور على ملف index.html")
