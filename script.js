@@ -231,18 +231,7 @@ window.injectCartModal = function () {
                     <div style="margin-bottom:15px;">
                         <input id="cart-code" type="text" placeholder="الكود (إن وجد)" style="width:100%; padding:10px; border:1px solid #ccc; border-radius:10px;">
                     </div>
-                    <div style="margin-bottom:15px;">
-                        <select id="cart-country" required style="width:100%; padding:10px; border:1px solid #ccc; border-radius:10px;">
-                            <option value="">اختر الدولة</option>
-                            <option value="السعودية">السعودية</option>
-                            <option value="الكويت">الكويت</option>
-                            <option value="عمان">عمان</option>
-                            <option value="مصر">مصر</option>
-                            <option value="الإمارات">الإمارات</option>
-                            <option value="قطر">قطر</option>
-                            <option value="البحرين">البحرين</option>
-                        </select>
-                    </div>
+
                     <div style="margin-bottom:15px;">
                         <select id="cart-payment" required style="width:100%; padding:10px; border:1px solid #ccc; border-radius:10px;">
                             <option value="">طريقة الدفع</option>
@@ -299,87 +288,14 @@ window.openCountryModal = function (e) {
     if (modal) modal.style.display = 'flex';
 };
 
-window.closeCountryModal = function () {
-    const modal = document.getElementById('country-modal');
-    if (modal) modal.style.display = 'none';
-};
 
-window.injectCountryModal = function () {
-    if (document.getElementById('country-modal')) return;
-    const modal = document.createElement('div');
-    modal.id = 'country-modal';
-    modal.style.cssText = 'position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(18,30,51,0.95); z-index:999999; display:none; justify-content:center; align-items:center; backdrop-filter:blur(15px); transition:0.3s;';
-
-    modal.innerHTML = `
-        <div style="background:#fff; width:90%; max-width:600px; border-radius:30px; padding:40px; position:relative; box-shadow:0 30px 60px rgba(0,0,0,0.5); text-align:center;">
-            <button onclick="closeCountryModal()" style="position:absolute; top:20px; right:20px; background:none; border:none; font-size:30px; cursor:pointer; color:#132644;"><i class="fas fa-times"></i></button>
-            <h2 style="font-size:32px; font-weight:900; color:#132644; margin-bottom:30px;">اختر الدولة <span style="color:#12b8c5;">محمد حسني</span></h2>
-            <div style="display:grid; grid-template-columns:repeat(2, 1fr); gap:20px;">
-                <div onclick="selectCountry('KW')" style="cursor:pointer; padding:20px; border:2px solid #f0f4f8; border-radius:20px; transition:0.3s;" onmouseover="this.style.borderColor='#12b8c5';this.style.background='#f0fcfd';" onmouseout="this.style.borderColor='#f0f4f8';this.style.background='#fff';">
-                    <img src="flag_kw.jpg" style="width:70px; height:70px; border-radius:50%; object-fit:cover; margin-bottom:10px; border:3px solid #eee;">
-                    <div style="font-size:20px; font-weight:800; color:#132644;">الكويت</div>
-                </div>
-                <div onclick="selectCountry('SA')" style="cursor:pointer; padding:20px; border:2px solid #f0f4f8; border-radius:20px; transition:0.3s;" onmouseover="this.style.borderColor='#12b8c5';this.style.background='#f0fcfd';" onmouseout="this.style.borderColor='#f0f4f8';this.style.background='#fff';">
-                    <img src="https://flagcdn.com/sa.svg" style="width:70px; height:70px; border-radius:50%; object-fit:cover; margin-bottom:10px; border:3px solid #eee;">
-                    <div style="font-size:20px; font-weight:800; color:#132644;">السعودية</div>
-                </div>
-                <div onclick="selectCountry('AE')" style="cursor:pointer; padding:20px; border:2px solid #f0f4f8; border-radius:20px; transition:0.3s;" onmouseover="this.style.borderColor='#12b8c5';this.style.background='#f0fcfd';" onmouseout="this.style.borderColor='#f0f4f8';this.style.background='#fff';">
-                    <img src="flag_ae.jpg" style="width:70px; height:70px; border-radius:50%; object-fit:cover; margin-bottom:10px; border:3px solid #eee;">
-                    <div style="font-size:20px; font-weight:800; color:#132644;">الإمارات</div>
-                </div>
-                <div onclick="selectCountry('QA')" style="cursor:pointer; padding:20px; border:2px solid #f0f4f8; border-radius:20px; transition:0.3s;" onmouseover="this.style.borderColor='#12b8c5';this.style.background='#f0fcfd';" onmouseout="this.style.borderColor='#f0f4f8';this.style.background='#fff';">
-                    <img src="https://flagcdn.com/qa.svg" style="width:70px; height:70px; border-radius:50%; object-fit:cover; margin-bottom:10px; border:3px solid #eee;">
-                    <div style="font-size:20px; font-weight:800; color:#132644;">قطر</div>
-                </div>
-                <div onclick="selectCountry('OM')" style="cursor:pointer; padding:20px; border:2px solid #f0f4f8; border-radius:20px; transition:0.3s;" onmouseover="this.style.borderColor='#12b8c5';this.style.background='#f0fcfd';" onmouseout="this.style.borderColor='#f0f4f8';this.style.background='#fff';">
-                    <img src="https://flagcdn.com/om.svg" style="width:70px; height:70px; border-radius:50%; object-fit:cover; margin-bottom:10px; border:3px solid #eee;">
-                    <div style="font-size:20px; font-weight:800; color:#132644;">عمان</div>
-                </div>
-                <div onclick="selectCountry('EG')" style="cursor:pointer; padding:20px; border:2px solid #f0f4f8; border-radius:20px; transition:0.3s;" onmouseover="this.style.borderColor='#12b8c5';this.style.background='#f0fcfd';" onmouseout="this.style.borderColor='#f0f4f8';this.style.background='#fff';">
-                    <img src="https://flagcdn.com/eg.svg" style="width:70px; height:70px; border-radius:50%; object-fit:cover; margin-bottom:10px; border:3px solid #eee;">
-                    <div style="font-size:20px; font-weight:800; color:#132644;">مصر</div>
-                </div>
-                <div onclick="selectCountry('BH')" style="cursor:pointer; padding:20px; border:2px solid #f0f4f8; border-radius:20px; transition:0.3s;" onmouseover="this.style.borderColor='#12b8c5';this.style.background='#f0fcfd';" onmouseout="this.style.borderColor='#f0f4f8';this.style.background='#fff';">
-                    <img src="https://flagcdn.com/bh.svg" style="width:70px; height:70px; border-radius:50%; object-fit:cover; margin-bottom:10px; border:3px solid #eee;">
-                    <div style="font-size:20px; font-weight:800; color:#132644;">البحرين</div>
-                </div>
-            </div>
-        </div>
-    `;
-    modal.onclick = (e) => { if (e.target === modal) closeCountryModal(); };
-    document.body.appendChild(modal);
-};
-
-window.selectCountry = function (code) {
-    localStorage.setItem('spedia_country', code);
-    window.location.reload();
-};
 
 window.injectFloatingAdmin = injectFloatingAdmin;
 
 
 
 window.attachGlobalEvents = function () {
-    const countryFlag = document.querySelector('.country-flag');
-    // Country links inside the dropdown - Delegation for better robustness
-    document.addEventListener('click', (e) => {
-        const link = e.target.closest('.country-dropdown a');
-        if (link) {
-            e.preventDefault();
-            const code = link.getAttribute('data-code');
-            if (code) {
-                localStorage.setItem('spedia_country', code);
-                window.location.reload();
-            }
-            return;
-        }
 
-        // Close dropdown if clicked outside - simplified
-        const menu = document.getElementById('country-dropdown-main');
-        if (menu && menu.style.display === 'block' && !e.target.closest('.country-flag') && !menu.contains(e.target)) {
-            menu.style.display = 'none';
-        }
-    });
 
     const btnDiscover = document.querySelector('.btn-rocket');
     if (btnDiscover) {
@@ -752,11 +668,10 @@ window.finishRegister = async function (e) {
     let name = document.getElementById('reg-name').value;
     let phone = document.getElementById('reg-phone').value;
     let grade = document.getElementById('reg-grade').value;
-    let country = document.getElementById('reg-country') ? document.getElementById('reg-country').value : 'EG';
 
-    if (!code || !name || !phone || !grade || !country) return alert("الرجاء إكمال كافة البيانات");
+    if (!code || !name || !phone || !grade) return alert("الرجاء إكمال كافة البيانات");
 
-    let newUser = { code, name, phone, grade, country, id: Date.now(), role: 'student' };
+    let newUser = { code, name, phone, grade, id: Date.now(), role: 'student' };
 
     if (window.fsData && window.fsData.addUser) {
         try {
@@ -804,12 +719,11 @@ window.submitCartOrder = function (e) {
     let cart = JSON.parse(localStorage.getItem('spedia_cart') || '[]');
     let name = document.getElementById('cart-name').value;
     let code = document.getElementById('cart-code').value;
-    let country = document.getElementById('cart-country').value;
     let payment = document.getElementById('cart-payment').value;
     let phone = document.getElementById('cart-phone').value;
 
     let itemsStr = cart.map(c => c.title).join(' , ');
-    let msg = `طلب جديد:\nالاسم: ${name}\nالكود: ${code || 'لا يوجد'}\nالدولة: ${country}\nطريقة الدفع: ${payment}\nللتواصل: ${phone}\nالمطلوب: ${itemsStr}`;
+    let msg = `طلب جديد:\nالاسم: ${name}\nالكود: ${code || 'لا يوجد'}\nطريقة الدفع: ${payment}\nللتواصل: ${phone}\nالمطلوب: ${itemsStr}`;
 
     localStorage.removeItem('spedia_cart');
     document.getElementById('cart-modal').style.display = 'none';
@@ -1100,7 +1014,7 @@ window.loadStudentData = async function (user) {
         if (ex.studentCode && ex.studentCode.trim() !== "") {
             return ex.studentCode === user.code;
         }
-        return String(ex.grade) === String(user.grade) && (!ex.country || ex.country === 'ALL' || ex.country === cCode);
+        return String(ex.grade) === String(user.grade);
     });
     let listExams = document.getElementById('student-exams');
     if (listExams) {

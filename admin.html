@@ -303,8 +303,8 @@
                 <div class="form-group">
                     <label>المرحلة</label>
                     <select id="ct-stage"
-                        onchange="if(window.updateGrades) window.updateGrades('ct-country', 'ct-stage', 'ct-grade')">
-                        <option value="">اختر الدولة أولاً</option>
+                        onchange="if(window.updateGrades) window.updateGrades(null, 'ct-stage', 'ct-grade')">
+                        <option value="">اختر المرحلة أولاً</option>
                     </select>
                 </div>
                 <div class="form-group">
@@ -349,8 +349,8 @@
                 <div class="form-group">
                     <label>المرحلة</label>
                     <select id="ex-stage"
-                        onchange="if(window.updateGrades) window.updateGrades('ex-country', 'ex-stage', 'ex-grade')">
-                        <option value="">اختر الدولة</option>
+                        onchange="if(window.updateGrades) window.updateGrades(null, 'ex-stage', 'ex-grade')">
+                        <option value="">اختر المرحلة</option>
                     </select>
                 </div>
                 <div class="form-group">
@@ -417,7 +417,7 @@
                 <div class="form-group">
                     <label>المرحلة</label>
                     <select id="lnk-stage"
-                        onchange="if(window.updateGrades) window.updateGrades('lnk-country', 'lnk-stage', 'lnk-grade')">
+                        onchange="if(window.updateGrades) window.updateGrades(null, 'lnk-stage', 'lnk-grade')">
                         <option value="ALL">الكل</option>
                     </select>
                 </div>
@@ -453,7 +453,7 @@
                 <div class="form-group">
                     <label>المرحلة / السنة الدراسية</label>
                     <select id="af-stage"
-                        onchange="if(window.updateGrades) window.updateGrades('af-country', 'af-stage', 'af-grade')">
+                        onchange="if(window.updateGrades) window.updateGrades(null, 'af-stage', 'af-grade')">
                         <option value="ALL">الكل</option>
                     </select>
                 </div>
@@ -830,10 +830,9 @@
 
             const tContent = document.getElementById('table-content-manager');
             if (tContent) {
-                tContent.innerHTML = `<tr><th>النوع</th><th>العنوان</th><th>الدولة</th><th>السعر</th><th>إجراءات</th></tr>` + contentList.map(c => `<tr>
+                tContent.innerHTML = `<tr><th>النوع</th><th>العنوان</th><th>السعر</th><th>إجراءات</th></tr>` + contentList.map(c => `<tr>
                     <td>${c.type === 'course' ? 'كورس' : (c.type === 'game' ? 'لعبة HTML' : 'مذكرة/كتاب')}</td>
                     <td>${c.title}</td>
-                    <td>${c.country === 'ALL' ? 'كل الدول' : c.country}</td>
                     <td>${c.priceBase || 0}</td>
                     <td>
                         <button onclick="window.editContent('${c.fsId ? c.fsId : c.id}')" style="background:#ff9800; color:#fff; border:none; padding:5px 10px; border-radius:5px; margin-bottom:5px; cursor:pointer; display:block; width:100%;"><i class="fas fa-edit"></i> تعديل</button>
@@ -848,9 +847,9 @@
             }
             const tLinks = document.getElementById('table-links');
             if (tLinks) {
-                let ths = `<th>الدولة/الطالب</th><th>الصف</th><th>العنوان</th><th>الرابط</th><th>حذف</th>`;
+                let ths = `<th>الفئة/الطالب</th><th>الصف</th><th>العنوان</th><th>الرابط</th><th>حذف</th>`;
                 tLinks.innerHTML = `<tr>${ths}</tr>` + links.map(l => {
-                    let targetText = l.studentCode ? `كود: ${l.studentCode}` : (l.country === 'ALL' ? 'كل الدول' : l.country);
+                    let targetText = l.studentCode ? `كود: ${l.studentCode}` : 'الكل';
                     return `<tr><td>${targetText}</td><td>${l.grade}</td><td>${l.title}</td><td><a href="${l.url}" target="_blank">فتح الرابط</a></td><td><button onclick="window.deleteLink('${l.fsId ? l.fsId : l.id}')" style="background:#f44336; color:#fff; padding:5px; border-radius:5px; border:none; cursor:pointer;">حذف</button></td></tr>`;
                 }).join('');
             }
@@ -861,10 +860,10 @@
             }
             const tSFiles = document.getElementById('table-student-files');
             if (tSFiles) {
-                let ths = `<th>الطالب</th><th>الدولة</th><th>الصف</th><th>الوصف</th><th>تاريخ</th><th>الملف</th>`;
+                let ths = `<th>الطالب</th><th>الصف</th><th>الوصف</th><th>تاريخ</th><th>الملف</th>`;
                 if (adminType === 'full') ths += `<th>حذف</th>`;
                 tSFiles.innerHTML = `<tr>${ths}</tr>` + sFiles.map(f => {
-                    let tr = `<td>${f.studentName || f.studentCode}</td><td>${f.country || 'EG'}</td><td>${f.grade}</td><td>${f.title}</td><td>${f.date}</td><td><a href="${f.url}" target="_blank" style="color:var(--primary-color);">معاينة</a></td>`;
+                    let tr = `<td>${f.studentName || f.studentCode}</td><td>${f.grade}</td><td>${f.title}</td><td>${f.date}</td><td><a href="${f.url}" target="_blank" style="color:var(--primary-color);">معاينة</a></td>`;
                     if (adminType === 'full') tr += `<td><button onclick="window.deleteItemGeneric('student_files', '${f.fsId || f.id || f.studentCode}', 'spedia_student_files', 'id')" style="background:#f44336; color:#fff; border:none; padding:5px 10px; border-radius:5px; cursor:pointer;">حذف</button></td>`;
                     return `<tr>${tr}</tr>`;
                 }).join('');
@@ -878,10 +877,10 @@
             }
             const tExamsManager = document.getElementById('table-exams-manager');
             if (tExamsManager) {
-                let ths = `<th>الدولة/الطالب</th><th>الصف</th><th>العنوان</th>`;
+                let ths = `<th>الفئة/الطالب</th><th>الصف</th><th>العنوان</th>`;
                 if (adminType === 'full') ths += `<th>حذف</th>`;
                 tExamsManager.innerHTML = `<tr>${ths}</tr>` + allCreatedExams.map(ex => {
-                    let targetText = ex.studentCode ? `كود: ${ex.studentCode}` : (ex.country === 'ALL' ? 'كل الدول' : ex.country);
+                    let targetText = ex.studentCode ? `كود: ${ex.studentCode}` : 'الكل';
                     let tr = `<td>${targetText}</td><td>${ex.grade}</td><td>${ex.title}</td>`;
                     if (adminType === 'full') tr += `<td><button onclick="window.deleteItemGeneric('exams', '${ex.fsId || ex.id || ex.title}', 'spedia_exams', 'id')" style="background:#f44336; color:#fff; border:none; padding:5px 10px; border-radius:5px; cursor:pointer;">حذف</button></td>`;
                     return `<tr>${tr}</tr>`;
