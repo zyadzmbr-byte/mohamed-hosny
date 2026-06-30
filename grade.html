@@ -1,0 +1,310 @@
+﻿<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=800">
+    <title>المواد الدراسية - منصة محمد حسني التعلمية</title>
+    <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700;800;900&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        body {
+            background-color: #ffffff;
+        }
+
+        .explore-hero {
+            position: relative;
+            background: linear-gradient(to bottom, #dffbfb 0%, #ecfdfd 100%);
+            padding: 100px 20px 100px;
+            text-align: center;
+            overflow: hidden;
+        }
+
+        .explore-wave {
+            position: absolute;
+            bottom: -1px;
+            left: 0;
+            width: 100%;
+            height: auto;
+            line-height: 0;
+            z-index: 5;
+        }
+
+        .explore-wave svg {
+            display: block;
+            width: 100%;
+            height: clamp(60px, 12vw, 150px);
+        }
+
+        .hero-cap {
+            position: absolute;
+            left: 10%;
+            bottom: 20%;
+            width: 180px;
+            filter: drop-shadow(0 20px 30px rgba(0, 0, 0, 0.2));
+            transform: rotate(-15deg);
+            z-index: 10;
+            animation: float 4s ease-in-out infinite;
+        }
+
+        .hero-text h1 {
+            font-size: 52px;
+            font-weight: 900;
+            color: #132644;
+            margin-bottom: 20px;
+            position: relative;
+            z-index: 10;
+            letter-spacing: -1px;
+        }
+
+        @keyframes float {
+
+            0%,
+            100% {
+                transform: translateY(0) rotate(-15deg);
+            }
+
+            50% {
+                transform: translateY(-20px) rotate(-10deg);
+            }
+        }
+
+        .grade-header-box {
+            max-width: 1200px;
+            margin: 0 auto;
+            text-align: right;
+            position: relative;
+            z-index: 10;
+        }
+
+        .grade-header-box h2 {
+            font-size: 60px;
+            font-weight: 900;
+            color: #12b8c5;
+            margin-bottom: 20px;
+            text-shadow: -2px -2px 0 #fff, 2px -2px 0 #fff, -2px 2px 0 #fff, 2px 2px 0 #fff, 4px 4px 0 #8ce1e6;
+        }
+
+        .grade-tabs {
+            display: inline-flex;
+            gap: 15px;
+            border-bottom: 3px solid rgba(18, 184, 197, 0.2);
+            padding-bottom: 10px;
+        }
+
+        .grade-tabs div {
+            font-size: 20px;
+            font-weight: 800;
+            color: #6a7c92;
+            cursor: pointer;
+            padding: 10px 20px;
+            border-radius: 20px;
+            transition: 0.3s;
+        }
+
+        .tab-active {
+            background: #12b8c5;
+            color: #fff !important;
+            box-shadow: 0 10px 20px rgba(18, 184, 197, 0.3);
+        }
+
+        .content-area {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px 20px 150px;
+            position: relative;
+        }
+
+        .section-title {
+            font-size: 32px;
+            font-weight: 900;
+            color: #132644;
+            margin-bottom: 30px;
+            text-align: right;
+        }
+
+        .courses-grid,
+        .books-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 25px;
+            margin-bottom: 60px;
+        }
+
+        .course-card,
+        .book-card {
+            background: #fff;
+            border-radius: 25px;
+            overflow: hidden;
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.05);
+            transition: 0.4s;
+            cursor: pointer;
+            border: 1px solid #f1f6fa;
+            position: relative;
+        }
+
+        .course-card:hover,
+        .book-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 25px 45px rgba(18, 184, 197, 0.15);
+            border-color: #bef4f5;
+        }
+
+        .course-card img,
+        .book-card img {
+            width: 100%;
+            height: 180px;
+            object-fit: cover;
+        }
+
+        .course-info,
+        .book-info {
+            padding: 25px;
+            text-align: right;
+        }
+
+        .course-info h3,
+        .book-info h3 {
+            font-size: 22px;
+            font-weight: 800;
+            color: #132644;
+            margin-bottom: 10px;
+        }
+
+        .course-info p,
+        .book-info p {
+            color: #6a7c92;
+            font-size: 16px;
+            font-weight: 600;
+            margin-bottom: 15px;
+        }
+
+        .book-price {
+            font-size: 24px;
+            font-weight: 900;
+            color: #12b8c5;
+        }
+
+        .back-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            color: #6a7c92;
+            font-size: 20px;
+            font-weight: 700;
+            text-decoration: none;
+            margin-bottom: 20px;
+            transition: 0.3s;
+            cursor: pointer;
+        }
+
+        .back-btn:hover {
+            color: #12b8c5;
+            transform: translateX(5px);
+        }
+    </style>
+</head>
+
+<body>
+
+    <header class="navbar"
+        style="background:rgba(255,255,255,0.95); backdrop-filter:blur(15px); border-bottom:1px solid #f1f1f1; position:sticky; top:0; z-index:1000; box-shadow:0 10px 30px rgba(0,0,0,0.05); padding:15px 5%;">
+        <div class="nav-container">
+            <a href="index.html" class="logo text-dark"
+                style="display:flex; align-items:center; gap:10px; text-decoration:none;">
+                <img src="img_logo.jpg" alt="Logo"
+                    style="width: 50px; height: 50px; border-radius: 50%; object-fit:cover;">
+                <div class="logo-text" style="display:flex; flex-direction:column; line-height:1;">
+                    <span class="ar" style="font-size:28px; font-weight:900; color:var(--primary-color);">منصة محمد حسني التعلمية</span>
+                    <span class="en" style="font-weight:800; color:#121e33;">Mohamed Hosny</span>
+                </div>
+            </a>
+
+            <div class="nav-actions">
+                <div class="discover-container">
+                    <a href="explore.html" class="btn-discover" style="padding:12px 25px; font-size:18px;">
+                        <i class="fas fa-th-large"></i> <span data-i18n="discover">اكتشف المواد</span>
+                    </a>
+                    <div class="mega-menu"
+                        style="border-radius:20px; box-shadow:0 30px 60px rgba(0,0,0,0.15); padding:30px;">
+                        <div class="mega-menu-grid"></div>
+                    </div>
+                </div>
+                <a href="#" class="nav-icon-circle cart-icon" onclick="openCart(event)"
+                    style="width:50px; height:50px; background:#f4f7fa; color:#121e33;">
+                    <i class="fas fa-shopping-cart"></i>
+                </a>
+                <a href="login.html" class="btn-login" style="padding:12px 30px; font-size:18px;">
+                    <span data-i18n="login">تسجيل دخول</span>
+                </a>
+            </div>
+        </div>
+    </header>
+
+    <section class="explore-hero">
+
+
+        <div class="hero-text">
+            <h1 id="hero-main-title">كل ما تحتاجه للدراسة بين يديك</h1>
+        </div>
+
+        <div class="grade-header-box animate-on-scroll">
+            <h2 id="grade-title">الأول.</h2>
+            <div class="grade-tabs">
+                <div class="tab-active">الكل</div>
+            </div>
+        </div>
+
+        <div class="explore-wave">
+            <svg viewBox="0 0 1440 320" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
+                <path fill="#ffffff" fill-opacity="1"
+                    d="M0,224L60,208C120,192,240,160,360,160C480,160,600,192,720,202.7C840,213,960,203,1080,176C1200,149,1320,107,1380,85.3L1440,64L1440,320L1380,320C1320,320,1200,320,1080,320C960,320,840,320,720,320C600,320,480,320,360,320C240,320,120,320,60,320L0,320Z">
+                </path>
+            </svg>
+        </div>
+    </section>
+
+    <div class="content-area">
+        <div class="courses-section">
+            <h2 class="section-title">الكورسات التفاعلية</h2>
+            <div class="courses-grid" id="courses-grid">
+                <!-- Injected via JS -->
+            </div>
+        </div>
+        <div class="books-section mt-50">
+            <h2 class="section-title">المذكرات و الكتب المطبوعة</h2>
+            <div class="books-grid" id="books-grid">
+                <!-- Injected via JS -->
+            </div>
+        </div>
+        <div class="games-section mt-50">
+            <h2 class="section-title">الألعاب والاختبارات الإلكترونية (HTML)</h2>
+            <div class="courses-grid" id="games-grid">
+                <!-- Injected via JS -->
+            </div>
+        </div>
+    </div>
+
+    <!-- Bottom Navbar removed per user request -->
+
+
+
+    <!-- Firebase SDKs -->
+    <script type="module" src="firebase-init.js"></script>
+    <script type="module" src="firebase-data.js"></script>
+    <script src="script.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const urlParams = new URLSearchParams(window.location.search);
+            let name = urlParams.get('name') || '';
+            if (name) {
+                if (!name.endsWith(".")) name += ".";
+                document.getElementById('grade-title').innerText = name;
+            }
+        });
+    </script>
+</body>
+
+</html>

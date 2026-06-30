@@ -1,0 +1,1526 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=800">
+    <title>لوحة الإدارة - Spedia</title>
+    <link rel="stylesheet" href="style.css?v=5">
+    <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700;800;900&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        .admin-nav {
+            display: flex;
+            gap: 15px;
+            margin-bottom: 30px;
+            flex-wrap: wrap;
+            background: #fff;
+            padding: 15px;
+            border-radius: 20px;
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.05);
+        }
+
+        .admin-nav button {
+            padding: 12px 25px;
+            border: none;
+            background: transparent;
+            color: #6a7c92;
+            cursor: pointer;
+            font-weight: 800;
+            border-radius: 12px;
+            font-size: 16px;
+            transition: 0.3s;
+        }
+
+        .admin-nav button:hover {
+            background: #f4f7fa;
+            color: #121e33;
+        }
+
+        .admin-nav button.active {
+            background: linear-gradient(135deg, #12b8c5, #1e3c72);
+            color: #fff;
+            box-shadow: 0 5px 15px rgba(18, 184, 197, 0.3);
+        }
+
+        .admin-section {
+            display: none;
+            background: #fff;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+        }
+
+        .admin-section.active {
+            display: block;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 700;
+            color: #121e33;
+            font-size: 15px;
+        }
+
+        .form-group input,
+        .form-group select,
+        .form-group textarea {
+            width: 100%;
+            padding: 15px;
+            border: 2px solid #e0e6ed;
+            border-radius: 12px;
+            font-family: 'Tajawal', sans-serif;
+            font-size: 15px;
+            transition: 0.3s;
+            background: #f8fafc;
+        }
+
+        .form-group input:focus,
+        .form-group select:focus,
+        .form-group textarea:focus {
+            border-color: #12b8c5;
+            outline: none;
+            background: #fff;
+            box-shadow: 0 0 0 4px rgba(18, 184, 197, 0.1);
+        }
+
+        /* Modern Tables */
+        table {
+            width: 100%;
+            border-collapse: separate;
+            border-spacing: 0 10px;
+            margin-top: 15px;
+        }
+
+        table th {
+            background: transparent;
+            color: #6a7c92;
+            padding: 10px 20px;
+            text-align: right;
+            font-weight: 800;
+            border: none;
+        }
+
+        table td {
+            background: #fff;
+            padding: 15px 20px;
+            text-align: right;
+            border: none;
+            color: #121e33;
+            font-weight: 600;
+        }
+
+        table tr td:first-child {
+            border-radius: 0 15px 15px 0;
+            border-right: 5px solid #12b8c5;
+        }
+
+        table tr td:last-child {
+            border-radius: 15px 0 0 15px;
+        }
+
+        table tr {
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.03);
+            transition: 0.3s;
+        }
+
+        table tr:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.05);
+        }
+
+        .admin-title {
+            font-size: 24px;
+            font-weight: 900;
+            color: #121e33;
+            margin-bottom: 25px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            border-bottom: 2px solid #f0f4f8;
+            padding-bottom: 15px;
+        }
+
+        .admin-title i {
+            color: #12b8c5;
+        }
+    </style>
+</head>
+
+<body class="dashboard-body" style="background:#f0f4f8;">
+    <div class="container"
+        style="padding:30px; max-width:900px; margin:40px auto; background:#fff; border-radius:15px; box-shadow:0 10px 30px rgba(0,0,0,0.08);">
+        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:30px;">
+            <h1
+                style="color:var(--primary-color); font-weight:900; font-size:24px; display:flex; align-items:center; gap:10px;">
+                <img src="img_logo.jpg" alt="Logo" style="width:40px; height:40px; border-radius:50%;">
+                <span>منصة محمد حسني التعلمية - لوحة الإدارة العامة</span>
+            </h1>
+            <div style="display:flex; gap:15px; align-items:center;">
+                <div style="position: relative; display: inline-block;">
+                    <button id="admin-noti-btn" onclick="toggleNotifications(event, 'admin')"
+                        style="background:transparent; border:none; font-size:24px; position:relative; cursor:pointer;"
+                        title="الإشعارات">
+                        <i class="fas fa-bell" style="color:#6a7c92;"></i>
+                        <span id="admin-noti-badge"
+                            style="display:none; position:absolute; top:-5px; right:-5px; background:#f44336; color:#fff; font-size:12px; padding:2px 6px; border-radius:10px; font-weight:bold;">0</span>
+                    </button>
+                    <div id="admin-noti-dropdown"
+                        style="display:none; position:absolute; top:40px; left:0; width:300px; background:#fff; border-radius:10px; box-shadow:0 10px 30px rgba(0,0,0,0.1); z-index:1000; overflow:hidden;">
+                        <div style="padding:15px; background:#12b8c5; color:#fff; font-weight:bold;">الإشعارات (ردود
+                            الطلاب وغيرها)</div>
+                        <div id="admin-noti-list" style="max-height:300px; overflow-y:auto; padding:10px;"></div>
+                    </div>
+                </div>
+                <button onclick="window.location.href='index.html'" class="btn-primary"
+                    style="background:#f44336; padding: 10px 20px; font-size: 16px;">خروج للرئيسية</button>
+            </div>
+        </div>
+
+        <div class="admin-nav" id="main-admin-nav">
+            <button class="active" onclick="showSection('tab-codes', this)">إدارة الأكواد</button>
+            <button onclick="showSection('tab-users', this)">الطلاب المسجلين</button>
+            <button onclick="showSection('tab-attendance', this)">الحضور والتقييمات</button>
+            <button onclick="showSection('tab-content', this)">المحتوى والكورسات</button>
+            <button onclick="showSection('tab-exams', this)">إضافة امتحانات</button>
+            <button onclick="showSection('tab-results', this)">نتائج الاختبارات</button>
+            <button onclick="showSection('tab-links', this)">روابط الحصص</button>
+            <button onclick="showSection('tab-files', this)">إرسال المحتوى الورقي</button>
+            <button onclick="showSection('tab-custom', this)">إرسال محتوى لمستخدم</button>
+            <button onclick="showSection('tab-re-chat', this)">نظام التواصل</button>
+            <button onclick="showSection('tab-monthly-reports', this)">التقارير الشهرية</button>
+            
+        </div>
+
+        <div class="restricted-nav" id="restricted-nav"
+            style="display:none; gap: 30px; justify-content: center; margin-bottom: 40px; flex-wrap: wrap;">
+            <div onclick="showSection('tab-re-send', this)"
+                style="background: linear-gradient(135deg, #12b8c5, #1e3c72); color: #fff; padding: 40px; border-radius: 20px; cursor: pointer; text-align: center; flex: 1; min-width: 250px; box-shadow: 0 10px 30px rgba(18,184,197,0.3); transition: 0.3s; font-size: 24px; font-weight: 900;">
+                <i class="fas fa-paper-plane" style="font-size: 40px; display: block; margin-bottom: 15px;"></i>
+                إرسال محتوى
+            </div>
+            <div onclick="showSection('tab-exams', this)"
+                style="background: linear-gradient(135deg, #4caf50, #2e7d32); color: #fff; padding: 40px; border-radius: 20px; cursor: pointer; text-align: center; flex: 1; min-width: 250px; box-shadow: 0 10px 30px rgba(76,175,80,0.3); transition: 0.3s; font-size: 24px; font-weight: 900;">
+                <i class="fas fa-edit" style="font-size: 40px; display: block; margin-bottom: 15px;"></i>
+                إضافة امتحان/واجب
+            </div>
+            <div onclick="showSection('tab-links', this)"
+                style="background: linear-gradient(135deg, #ff9800, #f57c00); color: #fff; padding: 40px; border-radius: 20px; cursor: pointer; text-align: center; flex: 1; min-width: 250px; box-shadow: 0 10px 30px rgba(255,152,0,0.3); transition: 0.3s; font-size: 24px; font-weight: 900;">
+                <i class="fas fa-video" style="font-size: 40px; display: block; margin-bottom: 15px;"></i>
+                إضافة رابط حصة
+            </div>
+            <div onclick="showSection('tab-re-results', this)"
+                style="background: linear-gradient(135deg, #f44336, #e91e63); color: #fff; padding: 40px; border-radius: 20px; cursor: pointer; text-align: center; flex: 1; min-width: 250px; box-shadow: 0 10px 30px rgba(244,67,54,0.3); transition: 0.3s; font-size: 24px; font-weight: 900;">
+                <i class="fas fa-poll" style="font-size: 40px; display: block; margin-bottom: 15px;"></i>
+                النتائج
+            </div>
+            <div onclick="showSection('tab-re-chat', this)"
+                style="background: linear-gradient(135deg, #9c27b0, #673ab7); color: #fff; padding: 40px; border-radius: 20px; cursor: pointer; text-align: center; flex: 1; min-width: 250px; box-shadow: 0 10px 30px rgba(156,39,176,0.3); transition: 0.3s; font-size: 24px; font-weight: 900;">
+                <i class="fas fa-comments" style="font-size: 40px; display: block; margin-bottom: 15px;"></i>
+                التواصل مع الطلاب
+            </div>
+            <div onclick="showSection('tab-monthly-reports', this)"
+                style="background: linear-gradient(135deg, #009688, #00796b); color: #fff; padding: 40px; border-radius: 20px; cursor: pointer; text-align: center; flex: 1; min-width: 250px; box-shadow: 0 10px 30px rgba(0,150,136,0.3); transition: 0.3s; font-size: 24px; font-weight: 900;">
+                <i class="fas fa-file-invoice" style="font-size: 40px; display: block; margin-bottom: 15px;"></i>
+                التقارير الشهرية
+            </div>
+            
+        </div>
+
+        <!-- Sections Content (Same as before but with working forms) -->
+        <div id="tab-codes" class="admin-section active">
+            <h2>إنشاء كود عشوائي جديد</h2>
+            <button onclick="generateCode()" class="btn-primary mt-10">إنشاء كود</button>
+            <h3 class="mt-20">الأكواد الحالية بالنظام</h3>
+            <div style="overflow-x:auto;">
+                <table id="table-codes"></table>
+            </div>
+
+            <h3 class="mt-30">أكواد اشتراكات الطلاب (مشتريات الكورسات والكتب)</h3>
+            <div style="overflow-x:auto;">
+                <table id="table-sub-codes"></table>
+            </div>
+        </div>
+
+        <div id="tab-users" class="admin-section">
+            <h2>الطلاب المسجلين</h2>
+            <div style="overflow-x:auto;">
+                <table id="table-users"></table>
+            </div>
+        </div>
+
+        <div id="tab-attendance" class="admin-section">
+            <h2>سجل الحضور</h2>
+            <div style="overflow-x:auto; margin-bottom:30px;">
+                <table id="table-attendance"></table>
+            </div>
+
+            <h2>إضافة تقييم للطالب</h2>
+            <form onsubmit="window.addEval(event)">
+                <div class="form-group">
+                    <label>كود الطالب</label>
+                    <input type="text" id="ev-code" required>
+                </div>
+                <div class="form-group">
+                    <label>التقييم أو الملاحظة</label>
+                    <input type="text" id="ev-note" required placeholder="مثال: ممتاز في الفيزياء">
+                </div>
+                <button type="submit" class="btn-primary w-100">إرسال التقييم</button>
+            </form>
+        </div>
+
+        <div id="tab-content" class="admin-section">
+            <h2>إضافة مادة أو كورس</h2>
+            <form onsubmit="window.addContent(event)">
+                <div class="form-group">
+                    <label>النوع</label>
+                    <select id="ct-type" onchange="
+                        document.getElementById('yt-container').style.display = this.value === 'course' ? 'block' : 'none';
+                        document.getElementById('pdf-container').style.display = this.value === 'book' ? 'block' : 'none';
+                        document.getElementById('html-container').style.display = this.value === 'game' ? 'block' : 'none';
+                        document.getElementById('img-container').style.display = 'block';
+                        ">
+                        <option value="book">كتاب / مذكرة إلكترونية</option>
+                        <option value="course">كورس واشتراك (فيديو يوتيوب)</option>
+                        
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>عنوان المحتوى</label>
+                    <input type="text" id="ct-title" required>
+                </div>
+                <div class="form-group" id="course-code-container">
+                    <label>كود التفعيل (كلمة المرور) - لغلق المحتوى (إن وجد)</label>
+                    <input type="text" id="ct-course-code">
+                </div>
+                
+                <div class="form-group">
+                    <label>المرحلة</label>
+                    <select id="ct-stage"
+                        onchange="if(window.updateGrades) window.updateGrades('ct-country', 'ct-stage', 'ct-grade')">
+                        <option value="">اختر الدولة أولاً</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>الصف</label>
+                    <select id="ct-grade" required>
+                        <option value="">اختر المرحلة أولاً</option>
+                    </select>
+                </div>
+                <div class="form-group" id="img-container">
+                    <label>صورة الغلاف (الكتاب أو الكورس - الرفع المباشر)</label>
+                    <input type="file" id="ct-image" accept="image/*">
+                </div>
+                <div class="form-group" id="yt-container" style="display:none;">
+                    <label>ملف فيديو الكورس (الرفع المباشر)</label>
+                    <input type="file" id="ct-yt" accept="video/*">
+                </div>
+                <div class="form-group" id="pdf-container">
+                    <label>ملف الكتاب / المذكرة (PDF - الرفع المباشر)</label>
+                    <input type="file" id="ct-pdf" accept=".pdf">
+                </div>
+                <div class="form-group" id="html-container" style="display:none;">
+                    <label>ملف اللعبة / التطبيق (HTML - الرفع المباشر)</label>
+                    <input type="file" id="ct-html" accept=".html,.zip">
+                </div>
+                <div class="form-group">
+                    <label>السعر الأساسي (ج.م)</label>
+                    <input type="number" id="ct-price" required>
+                </div>
+                <button type="submit" class="btn-primary w-100" id="btn-save-content">حفظ المحتوى</button>
+            </form>
+
+            <h3 class="mt-30">المحتوى الحالي (تعديل / حذف)</h3>
+            <div style="overflow-x:auto;">
+                <table id="table-content-manager"></table>
+            </div>
+        </div>
+
+        <div id="tab-exams" class="admin-section">
+            <h2>إضافة امتحان</h2>
+            <form onsubmit="window.addExam(event)">
+                
+                <div class="form-group">
+                    <label>المرحلة</label>
+                    <select id="ex-stage"
+                        onchange="if(window.updateGrades) window.updateGrades('ex-country', 'ex-stage', 'ex-grade')">
+                        <option value="">اختر الدولة</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>الصف</label>
+                    <select id="ex-grade" required></select>
+                </div>
+                <div class="form-group">
+                    <label>عنوان الامتحان</label>
+                    <input type="text" id="ex-title" required>
+                </div>
+                <div class="form-group">
+                    <label>نوع التكليف</label>
+                    <select id="ex-type">
+                        <option value="exam">امتحان</option>
+                        <option value="quiz">اختبار قصير</option>
+                        <option value="assignment">واجب</option>
+                        <option value="recitation">تسميع</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>المدة (دقائق)</label>
+                    <input type="number" id="ex-time" value="60">
+                </div>
+                <div class="form-group">
+                    <label>تاريخ البدء</label>
+                    <input type="datetime-local" id="ex-start" required>
+                </div>
+                <div class="form-group">
+                    <label>تاريخ الانتهاء</label>
+                    <input type="datetime-local" id="ex-end" required>
+                </div>
+                <!-- حقل كود الطالب -->
+                <div class="form-group">
+                    <label>كود الطالب (اختياري - أضف كود الطالب لإرسال المحتوى له خصيصاً)</label>
+                    <input type="text" id="ex-student-code" placeholder="أدخل كود الطالب أو اتركه فارغاً للجميع">
+                </div>
+                <div id="dynamic-questions-container"></div>
+                <div style="display:flex; gap:10px; margin-top:10px;">
+                    <button type="button" onclick="addQuestionField('mcq')" class="btn-primary" style="flex:1;">+ اختيار
+                        من متعدد</button>
+                    <button type="button" onclick="addQuestionField('tf')" class="btn-primary" style="flex:1;">+
+                        صح/خطأ</button>
+                    <button type="button" onclick="addQuestionField('essay')" class="btn-primary" style="flex:1;">+
+                        مقالي</button>
+                </div>
+                <button type="submit" class="btn-primary w-100 mt-20">نشر الامتحان</button>
+            </form>
+
+            <h3 class="mt-30">الامتحانات الحالية</h3>
+            <div style="overflow-x:auto;">
+                <table id="table-exams-manager"></table>
+            </div>
+        </div>
+
+        <div id="tab-results" class="admin-section">
+            <h2>سجل حلول الطلاب</h2>
+            <table id="table-submitted-exams"></table>
+        </div>
+
+        <div id="tab-links" class="admin-section">
+            <h2>إضافة رابط حصة أونلاين</h2>
+            <form onsubmit="window.addClassLink(event)">
+                
+                <div class="form-group">
+                    <label>المرحلة</label>
+                    <select id="lnk-stage"
+                        onchange="if(window.updateGrades) window.updateGrades('lnk-country', 'lnk-stage', 'lnk-grade')">
+                        <option value="ALL">الكل</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>الصف</label>
+                    <select id="lnk-grade" required>
+                        <option value="ALL">الكل</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>عنوان الحصة</label>
+                    <input type="text" id="lnk-title" required placeholder="مثال: حصة رياضيات تفاعلية">
+                </div>
+                <div class="form-group">
+                    <label>رابط الحصة (Zoom, Meet, etc)</label>
+                    <input type="url" id="lnk-url" required>
+                </div>
+                <!-- حقل كود الطالب -->
+                <div class="form-group">
+                    <label>كود الطالب (اختياري - لإرسال الرابط لطالب محدد)</label>
+                    <input type="text" id="lnk-student-code" placeholder="أدخل كود الطالب أو اتركه فارغاً للجميع">
+                </div>
+                <button type="submit" class="btn-primary w-100">حفظ ونشر الرابط</button>
+            </form>
+            <h3 class="mt-30">الروابط الحالية</h3>
+            <table id="table-links"></table>
+        </div>
+
+        <div id="tab-files" class="admin-section">
+            <h2>إرسال المحتوى الورقي والملفات للطلاب</h2>
+            <form onsubmit="window.sendAdminFile(event)">
+                
+                <div class="form-group">
+                    <label>المرحلة / السنة الدراسية</label>
+                    <select id="af-stage"
+                        onchange="if(window.updateGrades) window.updateGrades('af-country', 'af-stage', 'af-grade')">
+                        <option value="ALL">الكل</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>الصف</label>
+                    <select id="af-grade" required>
+                        <option value="ALL">الكل</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>العنوان / الوصف</label>
+                    <input type="text" id="af-title" required>
+                </div>
+                <div class="form-group">
+                    <label>الملف المرفق</label>
+                    <input type="file" id="af-file" accept="image/*,.pdf" required>
+                </div>
+                <button type="submit" class="btn-primary w-100" id="btn-af-submit">إرسال الملف</button>
+            </form>
+            <h3 class="mt-30">ملفات واستجابات الطلاب (المستلمة)</h3>
+            <table id="table-student-files"></table>
+        </div>
+
+        <div id="tab-custom" class="admin-section">
+            <h2>إرسال محتوى مخصص لطالب (حسب كوده)</h2>
+            <form onsubmit="window.sendCustomContent(event)">
+                <div class="form-group">
+                    <label>كود الطالب</label>
+                    <input type="text" id="cc-code" required placeholder="أدخل كود الطالب هنا">
+                </div>
+                <div class="form-group">
+                    <label>نوع المحتوى</label>
+                    <select id="cc-type" required>
+                        <option value="رابط حصة">رابط حصة</option>
+                        <option value="واجب">واجب</option>
+                        <option value="اختبار">اختبار</option>
+                        <option value="اختبار قصير">اختبار قصير</option>
+                        <option value="محتوى ورقي">محتوى ورقي</option>
+                        <option value="أخرى">أخرى</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>عنوان المحتوى / الوصف</label>
+                    <input type="text" id="cc-title" required placeholder="مثال: واجب الرياضيات للأسبوع الثاني">
+                </div>
+                <div class="form-group">
+                    <label>النص أو الرابط (إن وجد)</label>
+                    <input type="text" id="cc-url" placeholder="أدخل هنا رابط الاختبار/الحصة أو أي ملاحظة نصية">
+                </div>
+                <div class="form-group">
+                    <label>ملف مرفق (إن وجد)</label>
+                    <input type="file" id="cc-file" accept="image/*,.pdf">
+                </div>
+                <button type="submit" class="btn-primary w-100" id="btn-cc-submit">إرسال المحتوى</button>
+            </form>
+
+            <h3 class="mt-30">المحتويات المرسلة مسبقاً</h3>
+            <div style="overflow-x:auto;">
+                <table id="table-custom-content"></table>
+            </div>
+        </div>
+
+        <div id="tab-re-send" class="admin-section">
+            <h2 style="color:#12b8c5;">إرسال محتوى (مخصص للأدمن الثاني)</h2>
+            <form onsubmit="window.sendRestrictedContent(event)">
+                <div class="form-group">
+                    <label>كود الطالب (سيصل المحتوى لهذا الكود فقط)</label>
+                    <input type="text" id="re-code" required placeholder="أدخل كود الطالب هنا">
+                </div>
+                <div class="form-group">
+                    <label>نوع المحتوى</label>
+                    <select id="re-type" required onchange="
+                        if(this.value === 'رابط خارجي') {
+                            document.getElementById('re-url-container').style.display = 'block';
+                            document.getElementById('re-file-container').style.display = 'none';
+                        } else {
+                            document.getElementById('re-url-container').style.display = 'none';
+                            document.getElementById('re-file-container').style.display = 'block';
+                        }
+                    ">
+                        <option value="محتوى ورقي">محتوى ورقي</option>
+                        <option value="امتحانات">امتحانات</option>
+                        <option value="تسميعات">تسميعات</option>
+                        <option value="واجبات">واجبات</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>عنوان المحتوى / الوصف</label>
+                    <input type="text" id="re-title" required placeholder="مثال: الواجب الأول">
+                </div>
+                <div class="form-group" id="re-url-container" style="display:none;">
+                    <label>الرابط (إن وجد)</label>
+                    <input type="text" id="re-url" placeholder="رابط خارجي إن وجد">
+                </div>
+                <div class="form-group" id="re-file-container">
+                    <label>ملف مرفق (إن وجد)</label>
+                    <input type="file" id="re-file" accept="image/*,.pdf">
+                </div>
+                <button type="submit" class="btn-primary w-100" id="btn-re-submit"
+                    style="font-size:20px; padding:15px;">إرسال</button>
+            </form>
+        </div>
+
+        <div id="tab-re-results" class="admin-section">
+            <h2 style="color:#12b8c5;">النتائج / الملفات المستلمة</h2>
+            <div style="overflow-x:auto;">
+                <table id="table-re-results"></table>
+            </div>
+            <h3 class="mt-30">حلول الاختبارات المستلمة</h3>
+            <div style="overflow-x:auto;">
+                <table id="table-re-exams"></table>
+            </div>
+        </div>
+
+        <!-- 1. Communication System Tab -->
+        <div id="tab-re-chat" class="admin-section">
+            <h2 style="color:#9c27b0;">إرسال رسالة للطالب (نظام التواصل)</h2>
+            <form onsubmit="window.sendChatMessage(event)">
+                <div class="form-group">
+                    <label>كود الطالب</label>
+                    <input type="text" id="chat-code" required placeholder="أدخل كود الطالب">
+                </div>
+                <div class="form-group">
+                    <label>اسم المدرس</label>
+                    <input type="text" id="chat-teacher-name" required placeholder="اكتب اسم المدرس">
+                </div>
+                <div class="form-group">
+                    <label>الرسالة</label>
+                    <textarea id="chat-message" rows="4" required
+                        placeholder="اكتب الرسالة التي تريد إرسالها للطالب هنا..."></textarea>
+                </div>
+                <button type="submit" class="btn-primary w-100"
+                    style="background:#9c27b0; font-size:20px; padding:15px;">إرسال الرسالة</button>
+            </form>
+
+            <h3 class="mt-30">قائمة الرسائل والردود</h3>
+            <div style="overflow-x:auto;">
+                <table id="table-chat-messages"></table>
+            </div>
+        </div>
+
+        <!-- 2. Monthly Reports Tab -->
+        <div id="tab-monthly-reports" class="admin-section">
+            <h2 style="color:#009688;">إرسال تقرير شهري للطالب</h2>
+            <form onsubmit="window.sendMonthlyReport(event)">
+                <div class="form-group">
+                    <label>كود الطالب</label>
+                    <input type="text" id="mr-code" required placeholder="أدخل كود الطالب">
+                </div>
+                <div class="form-group">
+                    <label>عنوان التقرير (أو اسم الشهر)</label>
+                    <input type="text" id="mr-title" required placeholder="مثال: تقرير شهر أكتوبر">
+                </div>
+                <div class="form-group">
+                    <label>التقييم العام</label>
+                    <select id="mr-evaluation" required>
+                        <option value="ممتاز">ممتاز</option>
+                        <option value="جيد جداً">جيد جداً</option>
+                        <option value="جيد">جيد</option>
+                        <option value="مقبول">مقبول</option>
+                        <option value="ضعيف">ضعيف</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>تفاصيل التقرير / ملاحظات</label>
+                    <textarea id="mr-details" rows="5" required
+                        placeholder="اكتب تفاصيل التقرير ومستوى الطالب..."></textarea>
+                </div>
+                <button type="submit" class="btn-primary w-100"
+                    style="background:#009688; font-size:20px; padding:15px;">إرسال التقرير الشهري</button>
+            </form>
+        </div>
+
+        <!-- 3. Teacher Log Reports Tab -->
+        <div id="tab-teacher-reports" class="admin-section">
+            <h2 style="color:#795548;">كتابة تقرير الحصة المشروحة (للأدمن الثانوي)</h2>
+            <form onsubmit="window.addTeacherReport(event)">
+                <div class="form-group">
+                    <label>اسمك (اسم المدرس أو الأدمن الثانوي)</label>
+                    <input type="text" id="tr-name" required placeholder="مثال: أ. محمد أحمد">
+                </div>
+                <div class="form-group">
+                    <label>عنوان الحصة التي تم شرحها</label>
+                    <input type="text" id="tr-lesson" required placeholder="مثال: الباب الأول - الفيزياء الكلاسيكية">
+                </div>
+                <button type="submit" class="btn-primary w-100"
+                    style="background:#795548; font-size:20px; padding:15px;">حفظ التقرير في الجدول</button>
+            </form>
+
+            <h3 class="mt-30">جدول التقارير المسجلة</h3>
+            <div style="overflow-x:auto;">
+                <table id="table-teacher-reports"></table>
+            </div>
+        </div>
+    </div>
+
+    <!-- Edit Content Modal -->
+    <div id="edit-content-modal"
+        style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.8); z-index:20000; justify-content:center; align-items:center;">
+        <div
+            style="background:#fff; width:90%; max-width:600px; border-radius:20px; padding:30px; max-height:80vh; overflow-y:auto;">
+            <h3>تعديل بيانات المحتوى (كورس أو مذكرة/كتاب أو لعبة)</h3>
+            <form onsubmit="window.submitEditContent(event)">
+                <input type="hidden" id="edit-id">
+                <input type="hidden" id="edit-fsid">
+                <div class="form-group">
+                    <label>النوع (لا يمكن تغييره)</label>
+                    <input type="text" id="edit-type" readonly style="background:#e0e6ed;">
+                </div>
+                <div class="form-group">
+                    <label>عنوان المحتوى</label>
+                    <input type="text" id="edit-title" required>
+                </div>
+                <div class="form-group">
+                    <label>كود التفعيل (كلمة المرور)</label>
+                    <input type="text" id="edit-course-code">
+                </div>
+                <div class="form-group">
+                    <label>السعر الأساسي (ج.م)</label>
+                    <input type="number" id="edit-price" required>
+                </div>
+                <div class="form-group">
+                    <label>تغيير الغلاف/الصورة (اتركه فارغاً لعدم التغيير للمذكرة أو الكورس)</label>
+                    <input type="file" id="edit-image" accept="image/*">
+                </div>
+                <button type="submit" class="btn-primary w-100" style="margin-top:20px;" id="btn-save-edit">حفظ
+                    التعديلات</button>
+                <button type="button" onclick="document.getElementById('edit-content-modal').style.display='none'"
+                    class="btn-primary w-100" style="background:#888; margin-top:10px;">إلغاء</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Grading Modal -->
+    <div id="grading-modal"
+        style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.8); z-index:20000; justify-content:center; align-items:center;">
+        <div
+            style="background:#fff; width:90%; max-width:600px; border-radius:20px; padding:30px; max-height:80vh; overflow-y:auto;">
+            <h3>تصحيح إجابات: <span id="grad-student-name"></span></h3>
+            <div id="grad-questions-container"></div>
+            <button onclick="window.submitGrading()" class="btn-primary w-100" style="margin-top:20px;">اعتماد
+                النتيجة</button>
+            <button onclick="document.getElementById('grading-modal').style.display='none'" class="btn-primary w-100"
+                style="background:#888; margin-top:10px;">إلغاء</button>
+        </div>
+    </div>
+
+    <!-- Firebase SDKs -->
+    <script type="module" src="firebase-init.js"></script>
+    <script type="module" src="firebase-data.js"></script>
+    <script src="script.js"></script>
+    <script>
+        function showSection(id, btn) {
+            document.querySelectorAll('.admin-section').forEach(s => s.classList.remove('active'));
+            document.querySelectorAll('.admin-nav button').forEach(b => b.classList.remove('active'));
+            document.getElementById(id).classList.add('active');
+            if (btn) btn.classList.add('active');
+        }
+
+
+        window.addEval = async function (e) {
+            e.preventDefault();
+            let code = document.getElementById('ev-code').value;
+            let note = document.getElementById('ev-note').value;
+            let newUserEval = { code, note, date: new Date().toLocaleDateString('ar-EG') };
+
+            if (window.fsData && window.fsData.addEval) {
+                try { await window.fsData.addEval(newUserEval); } catch (er) { console.warn("Firebase Eval Add Error:", er); }
+            }
+
+            let evals = JSON.parse(localStorage.getItem('spedia_evals') || '[]');
+            evals.push(newUserEval);
+            localStorage.setItem('spedia_evals', JSON.stringify(evals));
+            alert('تم إضافة التقييم!');
+            e.target.reset();
+        }
+
+        async function renderTables() {
+            let codes = JSON.parse(localStorage.getItem('spedia_codes') || '[]');
+            let users = [];
+            let att = [];
+            let subCodes = [];
+            if (window.fsData) {
+                if (window.fsData.getAllCodes) {
+                    try {
+                        let fbCodes = await window.fsData.getAllCodes();
+                        if (fbCodes && fbCodes.length > 0) {
+                            codes = fbCodes;
+                            localStorage.setItem('spedia_codes', JSON.stringify(codes));
+                        }
+                    } catch (e) { }
+                }
+                users = await window.fsData.getAllUsers();
+                att = await window.fsData.getAttendance();
+                if (window.fsData.getAllSubscriptionCodes) subCodes = await window.fsData.getAllSubscriptionCodes();
+            } else {
+                users = JSON.parse(localStorage.getItem('spedia_users') || '[]');
+                att = JSON.parse(localStorage.getItem('spedia_attendance') || '[]');
+                subCodes = JSON.parse(localStorage.getItem('spedia_sub_codes') || '[]');
+            }
+            let subs = [];
+            if (window.fsData) {
+                subs = await window.fsData.getAllSubmissions();
+            } else {
+                subs = JSON.parse(localStorage.getItem('spedia_submissions') || '[]');
+            }
+            let adminType = sessionStorage.getItem('adminType');
+
+            const tCodes = document.getElementById('table-codes');
+            if (tCodes) {
+                let ths = `<th>الكود</th><th>مستخدم؟</th>`;
+                if (adminType === 'full') ths += `<th>حذف</th>`;
+                tCodes.innerHTML = `<tr>${ths}</tr>` + codes.map(c => {
+                    let tr = `<td>${c.code}</td><td style="color:${c.isUsed ? 'red' : 'green'}">${c.isUsed ? 'مستخدم' : 'متاح'}</td>`;
+                    if (adminType === 'full') tr += `<td><button onclick="window.deleteItemGeneric('codes', '${c.fsId || c.code}', 'spedia_codes', 'code')" style="background:#f44336; color:#fff; border:none; padding:5px 10px; border-radius:5px; cursor:pointer;">حذف</button></td>`;
+                    return `<tr>${tr}</tr>`;
+                }).join('');
+            }
+
+            const tSubCodes = document.getElementById('table-sub-codes');
+            if (tSubCodes) {
+                let ths = `<th>الكود</th><th>النوع</th><th>العنوان</th><th>التاريخ</th>`;
+                if (adminType === 'full') ths += `<th>حذف</th>`;
+                tSubCodes.innerHTML = `<tr>${ths}</tr>` + subCodes.map(c => {
+                    let tr = `<td>${c.code}</td><td>${c.type === 'course' ? 'كورس' : 'كتاب'}</td><td>${c.title}</td><td>${c.date || ''}</td>`;
+                    if (adminType === 'full') tr += `<td><button onclick="window.deleteItemGeneric('subscription_codes', '${c.fsId || c.code}', 'spedia_sub_codes', 'code')" style="background:#f44336; color:#fff; border:none; padding:5px 10px; border-radius:5px; cursor:pointer;">حذف</button></td>`;
+                    return `<tr>${tr}</tr>`;
+                }).join('');
+            }
+
+            const tUsers = document.getElementById('table-users');
+            if (tUsers) {
+                let ths = `<th>الكود</th><th>الاسم</th><th>الهاتف</th><th>الصف</th>`;
+                if (adminType === 'full') ths += `<th>حذف</th>`;
+                tUsers.innerHTML = `<tr>${ths}</tr>` + users.map(u => {
+                    let tr = `<td>${u.code}</td><td>${u.name}</td><td>${adminType === 'restricted' ? '********' : u.phone}</td><td>${u.grade}</td>`;
+                    if (adminType === 'full') tr += `<td><button onclick="window.deleteItemGeneric('users', '${u.fsId || u.code}', 'spedia_users', 'code')" style="background:#f44336; color:#fff; border:none; padding:5px 10px; border-radius:5px; cursor:pointer;">حذف</button></td>`;
+                    return `<tr>${tr}</tr>`;
+                }).join('');
+            }
+
+            const tAtt = document.getElementById('table-attendance');
+            if (tAtt) {
+                let ths = `<th>الكود</th><th>الاسم</th><th>التاريخ</th><th>الوقت</th>`;
+                if (adminType === 'full') ths += `<th>حذف</th>`;
+                tAtt.innerHTML = `<tr>${ths}</tr>` + att.map(a => {
+                    let tr = `<td>${a.code}</td><td>${a.name}</td><td>${a.date}</td><td>${a.time}</td>`;
+                    if (adminType === 'full') tr += `<td><button onclick="window.deleteItemGeneric('attendance', '${a.fsId || a.code}', 'spedia_attendance', 'code')" style="background:#f44336; color:#fff; border:none; padding:5px 10px; border-radius:5px; cursor:pointer;">حذف</button></td>`;
+                    return `<tr>${tr}</tr>`;
+                }).join('');
+            }
+
+            const tExams = document.getElementById('table-submitted-exams');
+            if (tExams) {
+                let ths = `<th>الطالب</th><th>الامتحان</th><th>الحالة</th><th>تصحيح</th>`;
+                if (adminType === 'full') ths += `<th>حذف</th>`;
+                tExams.innerHTML = `<tr>${ths}</tr>` + subs.map(s => {
+                    let tr = `<td>${s.name || s.code}</td><td>${s.examTitle}</td><td>${s.status}</td><td><button onclick="window.openGrading('${s.code}', '${s.examTitle}')" style="padding:5px 10px; background:var(--primary-color); border:none; color:#fff; border-radius:5px; cursor:pointer;">فتح</button></td>`;
+                    if (adminType === 'full') tr += `<td><button onclick="window.deleteItemGeneric('submissions', '${s.fsId || s.id || s.code}', 'spedia_submissions', 'id')" style="background:#f44336; color:#fff; border:none; padding:5px 10px; border-radius:5px; cursor:pointer;">حذف</button></td>`;
+                    return `<tr>${tr}</tr>`;
+                }).join('');
+            }
+
+            let contentList = [];
+            if (window.fsData && window.fsData.getAllContent) {
+                try {
+                    contentList = await window.fsData.getAllContent();
+                } catch (e) { }
+            }
+            let localContent = JSON.parse(localStorage.getItem('spedia_content') || '[]');
+            // Merge to avoid duplicates
+            localContent.forEach(lc => { if (!contentList.find(cc => cc.id === lc.id)) contentList.push(lc); });
+            localStorage.setItem('spedia_content', JSON.stringify(contentList));
+
+            const tContent = document.getElementById('table-content-manager');
+            if (tContent) {
+                tContent.innerHTML = `<tr><th>النوع</th><th>العنوان</th><th>الدولة</th><th>السعر</th><th>إجراءات</th></tr>` + contentList.map(c => `<tr>
+                    <td>${c.type === 'course' ? 'كورس' : (c.type === 'game' ? 'لعبة HTML' : 'مذكرة/كتاب')}</td>
+                    <td>${c.title}</td>
+                    <td>${c.country === 'ALL' ? 'كل الدول' : c.country}</td>
+                    <td>${c.priceBase || 0}</td>
+                    <td>
+                        <button onclick="window.editContent('${c.fsId ? c.fsId : c.id}')" style="background:#ff9800; color:#fff; border:none; padding:5px 10px; border-radius:5px; margin-bottom:5px; cursor:pointer; display:block; width:100%;"><i class="fas fa-edit"></i> تعديل</button>
+                        <button onclick="window.deleteContent('${c.fsId ? c.fsId : c.id}')" style="background:#f44336; color:#fff; border:none; padding:5px 10px; border-radius:5px; cursor:pointer; width:100%;"><i class="fas fa-trash"></i> حذف</button>
+                    </td>
+                </tr>`).join('');
+            }
+
+            let links = JSON.parse(localStorage.getItem('spedia_class_links') || '[]');
+            if (window.fsData && window.fsData.getAllClassLinks) {
+                try { links = await window.fsData.getAllClassLinks(); localStorage.setItem('spedia_class_links', JSON.stringify(links)); } catch (e) { }
+            }
+            const tLinks = document.getElementById('table-links');
+            if (tLinks) {
+                let ths = `<th>الدولة/الطالب</th><th>الصف</th><th>العنوان</th><th>الرابط</th><th>حذف</th>`;
+                tLinks.innerHTML = `<tr>${ths}</tr>` + links.map(l => {
+                    let targetText = l.studentCode ? `كود: ${l.studentCode}` : (l.country === 'ALL' ? 'كل الدول' : l.country);
+                    return `<tr><td>${targetText}</td><td>${l.grade}</td><td>${l.title}</td><td><a href="${l.url}" target="_blank">فتح الرابط</a></td><td><button onclick="window.deleteLink('${l.fsId ? l.fsId : l.id}')" style="background:#f44336; color:#fff; padding:5px; border-radius:5px; border:none; cursor:pointer;">حذف</button></td></tr>`;
+                }).join('');
+            }
+
+            let sFiles = JSON.parse(localStorage.getItem('spedia_student_files') || '[]');
+            if (window.fsData && window.fsData.getAllStudentFiles) {
+                try { sFiles = await window.fsData.getAllStudentFiles(); localStorage.setItem('spedia_student_files', JSON.stringify(sFiles)); } catch (e) { }
+            }
+            const tSFiles = document.getElementById('table-student-files');
+            if (tSFiles) {
+                let ths = `<th>الطالب</th><th>الدولة</th><th>الصف</th><th>الوصف</th><th>تاريخ</th><th>الملف</th>`;
+                if (adminType === 'full') ths += `<th>حذف</th>`;
+                tSFiles.innerHTML = `<tr>${ths}</tr>` + sFiles.map(f => {
+                    let tr = `<td>${f.studentName || f.studentCode}</td><td>${f.country || 'EG'}</td><td>${f.grade}</td><td>${f.title}</td><td>${f.date}</td><td><a href="${f.url}" target="_blank" style="color:var(--primary-color);">معاينة</a></td>`;
+                    if (adminType === 'full') tr += `<td><button onclick="window.deleteItemGeneric('student_files', '${f.fsId || f.id || f.studentCode}', 'spedia_student_files', 'id')" style="background:#f44336; color:#fff; border:none; padding:5px 10px; border-radius:5px; cursor:pointer;">حذف</button></td>`;
+                    return `<tr>${tr}</tr>`;
+                }).join('');
+            }
+
+            let allCreatedExams = [];
+            if (window.fsData && window.fsData.getAllExams) {
+                try { allCreatedExams = await window.fsData.getAllExams(); } catch (e) { }
+            } else {
+                allCreatedExams = JSON.parse(localStorage.getItem('spedia_exams') || '[]');
+            }
+            const tExamsManager = document.getElementById('table-exams-manager');
+            if (tExamsManager) {
+                let ths = `<th>الدولة/الطالب</th><th>الصف</th><th>العنوان</th>`;
+                if (adminType === 'full') ths += `<th>حذف</th>`;
+                tExamsManager.innerHTML = `<tr>${ths}</tr>` + allCreatedExams.map(ex => {
+                    let targetText = ex.studentCode ? `كود: ${ex.studentCode}` : (ex.country === 'ALL' ? 'كل الدول' : ex.country);
+                    let tr = `<td>${targetText}</td><td>${ex.grade}</td><td>${ex.title}</td>`;
+                    if (adminType === 'full') tr += `<td><button onclick="window.deleteItemGeneric('exams', '${ex.fsId || ex.id || ex.title}', 'spedia_exams', 'id')" style="background:#f44336; color:#fff; border:none; padding:5px 10px; border-radius:5px; cursor:pointer;">حذف</button></td>`;
+                    return `<tr>${tr}</tr>`;
+                }).join('');
+            }
+
+            const tCustomContent = document.getElementById('table-custom-content');
+            if (tCustomContent) {
+                let ccLocal = JSON.parse(localStorage.getItem('spedia_custom_content') || '[]');
+                let ccListId = [];
+                if (window.fsData && window.fsData.getCustomContentByUser) {
+                    try {
+                        // It gets all custom content if there's a getter. Since there's no getAllCustomContent, we just rely on local storage for admin.
+                        // Or we can just use localStorage which is populated when Admin sends it.
+                    } catch (e) { }
+                }
+                let ths = `<th>كود الطالب</th><th>النوع</th><th>العنوان</th><th>تاريخ</th>`;
+                if (adminType === 'full') ths += `<th>حذف</th>`;
+                tCustomContent.innerHTML = `<tr>${ths}</tr>` + ccLocal.map(c => {
+                    let tr = `<td>${c.studentCode}</td><td>${c.type}</td><td>${c.title}</td><td>${c.date}</td>`;
+                    if (adminType === 'full') tr += `<td><button onclick="window.deleteItemGeneric('custom_content', '${c.fsId || c.id}', 'spedia_custom_content', 'id')" style="background:#f44336; color:#fff; border:none; padding:5px 10px; border-radius:5px; cursor:pointer;">حذف</button></td>`;
+                    return `<tr>${tr}</tr>`;
+                }).join('');
+            }
+
+            if (adminType === 'restricted') {
+                const tReRes = document.getElementById('table-re-results');
+                if (tReRes) {
+                    tReRes.innerHTML = '<tr><th>الكود</th><th>الوصف</th><th>تاريخ</th><th>الملف المستلم</th></tr>' +
+                        sFiles.map(f => `<tr><td>${f.studentCode}</td><td>${f.title}</td><td>${f.date}</td><td><a href="${f.url}" target="_blank" style="color:#12b8c5;">فتح الملف</a></td></tr>`).join('');
+                }
+                const tReExams = document.getElementById('table-re-exams');
+                if (tReExams) {
+                    tReExams.innerHTML = `<tr><th>الكود</th><th>الامتحان</th><th>الحالة</th><th>تصحيح</th></tr>` +
+                        subs.map(s => `<tr><td>${s.code}</td><td>${s.examTitle}</td><td>${s.status}</td><td><button onclick="window.openGrading('${s.code}', '${s.examTitle}')" style="padding:5px 10px; background:var(--primary-color); border:none; color:#fff; border-radius:5px; cursor:pointer;">فتح</button></td></tr>`).join('');
+                }
+            }
+
+            const chatTable = document.getElementById('table-chat-messages');
+            if (chatTable) {
+                let chats = JSON.parse(localStorage.getItem('spedia_chat') || '[]');
+                if (window.fsData && window.fsData.getAllChatMessages) {
+                    try { chats = await window.fsData.getAllChatMessages(); localStorage.setItem('spedia_chat', JSON.stringify(chats)); } catch (e) { }
+                }
+                chatTable.innerHTML = `<tr><th>كود الطالب</th><th>المرسل / المدرس</th><th>الرسالة</th><th>التاريخ</th></tr>` +
+                    chats.map(c => {
+                        let senderLabel = c.sender === 'admin' ? `الإدارة (${c.teacher || ''})` : `الطالب (إلى: ${c.teacher || ''})`;
+                        return `<tr><td>${c.studentCode}</td><td>${senderLabel}</td><td>${c.message}</td><td>${c.date}</td></tr>`;
+                    }).join('');
+            }
+
+            const tReportTable = document.getElementById('table-teacher-reports');
+            if (tReportTable) {
+                let treports = JSON.parse(localStorage.getItem('spedia_teacher_reports') || '[]');
+                if (window.fsData && window.fsData.getAllTeacherReports) {
+                    try { treports = await window.fsData.getAllTeacherReports(); localStorage.setItem('spedia_teacher_reports', JSON.stringify(treports)); } catch (e) { }
+                }
+                tReportTable.innerHTML = `<tr><th>اسم المدرس / الأدمن</th><th>عنوان الحصة</th><th>التاريخ</th></tr>` +
+                    treports.map(t => `<tr><td>${t.teacherName}</td><td>${t.lesson}</td><td>${t.date}</td></tr>`).join('');
+            }
+        }
+
+        window.deleteItemGeneric = async function (collection, idVal, lsKey, idProp) {
+            if (!confirm('هل تأكد حذف هذا العنصر نهائياً؟')) return;
+
+            let arr = JSON.parse(localStorage.getItem(lsKey) || '[]');
+            arr = arr.filter(item => {
+                if (item.fsId === idVal) return false;
+                if (item[idProp] && item[idProp].toString() === idVal.toString()) return false;
+                return true;
+            });
+            localStorage.setItem(lsKey, JSON.stringify(arr));
+
+            if (window.fsData && window.fsData.deleteGeneric) {
+                try { await window.fsData.deleteGeneric(collection, idVal, idProp); } catch (e) { console.warn(e); }
+            }
+            renderTables();
+        };
+
+        window.deleteLink = async function (id) {
+            if (!confirm('حذف الرابط؟')) return;
+            let links = JSON.parse(localStorage.getItem('spedia_class_links') || '[]');
+            let targetLnk = links.find(l => l.id.toString() === id.toString() || l.fsId === id.toString());
+            links = links.filter(l => l.id.toString() !== id.toString() && l.fsId !== id.toString());
+            localStorage.setItem('spedia_class_links', JSON.stringify(links));
+
+            if (window.fsData && window.fsData.deleteClassLink) {
+                let dId = targetLnk && targetLnk.fsId ? targetLnk.fsId : id.toString();
+                try { await window.fsData.deleteClassLink(dId); } catch (e) { }
+            }
+            renderTables();
+        };
+
+        window.addClassLink = async function (e) {
+            e.preventDefault();
+            let lnk = {
+                id: Date.now(),
+                country: document.getElementById('lnk-country').value,
+                grade: document.getElementById('lnk-grade').value,
+                title: document.getElementById('lnk-title').value,
+                url: document.getElementById('lnk-url').value,
+                date: new Date().toLocaleDateString('ar-EG'),
+                studentCode: document.getElementById('lnk-student-code') ? document.getElementById('lnk-student-code').value.trim() : ''
+            };
+
+            if (window.fsData && window.fsData.addClassLink) {
+                try { await window.fsData.addClassLink(lnk); } catch (er) { }
+            }
+
+            let links = JSON.parse(localStorage.getItem('spedia_class_links') || '[]');
+            links.push(lnk);
+            localStorage.setItem('spedia_class_links', JSON.stringify(links));
+            alert('تم نشر الرابط بنجاح!');
+            e.target.reset();
+            renderTables();
+        };
+
+        window.sendAdminFile = async function (e) {
+            e.preventDefault();
+            const btn = document.getElementById('btn-af-submit');
+            btn.innerText = 'جاري الرفع... الرجاء الانتظار';
+            try {
+                let file = document.getElementById('af-file').files[0];
+                let fileUrl = await window.uploadToCloudinary(file);
+                let fItem = {
+                    id: Date.now(),
+                    country: document.getElementById('af-country').value,
+                    grade: document.getElementById('af-grade').value,
+                    title: document.getElementById('af-title').value,
+                    url: fileUrl,
+                    date: new Date().toLocaleDateString('ar-EG')
+                };
+
+                if (window.fsData && window.fsData.addAdminFile) {
+                    try { await window.fsData.addAdminFile(fItem); } catch (er) { }
+                }
+
+                let aFiles = JSON.parse(localStorage.getItem('spedia_admin_files') || '[]');
+                aFiles.push(fItem);
+                localStorage.setItem('spedia_admin_files', JSON.stringify(aFiles));
+                alert('تم إرسال الملف للطلاب بنجاح!');
+                e.target.reset();
+            } catch (er) {
+                alert('حدث خطأ أثناء الرفع: ' + er.message);
+            }
+            btn.innerText = 'إرسال الملف';
+        };
+
+        window.sendCustomContent = async function (e) {
+            e.preventDefault();
+            const btn = document.getElementById('btn-cc-submit');
+            btn.innerText = 'جاري الإرسال... الرجاء الانتظار';
+            try {
+                let code = document.getElementById('cc-code').value;
+                let type = document.getElementById('cc-type').value;
+                let title = document.getElementById('cc-title').value;
+                let url = document.getElementById('cc-url').value;
+
+                let file = document.getElementById('cc-file').files[0];
+                let fileUrl = '';
+                if (file) {
+                    fileUrl = await window.uploadToCloudinary(file);
+                }
+
+                let cItem = {
+                    id: Date.now(),
+                    studentCode: code,
+                    type: type,
+                    title: title,
+                    url: url,
+                    fileUrl: fileUrl,
+                    date: new Date().toLocaleDateString('ar-EG')
+                };
+
+                if (window.fsData && window.fsData.addCustomContent) {
+                    try { await window.fsData.addCustomContent(cItem); } catch (er) { console.warn(er); }
+                }
+
+                let ccLocal = JSON.parse(localStorage.getItem('spedia_custom_content') || '[]');
+                ccLocal.push(cItem);
+                localStorage.setItem('spedia_custom_content', JSON.stringify(ccLocal));
+
+                alert('تم إرسال المحتوى المخصص للطالب بنجاح!');
+                e.target.reset();
+            } catch (er) {
+                alert('حدث خطأ أثناء الإرسال: ' + er.message);
+            }
+            btn.innerText = 'إرسال المحتوى';
+        };
+
+        window.sendRestrictedContent = async function (e) {
+            e.preventDefault();
+            const btn = document.getElementById('btn-re-submit');
+            btn.innerText = 'جاري الإرسال... الرجاء الانتظار';
+            try {
+                let code = document.getElementById('re-code').value;
+                let type = document.getElementById('re-type').value;
+                let title = document.getElementById('re-title').value;
+                let url = document.getElementById('re-url').value;
+
+                let file = document.getElementById('re-file').files[0];
+                let fileUrl = '';
+                if (file) {
+                    fileUrl = await window.uploadToCloudinary(file);
+                }
+
+                let cItem = {
+                    id: Date.now(),
+                    studentCode: code,
+                    type: type,
+                    title: title,
+                    url: url,
+                    fileUrl: fileUrl,
+                    date: new Date().toLocaleDateString('ar-EG'),
+                    sender: 'restricted'
+                };
+
+                if (window.fsData && window.fsData.addCustomContent) {
+                    try { await window.fsData.addCustomContent(cItem); } catch (er) { console.warn(er); }
+                }
+
+                let ccLocal = JSON.parse(localStorage.getItem('spedia_custom_content') || '[]');
+                ccLocal.push(cItem);
+                localStorage.setItem('spedia_custom_content', JSON.stringify(ccLocal));
+
+                alert('تم إرسال المحتوى للطالب بنجاح! سيتمكن من رؤيته في لوحته.');
+                document.getElementById('re-code').value = '';
+            } catch (er) {
+                alert('حدث خطأ أثناء الإرسال: ' + er.message);
+            }
+            btn.innerText = 'إرسال';
+        };
+
+        window.deleteContent = async function (id) {
+            if (!confirm('هل أنت متأكد من الحذف؟')) return;
+            let c = JSON.parse(localStorage.getItem('spedia_content') || '[]');
+            c = c.filter(item => item.id.toString() !== id.toString() && item.fsId !== id.toString());
+            localStorage.setItem('spedia_content', JSON.stringify(c));
+
+            if (window.fsData && window.fsData.deleteContent) {
+                try {
+                    await window.fsData.deleteContent(id.toString());
+                } catch (e) { console.warn(e) }
+            }
+            alert('تم الحذف بنجاح');
+            renderTables();
+        };
+
+        window.editContent = function (id) {
+            let cList = JSON.parse(localStorage.getItem('spedia_content') || '[]');
+            let content = cList.find(c => c.id.toString() === id.toString() || c.fsId === id.toString());
+            if (!content) return alert("لم يتم العثور على المحتوى");
+
+            document.getElementById('edit-id').value = content.id || '';
+            document.getElementById('edit-fsid').value = content.fsId || '';
+            document.getElementById('edit-type').value = content.type === 'course' ? 'كورس' : (content.type === 'game' ? 'لعبة' : 'كتاب/مذكرة');
+            document.getElementById('edit-title').value = content.title || '';
+            document.getElementById('edit-course-code').value = content.courseCode || '';
+            document.getElementById('edit-price').value = content.priceBase || 0;
+
+            document.getElementById('edit-content-modal').style.display = 'flex';
+        };
+
+        window.submitEditContent = async function (e) {
+            e.preventDefault();
+            const btn = document.getElementById('btn-save-edit');
+            btn.innerText = 'جاري الحفظ...';
+
+            let id = document.getElementById('edit-id').value;
+            let fsId = document.getElementById('edit-fsid').value;
+            let title = document.getElementById('edit-title').value;
+            let courseCode = document.getElementById('edit-course-code').value;
+            let priceBase = parseInt(document.getElementById('edit-price').value) || 0;
+            let fileInput = document.getElementById('edit-image');
+
+            let updates = { title, courseCode, priceBase };
+
+            try {
+                if (fileInput.files && fileInput.files[0]) {
+                    updates.image = await window.uploadToCloudinary(fileInput.files[0]);
+                }
+
+                // update local storage
+                let cList = JSON.parse(localStorage.getItem('spedia_content') || '[]');
+                let index = cList.findIndex(c => c.id.toString() === id || c.fsId === fsId);
+                if (index > -1) {
+                    cList[index] = { ...cList[index], ...updates };
+                    localStorage.setItem('spedia_content', JSON.stringify(cList));
+                }
+
+                // update firebase
+                if (window.fsData && window.fsData.updateContent && fsId) {
+                    await window.fsData.updateContent(fsId, updates);
+                }
+
+                alert('تم التعديل بنجاح!');
+                document.getElementById('edit-content-modal').style.display = 'none';
+                renderTables();
+            } catch (er) {
+                alert('حدث خطأ: ' + er.message);
+            }
+            btn.innerText = 'حفظ التعديلات';
+        };
+
+        window.generateCode = async function () {
+            const btn = document.querySelector('button[onclick="generateCode()"]');
+            if (btn) btn.innerText = "جاري الإنشاء...";
+            let rnd = Math.floor(1000 + Math.random() * 9000).toString();
+            let codeObj = { code: rnd, isUsed: false };
+
+            if (window.fsData && window.fsData.addCode) {
+                try {
+                    await window.fsData.addCode(codeObj);
+                } catch (e) { console.warn("Firebase save error", e); }
+            }
+
+            let codes = JSON.parse(localStorage.getItem('spedia_codes') || '[]');
+            codes.push(codeObj);
+            localStorage.setItem('spedia_codes', JSON.stringify(codes));
+            renderTables();
+            if (btn) btn.innerText = "إنشاء كود";
+        }
+
+        window.addContent = async function (e) {
+            e.preventDefault();
+            const btn = e.target.querySelector('button[type="submit"]');
+            if (btn) btn.innerText = "جاري الحفظ...";
+
+            try {
+                let ctType = document.getElementById('ct-type') ? document.getElementById('ct-type').value : 'course';
+
+                let titleEl = document.getElementById('ct-title');
+                let gradeEl = document.getElementById('ct-grade');
+                let countryEl = document.getElementById('ct-country');
+                let priceEl = document.getElementById('ct-price');
+                let codeEl = document.getElementById('ct-course-code');
+
+                let newItem = {
+                    id: Date.now(),
+                    type: ctType,
+                    title: titleEl ? titleEl.value : '',
+                    grade: gradeEl ? gradeEl.value : '',
+                    country: countryEl ? countryEl.value : 'EG',
+                    priceBase: (priceEl ? parseInt(priceEl.value) : 0) || 0,
+                    courseCode: codeEl ? codeEl.value : ''
+                };
+
+                let imgInput = document.getElementById('ct-image');
+                if (imgInput && imgInput.files && imgInput.files[0]) {
+                    try {
+                        newItem.image = await window.uploadToCloudinary(imgInput.files[0]);
+                    } catch (e) {
+                        throw new Error("فشل رفع صورة الغلاف: " + e.message);
+                    }
+                } else {
+                    newItem.image = newItem.type === 'course'
+                        ? "https://cdni.iconscout.com/illustration/premium/thumb/online-learning-2766324-2305593.png"
+                        : "https://cdni.iconscout.com/illustration/premium/thumb/book-4113220-3406254.png";
+                }
+
+                if (newItem.type === 'course') {
+                    let ytEl = document.getElementById('ct-yt');
+                    if (ytEl && ytEl.files && ytEl.files[0]) {
+                        try {
+                            btn.innerText = "جاري رفع الفيديو... (يرجى عدم إغلاق الصفحة)";
+                            newItem.videoUrl = await window.uploadToCloudinary(ytEl.files[0]);
+                        } catch (e) {
+                            throw new Error("فشل رفع فيديو الكورس: " + e.message);
+                        }
+                    }
+                } else if (newItem.type === 'book') {
+                    let pdfInput = document.getElementById('ct-pdf');
+                    if (pdfInput && pdfInput.files && pdfInput.files[0]) {
+                        try {
+                            btn.innerText = "جاري رفع المذكرة/الكتاب (PDF)...";
+                            newItem.pdfUrl = await window.uploadToCloudinary(pdfInput.files[0]);
+                        } catch (e) {
+                            throw new Error("فشل رفع ملف المذكرة/الكتاب: " + e.message);
+                        }
+                    }
+                } else if (newItem.type === 'game') {
+                    let htmlInput = document.getElementById('ct-html');
+                    if (htmlInput && htmlInput.files && htmlInput.files[0]) {
+                        try {
+                            btn.innerText = "جاري رفع اللعبة (HTML)...";
+                            newItem.htmlUrl = await window.uploadToCloudinary(htmlInput.files[0]);
+                        } catch (e) {
+                            throw new Error("فشل رفع اللعبة: " + e.message);
+                        }
+                    }
+                }
+
+                if (window.fsData && window.fsData.addContent) {
+                    try {
+                        const timeoutPromise = new Promise((_, reject) => setTimeout(() => reject(new Error("Firebase Timeout")), 5000));
+                        await Promise.race([window.fsData.addContent(newItem), timeoutPromise]);
+                    } catch (e) {
+                        console.warn("Firestore save failed, saving locally instead:", e);
+                        let c = JSON.parse(localStorage.getItem('spedia_content') || '[]');
+                        c.push(newItem);
+                        localStorage.setItem('spedia_content', JSON.stringify(c));
+                    }
+                } else {
+                    let c = JSON.parse(localStorage.getItem('spedia_content') || '[]');
+                    c.push(newItem);
+                    localStorage.setItem('spedia_content', JSON.stringify(c));
+                }
+
+                alert('تم الحفظ بنجاح! سيتم عرض المحتوى في المنصة فوراً.');
+                if (e.target && e.target.reset) e.target.reset();
+                if (window.renderTables) window.renderTables();
+            } catch (err) {
+                console.error("Save Error:", err);
+                alert('عذراً، فشل الحفظ. تأكد من إعدادات Storage أو اتصال الإنترنت.\nالمشكلة: ' + err.message);
+            } finally {
+                if (btn) btn.innerText = "حفظ المحتوى";
+            }
+        }
+
+        function addQuestionField(type) {
+            let container = document.getElementById('dynamic-questions-container');
+            let qDiv = document.createElement('div');
+            qDiv.className = 'q-block';
+            qDiv.dataset.type = type;
+            qDiv.style.cssText = "background:#f8fafc; border:1px solid #e0e6ed; padding:15px; border-radius:10px; position:relative; margin-top:10px;";
+            qDiv.innerHTML = `<button type="button" onclick="this.parentElement.remove()" style="position:absolute; top:5px; left:5px;">X</button>`;
+            if (type === 'mcq') qDiv.innerHTML += `<input type="text" class="q-text" placeholder="السؤال" style="width:100%;"><div style="display:grid; grid-template-columns:1fr 1fr; gap:5px; margin-top:5px;"><input type="text" class="q-opt" placeholder="الصح"><input type="text" class="q-opt" placeholder="2"><input type="text" class="q-opt" placeholder="3"><input type="text" class="q-opt" placeholder="4"></div>`;
+            else if (type === 'tf') qDiv.innerHTML += `<input type="text" class="q-text" placeholder="العبارة" style="width:100%;"><select class="q-tf-answer"><option value="true">صح</option><option value="false">خطأ</option></select>`;
+            else qDiv.innerHTML += `<input type="text" class="q-text" placeholder="السؤال" style="width:100%;">`;
+            container.appendChild(qDiv);
+        }
+
+        window.addExam = async function (e) {
+            e.preventDefault();
+            try {
+                let qs = [];
+                document.querySelectorAll('.q-block').forEach(b => {
+                    let t = b.dataset.type;
+                    if (t === 'mcq') qs.push({ type: 'mcq', text: b.querySelector('.q-text').value, options: Array.from(b.querySelectorAll('.q-opt')).map(i => i.value) });
+                    else if (t === 'tf') qs.push({ type: 'tf', text: b.querySelector('.q-text').value, answer: b.querySelector('.q-tf-answer').value });
+                    else qs.push({ type: 'essay', text: b.querySelector('.q-text').value });
+                });
+
+                let exam = {
+                    id: Date.now(),
+                    title: document.getElementById('ex-title').value,
+                    grade: document.getElementById('ex-grade').value,
+                    country: document.getElementById('ex-country').value,
+                    time: document.getElementById('ex-time').value,
+                    durationMinutes: document.getElementById('ex-time').value,
+                    type: document.getElementById('ex-type').value,
+                    typeName: document.getElementById('ex-type').options[document.getElementById('ex-type').selectedIndex].text,
+                    startDate: document.getElementById('ex-start').value,
+                    endDate: document.getElementById('ex-end').value,
+                    questionsList: qs,
+                    studentCode: document.getElementById('ex-student-code') ? document.getElementById('ex-student-code').value.trim() : ''
+                };
+                if (window.fsData) await window.fsData.addExam(exam);
+                else {
+                    let ex = JSON.parse(localStorage.getItem('spedia_exams') || '[]');
+                    ex.push(exam);
+                    localStorage.setItem('spedia_exams', JSON.stringify(ex));
+                }
+                alert('تم نشر الامتحان بنجاح!');
+                e.target.reset();
+                document.getElementById('dynamic-questions-container').innerHTML = '';
+            } catch (err) {
+                alert('خطأ في نشر الامتحان');
+            }
+        }
+
+        let currentSub = null;
+        window.openGrading = async function (code, title) {
+            let subs = window.fsData ? await window.fsData.getAllSubmissions() : JSON.parse(localStorage.getItem('spedia_submissions') || '[]');
+            currentSub = subs.find(s => s.code === code && s.examTitle === title);
+            document.getElementById('grad-student-name').innerText = currentSub.name || code;
+
+            let allExams = [];
+            if (window.fsData && window.fsData.getAllExams) {
+                try { allExams = await window.fsData.getAllExams(); } catch (e) { }
+            } else {
+                allExams = JSON.parse(localStorage.getItem('spedia_exams') || '[]');
+            }
+            let originalExam = allExams.find(e => e.title === title);
+            let qList = (originalExam && originalExam.questionsList) ? originalExam.questionsList : [];
+
+            let answersHtml = '';
+            let ansObj = currentSub.answers || {};
+            let total = Array.isArray(ansObj) ? ansObj.length : Object.keys(ansObj).length;
+
+            for (let i = 0; i < total; i++) {
+                let q = qList[i] || {};
+                let qText = q.text || (typeof q === 'string' ? q : 'سؤال محذوف/غير معروف');
+                let aText = ansObj[i] || 'لم تتم الإجابة';
+
+                answersHtml += `
+                <div style="margin-top:15px; border-bottom:1px solid #eee; padding-bottom:15px; background:#f9fbff; padding:15px; border-radius:10px;">
+                    <p style="font-weight:bold; color:var(--text-dark); margin-bottom:10px;"><b style="color:var(--primary-color);">السؤال ${i + 1}:</b> ${qText}</p>
+                    <p style="margin-bottom:10px; font-weight:bold;"><b>الإجابة:</b> <span style="color:#e91e63;">${aText}</span></p>
+                    <div style="display:flex; gap:15px; margin-top:10px; padding-top:10px; border-top:1px dashed #ccc;">
+                        <label style="cursor:pointer; font-weight:bold; color:#4caf50;"><input type="radio" name="grad_q${i}" value="1"> صح</label>
+                        <label style="cursor:pointer; font-weight:bold; color:#f44336;"><input type="radio" name="grad_q${i}" value="0"> خطأ</label>
+                    </div>
+                </div>`;
+            }
+
+            if (total === 0) {
+                answersHtml = '<p style="text-align:center; color:red; font-weight:bold;">لا توجد إجابات مخزنة لهذا الكود.</p>';
+            }
+
+            document.getElementById('grad-questions-container').innerHTML = answersHtml;
+            document.getElementById('grading-modal').style.display = 'flex';
+        }
+
+        window.submitGrading = async function () {
+            let ansObj = currentSub.answers || {};
+            let total = Array.isArray(ansObj) ? ansObj.length : Object.keys(ansObj).length;
+            total = total === 0 ? 1 : total;
+            let ok = 0;
+            for (let i = 0; i < total; i++) {
+                let sel = document.querySelector(`input[name="grad_q${i}"]:checked`);
+                if (sel && sel.value === "1") ok++;
+            }
+
+            // Save to Results
+            let newResult = { code: currentSub.code, examTitle: currentSub.examTitle, grade: `${ok}/${total}`, date: new Date().toLocaleDateString('ar-EG') };
+            let results = JSON.parse(localStorage.getItem('spedia_results') || '[]');
+            results.push(newResult);
+            localStorage.setItem('spedia_results', JSON.stringify(results));
+
+            if (window.fsData && window.fsData.addResult) {
+                try { await window.fsData.addResult(newResult); } catch (e) { }
+            }
+
+            // Update Submissions Status
+            let subs = JSON.parse(localStorage.getItem('spedia_submissions') || '[]');
+            let sIndex = subs.findIndex(s => s.code === currentSub.code && s.examTitle === currentSub.examTitle);
+            if (sIndex > -1) {
+                subs[sIndex].status = "تم التصحيح";
+                localStorage.setItem('spedia_submissions', JSON.stringify(subs));
+            }
+            if (window.fsData && window.fsData.updateSubmission && currentSub.id) {
+                try { await window.fsData.updateSubmission(currentSub.id, { status: "تم التصحيح" }); } catch (e) { }
+            }
+
+            document.getElementById('grading-modal').style.display = 'none';
+            alert('تم التصحيح بنجاح وإرسال النتيجة للطالب!');
+            renderTables();
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            if (sessionStorage.getItem('isAdmin') !== 'yes') {
+                window.location.href = 'index.html';
+                return;
+            }
+            let adminType = sessionStorage.getItem('adminType');
+            if (adminType === 'restricted') {
+                document.getElementById('main-admin-nav').style.display = 'none';
+                document.getElementById('restricted-nav').style.display = 'flex';
+                showSection('tab-re-send');
+            } else {
+                document.getElementById('main-admin-nav').style.display = 'flex';
+                document.getElementById('restricted-nav').style.display = 'none';
+                showSection('tab-codes');
+            }
+            renderTables();
+
+            setTimeout(() => {
+                if (window.loadNotifications) window.loadNotifications('admin');
+            }, 300);
+        });
+
+        window.sendChatMessage = async function (e) {
+            e.preventDefault();
+            let code = document.getElementById('chat-code').value.trim();
+            let teacher = document.getElementById('chat-teacher-name').value.trim();
+            let msg = document.getElementById('chat-message').value.trim();
+
+            let chatMsg = { id: Date.now(), studentCode: code, teacher: teacher, message: msg, date: new Date().toLocaleDateString('ar-EG'), sender: 'admin' };
+            let chats = JSON.parse(localStorage.getItem('spedia_chat') || '[]');
+            chats.push(chatMsg);
+            localStorage.setItem('spedia_chat', JSON.stringify(chats));
+
+            if (window.fsData && window.fsData.addChatMessage) {
+                try { await window.fsData.addChatMessage(chatMsg); } catch (er) { }
+            }
+
+            let notifs = JSON.parse(localStorage.getItem('spedia_notifications') || '[]');
+            notifs.push({ code: code, text: `رسالة جديدة من ${teacher}`, date: new Date().toLocaleDateString('ar-EG'), read: false });
+            localStorage.setItem('spedia_notifications', JSON.stringify(notifs));
+
+            alert('تم إرسال الرسالة بنجاح.');
+            e.target.reset();
+            renderTables();
+        };
+
+        window.sendMonthlyReport = async function (e) {
+            e.preventDefault();
+            let code = document.getElementById('mr-code').value.trim();
+            let title = document.getElementById('mr-title').value.trim();
+            let evalText = document.getElementById('mr-evaluation').value.trim();
+            let details = document.getElementById('mr-details').value.trim();
+
+            let report = { id: Date.now(), studentCode: code, title: title, evaluation: evalText, details: details, date: new Date().toLocaleDateString('ar-EG') };
+            let reports = JSON.parse(localStorage.getItem('spedia_monthly_reports') || '[]');
+            reports.push(report);
+            localStorage.setItem('spedia_monthly_reports', JSON.stringify(reports));
+
+            if (window.fsData && window.fsData.addMonthlyReport) {
+                try { await window.fsData.addMonthlyReport(report); } catch (er) { }
+            }
+
+            let notifs = JSON.parse(localStorage.getItem('spedia_notifications') || '[]');
+            notifs.push({ code: code, text: `تقرير شهري جديد: ${title}`, date: new Date().toLocaleDateString('ar-EG'), read: false });
+            localStorage.setItem('spedia_notifications', JSON.stringify(notifs));
+
+            alert('تم إرسال التقرير الشهري بنجاح.');
+            e.target.reset();
+        };
+
+        window.addTeacherReport = async function (e) {
+            e.preventDefault();
+            let name = document.getElementById('tr-name').value.trim();
+            let lesson = document.getElementById('tr-lesson').value.trim();
+
+            let treport = { id: Date.now(), teacherName: name, lesson: lesson, date: new Date().toLocaleDateString('ar-EG') };
+            let tReports = JSON.parse(localStorage.getItem('spedia_teacher_reports') || '[]');
+            tReports.push(treport);
+            localStorage.setItem('spedia_teacher_reports', JSON.stringify(tReports));
+
+            if (window.fsData && window.fsData.addTeacherReport) {
+                try { await window.fsData.addTeacherReport(treport); } catch (er) { }
+            }
+
+            alert('تم حفظ التقرير بنجاح.');
+            e.target.reset();
+            renderTables();
+        };
+    </script>
+</body>
+
+</html>

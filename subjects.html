@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=800">
+    <title>موادي - Spedia</title>
+    <link rel="stylesheet" href="style.css?v=5">
+    <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700;800;900&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+
+<body class="dashboard-body">
+
+    <div class="dashboard-layout">
+        <!-- Sidebar -->
+        <aside class="sidebar" id="sidebar">
+            <div class="sidebar-header">
+                <a href="index.html" class="logo"
+                    style="text-decoration:none; display:flex; align-items:center; gap:10px;">
+                    <img src="img_logo.jpg" alt="Logo"
+                        style="width: 40px; height: 40px; border-radius: 50%; object-fit:cover;">
+                    <div class="logo-text">
+                        <span class="ar" style="font-size: 24px; font-weight: 900; color: #12b8c5;">منصة محمد حسني التعلمية</span>
+                        <span class="en" style="font-size: 16px; font-weight: 700; color: #121e33;">Mohamed Hosny</span>
+                    </div>
+                </a>
+                <button class="close-sidebar d-lg-none" onclick="toggleSidebar()">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+
+            <div class="user-profile-widget">
+                <img src="https://ui-avatars.com/api/?name=طالب+مجتهد&background=12b8c5&color=fff&size=100" alt="User">
+                <h4>أحمد محمد</h4>
+                <p>الصف العاشر</p>
+            </div>
+
+            <ul class="sidebar-menu">
+                <li><a href="dashboard.html"><i class="fas fa-home"></i> <span>لوحة التحكم</span></a></li>
+                <li class="active"><a href="subjects.html"><i class="fas fa-book"></i> <span>موادي</span></a></li>
+                <li><a href="#"><i class="fas fa-video"></i> <span>حصص مباشرة</span></a></li>
+                <li><a href="#"><i class="fas fa-calendar-alt"></i> <span>جدول الحصص</span></a></li>
+                <li><a href="#"><i class="fas fa-file-alt"></i> <span>الامتحانات</span></a></li>
+                <li><a href="#"><i class="fas fa-question-circle"></i> <span>اسأل معلمك</span></a></li>
+                <li class="menu-divider"></li>
+                <li><a href="#"><i class="fas fa-cog"></i> <span>الإعدادات</span></a></li>
+                <li><a href="index.html" class="logout"><i class="fas fa-sign-out-alt"></i> <span>تسجيل خروج</span></a>
+                </li>
+            </ul>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="dashboard-main">
+            <!-- Top Header -->
+            <header class="dashboard-header">
+                <div class="header-left">
+                    <button class="open-sidebar d-lg-none" onclick="toggleSidebar()">
+                        <i class="fas fa-bars"></i>
+                    </button>
+                    <div class="search-bar">
+                        <i class="fas fa-search"></i>
+                        <input type="text" placeholder="ابحث عن مادة..">
+                    </div>
+                </div>
+                <div class="header-right">
+                    <div class="wallet-badge">
+                        <i class="fas fa-coins"></i>
+                        <span>150 نقطة</span>
+                    </div>
+                    <button class="notification-btn">
+                        <i class="far fa-bell"></i>
+                        <span class="badge">3</span>
+                    </button>
+                </div>
+            </header>
+
+            <!-- Content Area -->
+            <div class="dashboard-content">
+                <div class="page-title-box">
+                    <h2>المواد الدراسية</h2>
+                    <p>اختر المادة لتكمل المشاهدة وحل التمارين</p>
+                </div>
+
+                <div class="subjects-grid">
+                    <!-- Subject Card 1 -->
+                    <div class="subject-card">
+                        <div class="subject-cover" style="background:#e8fbff">
+                            <i class="fas fa-calculator fa-4x highlight"></i>
+                        </div>
+                        <div class="subject-body">
+                            <h3>الرياضيات</h3>
+                            <p>أ. محمد عبدالله</p>
+                            <div class="subject-meta">
+                                <span><i class="fas fa-video"></i> 45 فيديو</span>
+                                <span><i class="fas fa-file-alt"></i> 12 اختبار</span>
+                            </div>
+                            <div class="progress-bar-container mt-10">
+                                <div class="progress" style="width: 60%;"></div>
+                            </div>
+                            <a href="#" class="btn-primary w-100 mt-10"
+                                style="display:block; text-align:center; font-size: 16px; padding: 10px;">دخول
+                                للمادة</a>
+                        </div>
+                    </div>
+                    <!-- Subject Card 2 -->
+                    <div class="subject-card">
+                        <div class="subject-cover" style="background:#fff3e0">
+                            <i class="fas fa-flask fa-4x" style="color:#ff9800;"></i>
+                        </div>
+                        <div class="subject-body">
+                            <h3>الكيمياء</h3>
+                            <p>أ. فهد الشمري</p>
+                            <div class="subject-meta">
+                                <span><i class="fas fa-video"></i> 32 فيديو</span>
+                                <span><i class="fas fa-file-alt"></i> 8 اختبار</span>
+                            </div>
+                            <div class="progress-bar-container mt-10">
+                                <div class="progress" style="width: 30%;"></div>
+                            </div>
+                            <a href="#" class="btn-primary w-100 mt-10"
+                                style="display:block; text-align:center; font-size: 16px; padding: 10px;">دخول
+                                للمادة</a>
+                        </div>
+                    </div>
+                    <!-- Subject Card 3 -->
+                    <div class="subject-card">
+                        <div class="subject-cover" style="background:#e8f5e9">
+                            <i class="fas fa-globe-americas fa-4x" style="color:#4caf50;"></i>
+                        </div>
+                        <div class="subject-body">
+                            <h3>الاجتماعيات</h3>
+                            <p>أ. سالم سعد</p>
+                            <div class="subject-meta">
+                                <span><i class="fas fa-video"></i> 25 فيديو</span>
+                                <span><i class="fas fa-file-alt"></i> 5 اختبار</span>
+                            </div>
+                            <div class="progress-bar-container mt-10">
+                                <div class="progress" style="width: 0%;"></div>
+                            </div>
+                            <a href="#" class="btn-primary w-100 mt-10"
+                                style="display:block; text-align:center; font-size: 16px; padding: 10px;">دخول
+                                للمادة</a>
+                        </div>
+                    </div>
+                    <!-- Subject Card 4 -->
+                    <div class="subject-card">
+                        <div class="subject-cover" style="background:#e3f2fd">
+                            <i class="fas fa-language fa-4x" style="color:#2196f3;"></i>
+                        </div>
+                        <div class="subject-body">
+                            <h3>اللغة الإنجليزية</h3>
+                            <p>أ. جون سميث</p>
+                            <div class="subject-meta">
+                                <span><i class="fas fa-video"></i> 50 فيديو</span>
+                                <span><i class="fas fa-file-alt"></i> 15 اختبار</span>
+                            </div>
+                            <div class="progress-bar-container mt-10">
+                                <div class="progress" style="width: 80%;"></div>
+                            </div>
+                            <a href="#" class="btn-primary w-100 mt-10"
+                                style="display:block; text-align:center; font-size: 16px; padding: 10px;">دخول
+                                للمادة</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <!-- Firebase SDKs -->
+    <script type="module" src="firebase-init.js"></script>
+    <script type="module" src="firebase-data.js"></script>
+    <script src="script.js?v=5"></script>
+</body>
+
+</html>

@@ -1,0 +1,301 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=800">
+    <title>لوحة التحكم - منصة محمد حسني التعلمية</title>
+    <link rel="stylesheet" href="style.css?v=5">
+    <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700;800;900&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        .banner-img img {
+            animation: float 4s ease-in-out infinite;
+        }
+
+        .subject-mini-card {
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            border-right: 4px solid transparent;
+        }
+
+        .subject-mini-card:hover {
+            transform: translateX(-5px);
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.08);
+            border-right-color: var(--primary-color);
+        }
+    </style>
+</head>
+
+<body class="dashboard-body" style="background:#f4f7fa;">
+
+    <div class="dashboard-layout">
+        <!-- Sidebar -->
+        <aside class="sidebar" id="sidebar" style="border-left:1px solid #eef1f5;">
+            <div class="sidebar-header">
+                <a href="index.html" class="logo"
+                    style="text-decoration:none; display:flex; align-items:center; gap:10px;">
+                    <img src="img_logo.jpg" alt="Logo"
+                        style="width: 35px; height: 35px; object-fit: cover; clip-path: circle(45%); border-radius: 50%; animation: none !important; transform: none !important;">
+                    <div class="logo-text">
+                        <span class="ar"
+                            style="font-size: 24px; font-weight: 900; color: var(--primary-color);">منصة محمد حسني التعلمية</span>
+                        <span class="en" style="font-size: 16px; font-weight: 700; color: #121e33;">Mohamed Hosny</span>
+                    </div>
+                </a>
+                <button class="close-sidebar d-lg-none" onclick="toggleSidebar()">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+
+            <div class="user-profile-widget"
+                style="background:linear-gradient(180deg, #ffffff, #f9fbfc); border-bottom:none; margin:15px; border-radius:15px; box-shadow:0 4px 10px rgba(0,0,0,0.02);">
+                <div style="position:relative; display:inline-block; margin-bottom: 5px;">
+                    <input type="file" id="profile-upload" accept="image/*" style="display:none;"
+                        onchange="updateProfileImg(this)">
+                    <img id="sidebar-profile-img" src="img_logo.jpg" alt="Logo Profile"
+                        style="width:100px; height:100px; object-fit:cover; border-radius:50%; box-shadow:0 10px 20px rgba(0,0,0,0.15); clip-path: circle(45%); cursor:pointer; animation: none !important; transform: none !important;"
+                        onclick="document.getElementById('profile-upload').click()" title="تغيير الصورة">
+                    <i class="fas fa-camera"
+                        style="position:absolute; bottom:5px; right:5px; color:#121e33; font-size:18px; background:#fff; border-radius:50%; padding:5px; box-shadow: 0 2px 5px rgba(0,0,0,0.1); cursor:pointer;"
+                        onclick="document.getElementById('profile-upload').click()"></i>
+                </div>
+                <div style="display:flex; justify-content:center; align-items:center; gap: 8px; margin-top:5px;">
+                    <h4 id="dash-name" style="font-size:20px; margin:0;">طالب منصة محمد حسني التعلمية</h4>
+                </div>
+                <p id="dash-grade" style="color:var(--primary-color); font-weight:700; font-size:16px;">الصف العاشر</p>
+            </div>
+
+            <ul class="sidebar-menu" style="padding:0 15px;">
+                <li class="active"><a href="#" onclick="showDashTab('dash-home', this)"
+                        style="border-radius:10px; margin-bottom:5px;"><i class="fas fa-home"></i>
+                        <span>الرئيسية</span></a></li>
+                <li><a href="#" onclick="showDashTab('dash-required', this)"
+                        style="border-radius:10px; margin-bottom:5px;"><i class="fas fa-list-ul"></i> <span>المطلوب
+                            (مهامك)</span></a></li>
+                <li><a href="#" onclick="showDashTab('dash-results', this)"
+                        style="border-radius:10px; margin-bottom:5px;"><i class="fas fa-poll-h"></i>
+                        <span>النتائج</span></a></li>
+                <li><a href="#" onclick="registerAttendance()" style="border-radius:10px; margin-bottom:5px;"><i
+                            class="fas fa-user-check"></i> <span style="color:#4caf50; font-weight:700;">تسجيل حضور
+                            اليوم</span></a></li>
+                <li><a href="index.html" style="border-radius:10px; margin-bottom:5px;"><i class="fas fa-book-open"></i>
+                        <span>تصفح جميع الكورسات</span></a></li>
+                <li><a href="#" onclick="showDashTab('dash-links', this)"
+                        style="border-radius:10px; margin-bottom:5px;"><i class="fas fa-link"></i> <span>روابط
+                            الحصص</span></a></li>
+                <li><a href="#" onclick="showDashTab('dash-files', this)"
+                        style="border-radius:10px; margin-bottom:5px;"><i class="fas fa-file-upload"></i> <span>المحتوى
+                            الورقي</span></a></li>
+                <li><a href="#" onclick="showDashTab('dash-custom', this)"
+                        style="border-radius:10px; margin-bottom:5px; background:linear-gradient(135deg, rgba(18,184,197,0.1), transparent);"><i
+                            class="fas fa-envelope-open-text" style="color:#12b8c5;"></i> <span
+                            style="font-weight:bold;">محتوى مخصص لي</span></a></li>
+                <li><a href="#" onclick="showDashTab('dash-messages', this)"
+                        style="border-radius:10px; margin-bottom:5px;"><i class="fas fa-comments"></i> <span>الرسائل
+                            والتواصل</span></a></li>
+                <li><a href="#" onclick="showDashTab('dash-monthly-reports', this)"
+                        style="border-radius:10px; margin-bottom:5px;"><i class="fas fa-file-invoice"></i>
+                        <span>التقارير
+                            الشهرية</span></a></li>
+                <li class="menu-divider"></li>
+                <li><a href="javascript:void(0)" class="logout" onclick="logout()" style="border-radius:10px;"><i
+                            class="fas fa-sign-out-alt"></i> <span>تسجيل الخروج</span></a></li>
+            </ul>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="dashboard-main">
+            <!-- Header -->
+            <header class="dashboard-header" style="border-bottom:1px solid #eef1f5;">
+                <div class="header-left">
+                    <button class="open-sidebar d-lg-none" onclick="toggleSidebar()"
+                        style="background:#fff; border:1px solid #eee; padding:10px; border-radius:10px;"><i
+                            class="fas fa-bars"></i></button>
+                    <div class="search-bar" style="max-width:250px;">
+                        <i class="fas fa-search"></i>
+                        <input type="text" placeholder="البحث السريع..."
+                            style="background:#f4f7fa; border:none; box-shadow:inset 0 2px 5px rgba(0,0,0,0.02);">
+                    </div>
+                </div>
+                <div class="header-right">
+                    <div style="position: relative; display: inline-block;">
+                        <button id="noti-btn" onclick="toggleNotifications(event)"
+                            style="background:transparent; border:none; font-size:24px; position:relative; cursor:pointer;"
+                            title="الإشعارات">
+                            <i class="fas fa-bell" style="color:var(--primary-dark);"></i>
+                            <span id="noti-badge"
+                                style="display:none; position:absolute; top:-5px; right:-5px; background:#f44336; color:#fff; font-size:10px; padding:2px 5px; border-radius:10px; font-weight:bold;">0</span>
+                        </button>
+                        <div id="noti-dropdown"
+                            style="display:none; position:absolute; top:40px; right:0; width:300px; background:#fff; border-radius:10px; box-shadow:0 10px 30px rgba(0,0,0,0.1); z-index:1000; overflow:hidden;">
+                            <div style="padding:15px; background:#1e3c72; color:#fff; font-weight:bold;">الإشعارات</div>
+                            <div id="noti-list" style="max-height:300px; overflow-y:auto; padding:10px;"></div>
+                        </div>
+                    </div>
+                </div>
+            </header>
+
+            <div class="dashboard-content">
+                <div class="welcome-banner" style="box-shadow:0 15px 30px rgba(18,184,197,0.2);">
+                    <div class="banner-text">
+                        <h2 style="font-size:32px; margin-bottom: 10px;">مرحباً بك يا مبدع! Welcome <i
+                                class="fas fa-rocket" style="color:yellow; margin-right:10px;"></i></h2>
+                        <p style="font-size:18px; margin-bottom:25px;">مستعد تكتسح المنهج وتكون من الأوائل؟ إحنا معاك
+                            خطوة بخطوة.</p>
+                        <a href="index.html" class="btn-primary"
+                            style="background:#fff; color:var(--primary-color); border-radius:15px; font-size:16px;">
+                            <i class="fas fa-book"></i> تصفح أحدث الكورسات بالنظام
+                        </a>
+                    </div>
+                    <div class="banner-img"
+                        style="background: transparent; border-radius: 50%; width: 220px; height: 220px; overflow: hidden; display: flex; justify-content: center; align-items: center; box-shadow: 0 15px 30px rgba(0,0,0,0.1);">
+                        <img src="img_logo.jpg" alt="Logo"
+                            style="width: 100%; height: 100%; object-fit: cover; clip-path: circle(45%); border-radius: 50%; animation: none !important; transform: none !important;">
+                    </div>
+                </div>
+
+                <div id="dash-home" class="dash-tab-section" style="display:block;">
+                    <div class="two-columns" style="gap:40px;">
+                        <div class="column">
+                            <h3 class="section-title"><i class="fas fa-bell" style="color:var(--primary-color);"></i>
+                                آخر التنبيهات</h3>
+                            <p style="color:#6a7c92; font-weight:bold;">لا توجد تنبيهات جديدة من الإدارة حالياً.</p>
+                        </div>
+                        <div class="column">
+                            <h3 class="section-title" style="color:#ff9800"><i class="fas fa-award"></i> لوحة التميز
+                                (تقييمات الأداء)</h3>
+                            <div id="student-evals">
+                                <!-- Populated dynamically via Admin -->
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div id="dash-required" class="dash-tab-section" style="display:none;">
+                    <h3 class="section-title"><i class="fas fa-tasks" style="color:var(--primary-color);"></i>
+                        الامتحانات والواجبات والاختبارات القصيرة (المطلوب)</h3>
+                    <div id="student-exams" class="subject-mini-cards">
+                        <!-- Populated dynamically based on Grade -->
+                    </div>
+                </div>
+
+                <div id="dash-results" class="dash-tab-section" style="display:none;">
+                    <h3 class="section-title" style="color:#9c27b0"><i class="fas fa-poll-h"></i> إشعارات ونتائج
+                        الاختبارات</h3>
+                    <div id="student-results" class="subject-mini-cards">
+                        <!-- Populated dynamically via Admin -->
+                    </div>
+                </div>
+
+                <div id="dash-links" class="dash-tab-section" style="display:none;">
+                    <h3 class="section-title"><i class="fas fa-link" style="color:var(--primary-color);"></i> روابط
+                        الحصص المباشرة</h3>
+                    <div id="student-links-container" style="display:grid; gap:15px;"></div>
+                </div>
+
+                <div id="dash-files" class="dash-tab-section" style="display:none;">
+                    <h3 class="section-title"><i class="fas fa-file-download" style="color:var(--primary-color);"></i>
+                        المحتوى الورقي (من الإدارة)</h3>
+                    <div id="admin-files-container" style="display:grid; gap:15px; margin-bottom:40px;"></div>
+
+                    <h3 class="section-title"><i class="fas fa-file-upload" style="color:#ff9800;"></i> إرسال الواجب أو
+                        المحتوى الورقي</h3>
+                    <form onsubmit="window.uploadStudentFile(event)"
+                        style="background:#fff; padding:20px; border-radius:15px; box-shadow:0 5px 15px rgba(0,0,0,0.05);">
+                        <div class="form-group" style="margin-bottom:15px;">
+                            <label style="font-weight:bold; display:block; margin-bottom:8px;">العنوان / الوصف</label>
+                            <input type="text" id="sf-title" required
+                                style="width:100%; padding:10px; border:1px solid #ccc; border-radius:10px;">
+                        </div>
+                        <div class="form-group" style="margin-bottom:15px;">
+                            <label style="font-weight:bold; display:block; margin-bottom:8px;">اختر الملف</label>
+                            <input type="file" id="sf-file" accept="image/*,.pdf" required
+                                style="width:100%; padding:10px; border:1px solid #ccc; border-radius:10px;">
+                        </div>
+                        <button type="submit" id="btn-sf-upload" class="btn-primary w-100" style="width:100%;">رفع
+                            وإرسال</button>
+                    </form>
+                </div>
+
+                <div id="dash-custom" class="dash-tab-section" style="display:none;">
+                    <h3 class="section-title"><i class="fas fa-envelope-open-text"
+                            style="color:var(--primary-color);"></i>
+                        المحتوى المخصص لك</h3>
+                    <div id="student-custom-container" style="display:grid; gap:15px; margin-bottom:40px;"></div>
+                </div>
+
+                <div id="dash-messages" class="dash-tab-section" style="display:none;">
+                    <h3 class="section-title"><i class="fas fa-comments" style="color:var(--primary-color);"></i>
+                        الرسائل الواردة والتواصل</h3>
+                    <div id="student-messages-container" style="display:grid; gap:15px; margin-bottom:40px;"></div>
+
+                    <h3 class="section-title"><i class="fas fa-paper-plane" style="color:#9c27b0;"></i> إرسال رسالة
+                        للمعلم</h3>
+                    <form onsubmit="window.sendStudentMessage(event)"
+                        style="background:#fff; padding:20px; border-radius:15px; box-shadow:0 5px 15px rgba(0,0,0,0.05);">
+                        <div class="form-group" style="margin-bottom:15px;">
+                            <label style="font-weight:bold; display:block; margin-bottom:8px;">اسم المدرس (اكتبه
+                                يدوياً)</label>
+                            <input type="text" id="sm-teacher" required placeholder="مثال: أ. أحمد محمود"
+                                style="width:100%; padding:10px; border:1px solid #ccc; border-radius:10px;">
+                        </div>
+                        <div class="form-group" style="margin-bottom:15px;">
+                            <label style="font-weight:bold; display:block; margin-bottom:8px;">الرسالة /
+                                الاستفسار</label>
+                            <textarea id="sm-message" rows="4" required placeholder="اكتب رسالتك هنا..."
+                                style="width:100%; padding:10px; border:1px solid #ccc; border-radius:10px;"></textarea>
+                        </div>
+                        <button type="submit" id="btn-sm-send" class="btn-primary w-100"
+                            style="width:100%; background:#9c27b0;">إرسال
+                            الرسالة</button>
+                    </form>
+                </div>
+
+                <div id="dash-monthly-reports" class="dash-tab-section" style="display:none;">
+                    <h3 class="section-title"><i class="fas fa-file-invoice" style="color:#9c27b0;"></i>
+                        التقارير الشهرية</h3>
+                    <div id="student-monthly-reports-container" style="display:grid; gap:15px; margin-bottom:40px;">
+                    </div>
+                </div>
+
+                <h3 class="section-title" style="margin-top:50px;"><i class="fas fa-chart-pie"
+                        style="color:#4caf50;"></i> إحصائيات النمو السريعة</h3>
+                <div class="stats-grid">
+                    <div class="stat-card animate-on-scroll"
+                        style="animation-delay:0.1s; border:1px solid #eee; transition:0.3s; cursor:pointer;"
+                        onmouseover="this.style.transform='translateY(-5px)'; this.style.boxShadow='0 10px 20px rgba(0,0,0,0.05)';"
+                        onmouseout="this.style.transform='none'; this.style.boxShadow='none';">
+                        <div class="icon" style="background:linear-gradient(135deg, #e8f5e9, #a5d6a7); color:#2e7d32;">
+                            <i class="fas fa-check-double"></i>
+                        </div>
+                        <div class="details">
+                            <h3 style="font-size:32px;">14</h3>
+                            <p style="font-weight:700;">درس تم إنجازه بامتياز</p>
+                        </div>
+                    </div>
+                    <div class="stat-card animate-on-scroll"
+                        style="animation-delay:0.3s; border:1px solid #eee; transition:0.3s; cursor:pointer;"
+                        onmouseover="this.style.transform='translateY(-5px)'; this.style.boxShadow='0 10px 20px rgba(0,0,0,0.05)';"
+                        onmouseout="this.style.transform='none'; this.style.boxShadow='none';">
+                        <div class="icon" style="background:linear-gradient(135deg, #e3f2fd, #90caf9); color:#1565c0;">
+                            <i class="fas fa-calendar-check"></i>
+                        </div>
+                        <div class="details">
+                            <h3 id="stat-attendance-days" style="font-size:32px;">0</h3>
+                            <p style="font-weight:700;">عدد أيام الحضور والتفاعل</p>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </main>
+    </div>
+
+    <!-- Firebase SDKs -->
+    <script type="module" src="firebase-init.js"></script>
+    <script type="module" src="firebase-data.js"></script>
+    <script src="script.js?v=5"></script>
+</body>
+
+</html>

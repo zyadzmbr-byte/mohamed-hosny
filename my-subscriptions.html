@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=800">
+    <title>كورساتي وكتبي - منصة محمد حسني التعلمية</title>
+    <link rel="stylesheet" href="style.css?v=5">
+    <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700;800;900&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        body {
+            background-color: #ffffff;
+        }
+
+        .explore-hero {
+            position: relative;
+            background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
+            padding: 100px 20px 100px;
+            text-align: center;
+            overflow: hidden;
+            color: #fff;
+        }
+
+        .explore-wave {
+            position: absolute;
+            bottom: -1px;
+            left: 0;
+            width: 100%;
+            height: auto;
+            line-height: 0;
+            z-index: 5;
+        }
+
+        .explore-wave svg {
+            display: block;
+            width: 100%;
+            height: clamp(60px, 12vw, 150px);
+        }
+
+        .hero-text h1 {
+            font-size: 52px;
+            font-weight: 900;
+            margin-bottom: 20px;
+            position: relative;
+            z-index: 10;
+            letter-spacing: -1px;
+            color: #fff;
+        }
+
+        .content-area {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px 20px 150px;
+            position: relative;
+        }
+
+        .section-title {
+            font-size: 32px;
+            font-weight: 900;
+            color: #132644;
+            margin-bottom: 30px;
+            text-align: right;
+        }
+
+        .courses-grid,
+        .books-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 25px;
+            margin-bottom: 60px;
+        }
+
+        .course-card,
+        .book-card {
+            background: #fff;
+            border-radius: 25px;
+            overflow: hidden;
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.05);
+            transition: 0.4s;
+            border: 1px solid #f1f6fa;
+            position: relative;
+        }
+
+        .course-card:hover,
+        .book-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 25px 45px rgba(18, 184, 197, 0.15);
+            border-color: #bef4f5;
+        }
+    </style>
+</head>
+
+<body>
+    <header class="navbar"
+        style="background:rgba(255,255,255,0.95); backdrop-filter:blur(15px); border-bottom:1px solid #f1f1f1; position:sticky; top:0; z-index:1000; box-shadow:0 10px 30px rgba(0,0,0,0.05); padding:15px 5%;">
+        <div class="nav-container">
+            <a href="index.html" class="logo text-dark"
+                style="display:flex; align-items:center; gap:10px; text-decoration:none;">
+                <img src="img_logo.jpg" alt="Logo"
+                    style="width: 50px; height: 50px; border-radius: 50%; object-fit:cover;">
+                <div class="logo-text" style="display:flex; flex-direction:column; line-height:1;">
+                    <span class="ar" style="font-size:28px; font-weight:900; color:var(--primary-color);">منصة محمد حسني التعلمية</span>
+                </div>
+            </a>
+            <div class="nav-actions">
+                <a href="explore.html" class="btn-discover"
+                    style="padding:12px 25px; font-size:18px; text-decoration:none;">
+                    <i class="fas fa-th-large"></i> <span data-i18n="discover">اكتشف المواد</span>
+                </a>
+            </div>
+        </div>
+    </header>
+
+    <section class="explore-hero">
+        <div class="hero-text">
+            <h1 id="hero-main-title"><i class="fas fa-book-reader"></i> مكتبتي الخاصة</h1>
+            <p>المحتوى الذي اشتركت به وتنتظر تفعيله أو مفعل لك</p>
+        </div>
+        <div class="explore-wave">
+            <svg viewBox="0 0 1440 320" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
+                <path fill="#ffffff" fill-opacity="1"
+                    d="M0,224L60,208C120,192,240,160,360,160C480,160,600,192,720,202.7C840,213,960,203,1080,176C1200,149,1320,107,1380,85.3L1440,64L1440,320L1380,320C1320,320,1200,320,1080,320C960,320,840,320,720,320C600,320,480,320,360,320C240,320,120,320,60,320L0,320Z">
+                </path>
+            </svg>
+        </div>
+    </section>
+
+    <div class="content-area">
+        <div class="courses-section">
+            <h2 class="section-title">الكورسات المشترك بها</h2>
+            <div class="courses-grid" id="courses-grid">
+                <!-- Injected via JS -->
+            </div>
+        </div>
+        <div class="books-section mt-50">
+            <h2 class="section-title">المذكرات و الكتب المطبوعة</h2>
+            <div class="books-grid" id="books-grid">
+                <!-- Injected via JS -->
+            </div>
+        </div>
+        <div class="games-section mt-50">
+            <h2 class="section-title">الألعاب والاختبارات الإلكترونية (HTML)</h2>
+            <div class="courses-grid" id="games-grid">
+                <!-- Injected via JS -->
+            </div>
+        </div>
+    </div>
+
+    <!-- Firebase SDKs -->
+    <script type="module" src="firebase-init.js"></script>
+    <script type="module" src="firebase-data.js"></script>
+    <script src="script.js?v=5"></script>
+</body>
+
+</html>

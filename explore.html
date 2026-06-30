@@ -1,0 +1,461 @@
+﻿<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=800">
+    <title>اكتشف المواد - منصة محمد حسني التعلمية</title>
+    <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700;800;900&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        body {
+            background-color: #ffffff;
+        }
+
+        .explore-hero {
+            position: relative;
+            background: linear-gradient(to bottom, #dffbfb 0%, #ecfdfd 100%);
+            padding: 100px 20px 100px;
+            text-align: center;
+            overflow: hidden;
+        }
+
+        .explore-wave {
+            position: absolute;
+            bottom: -1px;
+            left: 0;
+            width: 100%;
+            height: auto;
+            line-height: 0;
+            z-index: 5;
+        }
+
+        .explore-wave svg {
+            display: block;
+            width: 100%;
+            height: clamp(60px, 12vw, 150px);
+        }
+
+        .hero-text h1 {
+            font-size: 52px;
+            font-weight: 900;
+            color: #132644;
+            margin-bottom: 20px;
+            position: relative;
+            z-index: 10;
+            letter-spacing: -1px;
+        }
+
+        .hero-text p {
+            font-size: 24px;
+            color: #6a7c92;
+            font-weight: 700;
+            max-width: 800px;
+            margin: 0 auto;
+            position: relative;
+            z-index: 10;
+        }
+
+        .hero-cap {
+            position: absolute;
+            left: 10%;
+            bottom: 20%;
+            width: 180px;
+            filter: drop-shadow(0 20px 30px rgba(0, 0, 0, 0.2));
+            transform: rotate(-15deg);
+            z-index: 10;
+            animation: float 4s ease-in-out infinite;
+        }
+
+        @keyframes float {
+
+            0%,
+            100% {
+                transform: translateY(0) rotate(-15deg);
+            }
+
+            50% {
+                transform: translateY(-20px) rotate(-10deg);
+            }
+        }
+
+        .content-area {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 60px 20px 60px;
+            position: relative;
+        }
+
+        .section-title {
+            font-size: 40px;
+            font-weight: 900;
+            color: #132644;
+            margin-bottom: 50px;
+            text-align: right;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .section-title .dimmed {
+            color: #6a7c92;
+        }
+
+        /* Stages Grid */
+        .stages-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 30px;
+            display: none;
+        }
+
+        .stage-card {
+            background: radial-gradient(circle at 50% 50%, #ffffff 40%, rgba(18, 184, 197, 0.15) 150%);
+            border-radius: 30px;
+            padding: 50px 30px;
+            text-align: center;
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.05);
+            border: 2px solid #f4fcfc;
+            cursor: pointer;
+            transition: 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            min-height: 220px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .stage-card::before {
+            content: '';
+            position: absolute;
+            top: -50px;
+            right: -50px;
+            width: 100px;
+            height: 100px;
+            background: rgba(18, 184, 197, 0.1);
+            filter: blur(30px);
+            border-radius: 50%;
+        }
+
+        .stage-card:hover {
+            transform: translateY(-15px);
+            box-shadow: 0 25px 45px rgba(18, 184, 197, 0.2);
+            border-color: #bef4f5;
+        }
+
+        .stage-card h3 {
+            font-size: 40px;
+            font-weight: 900;
+            color: #12b8c5;
+            line-height: 1.3;
+            margin: 0;
+            position: relative;
+            z-index: 2;
+        }
+
+        /* Grades Grid */
+        .grades-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+            gap: 30px;
+            display: none;
+        }
+
+        .grade-card {
+            background: radial-gradient(circle at 50% 50%, #ffffff 40%, rgba(18, 184, 197, 0.15) 150%);
+            border-radius: 25px;
+            padding: 50px 20px 30px;
+            text-align: center;
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.05);
+            border: 2px solid #f4fcfc;
+            cursor: pointer;
+            transition: 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            position: relative;
+        }
+
+        .grade-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 20px 40px rgba(18, 184, 197, 0.2);
+            border-color: #bef4f5;
+        }
+
+        .grade-card .grade-num {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 140px;
+            height: 140px;
+            margin: 0 auto 30px auto;
+            position: relative;
+            background: transparent;
+            border-radius: 0;
+            box-shadow: none;
+        }
+
+        /* Default base styling for the inflated balloon font */
+        .grade-card .grade-num .num-text {
+            font-size: 150px;
+            font-weight: 900;
+            font-family: 'Arial Rounded MT Bold', 'Arial', sans-serif;
+            /* Restored old font */
+            z-index: 2;
+            display: inline-block;
+        }
+
+        /* The Balloon Valve / Knot (Base structure) */
+        .grade-card .grade-num::after {
+            content: '';
+            position: absolute;
+            bottom: -5px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 0;
+            height: 0;
+            border-left: 10px solid transparent;
+            border-right: 10px solid transparent;
+            border-bottom: 22px solid transparent;
+            border-radius: 6px;
+            z-index: 1;
+        }
+
+        /* Color 1: Gold */
+        .grade-card:nth-child(5n+1) .grade-num .num-text {
+            color: #ffca28;
+            -webkit-text-stroke: 8px #ffca28;
+            text-shadow: -4px -4px 0px rgba(255, 255, 255, 0.9), 0px 6px 0px #d4a017, 0px 15px 25px rgba(0, 0, 0, 0.4);
+        }
+
+        .grade-card:nth-child(5n+1) .grade-num::after {
+            border-bottom-color: #ffca28;
+        }
+
+        /* Color 2: Red / Rose */
+        .grade-card:nth-child(5n+2) .grade-num .num-text {
+            color: #ff5252;
+            -webkit-text-stroke: 8px #ff5252;
+            text-shadow: -4px -4px 0px rgba(255, 255, 255, 0.9), 0px 6px 0px #c62828, 0px 15px 25px rgba(0, 0, 0, 0.4);
+        }
+
+        .grade-card:nth-child(5n+2) .grade-num::after {
+            border-bottom-color: #ff5252;
+        }
+
+        /* Color 3: Cyan / Sky Blue */
+        .grade-card:nth-child(5n+3) .grade-num .num-text {
+            color: #18dcff;
+            -webkit-text-stroke: 8px #18dcff;
+            text-shadow: -4px -4px 0px rgba(255, 255, 255, 0.9), 0px 6px 0px #0984e3, 0px 15px 25px rgba(0, 0, 0, 0.4);
+        }
+
+        .grade-card:nth-child(5n+3) .grade-num::after {
+            border-bottom-color: #18dcff;
+        }
+
+        /* Color 4: Purple */
+        .grade-card:nth-child(5n+4) .grade-num .num-text {
+            color: #c56cf0;
+            -webkit-text-stroke: 8px #c56cf0;
+            text-shadow: -4px -4px 0px rgba(255, 255, 255, 0.9), 0px 6px 0px #8e44ad, 0px 15px 25px rgba(0, 0, 0, 0.4);
+        }
+
+        .grade-card:nth-child(5n+4) .grade-num::after {
+            border-bottom-color: #c56cf0;
+        }
+
+        /* Color 5: Mint Green */
+        .grade-card:nth-child(5n+5) .grade-num .num-text {
+            color: #32ff7e;
+            -webkit-text-stroke: 8px #32ff7e;
+            text-shadow: -4px -4px 0px rgba(255, 255, 255, 0.9), 0px 6px 0px #1e8f49, 0px 15px 25px rgba(0, 0, 0, 0.4);
+        }
+
+        .grade-card:nth-child(5n+5) .grade-num::after {
+            border-bottom-color: #32ff7e;
+        }
+
+        .grade-card h4 {
+            font-size: 26px;
+            font-weight: 900;
+            color: #132644;
+            margin: 0;
+        }
+
+        .back-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            color: #6a7c92;
+            font-size: 20px;
+            font-weight: 700;
+            text-decoration: none;
+            margin-bottom: 20px;
+            transition: 0.3s;
+            cursor: pointer;
+        }
+
+        .back-btn:hover {
+            color: #12b8c5;
+            transform: translateX(5px);
+        }
+    </style>
+</head>
+
+<body>
+
+    <header class="navbar"
+        style="background:rgba(255,255,255,0.95); backdrop-filter:blur(15px); border-bottom:1px solid #f1f1f1; position:sticky; top:0; z-index:1000; box-shadow:0 10px 30px rgba(0,0,0,0.05); padding:15px 5%;">
+        <div class="nav-container">
+            <a href="index.html" class="logo text-dark"
+                style="display:flex; align-items:center; gap:10px; text-decoration:none;">
+                <img src="img_logo.jpg" alt="Logo"
+                    style="width: 50px; height: 50px; border-radius: 50%; object-fit:cover;">
+                <div class="logo-text" style="display:flex; flex-direction:column; line-height:1;">
+                    <span class="ar" style="font-size:28px; font-weight:900; color:var(--primary-color);">منصة محمد حسني التعلمية</span>
+                    <span class="en" style="font-weight:800; color:#121e33;"></span>
+                </div>
+            </a>
+
+            <div class="nav-actions">
+                <div class="discover-container">
+                    <a href="explore.html" class="btn-discover" style="padding:12px 25px; font-size:18px;">
+                        <i class="fas fa-th-large"></i> <span data-i18n="discover">اكتشف المواد</span>
+                    </a>
+                    <div class="mega-menu"
+                        style="border-radius:20px; box-shadow:0 30px 60px rgba(0,0,0,0.15); padding:30px;">
+                        <div class="mega-menu-grid"></div>
+                    </div>
+                </div>
+                <a href="#" class="nav-icon-circle cart-icon" onclick="openCart(event)"
+                    style="width:50px; height:50px; background:#f4f7fa; color:#121e33;">
+                    <i class="fas fa-shopping-cart"></i>
+                </a>
+                <a href="login.html" class="btn-login" style="padding:12px 30px; font-size:18px;">
+                    <span data-i18n="login">تسجيل دخول</span>
+                </a>
+            </div>
+        </div>
+    </header>
+
+    <section class="explore-hero">
+
+
+        <div class="hero-text">
+            <h1 id="hero-main-title">كل ما تحتاجه للدراسة بين يديك</h1>
+            <p>ارفع درجاتك مع كتب منصة منصة محمد حسني التعلمية الشاملة و فيديوهاتها و اختباراتها الذكية</p>
+        </div>
+
+        <div class="explore-wave">
+            <svg viewBox="0 0 1440 320" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
+                <path fill="#ffffff" fill-opacity="1"
+                    d="M0,224L60,208C120,192,240,160,360,160C480,160,600,192,720,202.7C840,213,960,203,1080,176C1200,149,1320,107,1380,85.3L1440,64L1440,320L1380,320C1320,320,1200,320,1080,320C960,320,840,320,720,320C600,320,480,320,360,320C240,320,120,320,60,320L0,320Z">
+                </path>
+            </svg>
+        </div>
+    </section>
+
+    <div class="content-area">
+        <!-- Stages View -->
+        <div id="stages-view">
+            <h2 class="section-title">اختر المرحلة</h2>
+            <div class="stages-grid" id="stages-grid" style="display:grid;">
+                <!-- Rendered softly -->
+            </div>
+        </div>
+
+        <!-- Grades View -->
+        <div id="grades-view" style="display:none;">
+            <div class="back-btn" onclick="showStages()">
+                <i class="fas fa-arrow-right"></i> عودة للمراحل
+            </div>
+            <h2 class="section-title"><span class="dimmed" id="selected-stage-name">المرحلة</span> اختر الصف</h2>
+            <div class="grades-grid" id="grades-grid" style="display:grid;">
+                <!-- Rendered softly -->
+            </div>
+        </div>
+    </div>
+
+
+
+    <!-- Firebase SDKs -->
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
+    <script type="module" src="firebase-init.js"></script>
+    <script type="module" src="firebase-data.js"></script>
+    <script src="script.js?v=6"></script>
+    <script>
+        // Use mapping for grades numerical representation
+        const numMapping = {
+            1: "1", 2: "2", 3: "3", 4: "4", 5: "5", 6: "6",
+            7: "7", 8: "8", 9: "9", 10: "10", 11: "11", 12: "12"
+        };
+        const titleExtractRegex = /الصف\s+(?:الحادي\s*عشر|الثاني\s*عشر|الأول|الثاني|الثالث|الرابع|الخامس|السادس|السابع|الثامن|التاسع|العاشر)|الحادي\s*عشر|الثاني\s*عشر|الأول|الثاني|الثالث|الرابع|الخامس|السادس|السابع|الثامن|التاسع|العاشر/;
+
+        document.addEventListener('DOMContentLoaded', () => {
+            renderStages();
+            document.getElementById('hero-main-title').innerText = "كل ما تحتاجه للدراسة بين يديك";
+        });
+
+        function renderStages() {
+            const cCode = 'EG';
+            const structure = COUNTRY_SYSTEMS[cCode] || COUNTRY_SYSTEMS['EG'];
+
+            const grid = document.getElementById('stages-grid');
+            grid.innerHTML = structure.map((stage, index) => {
+                // Break stage title into words for nice stacking
+                let titleParts = stage.title.split(' ');
+                let htmlTitle = titleParts.join('<br>');
+
+                return `
+                    <div class="stage-card" onclick='showGrades(${JSON.stringify(stage).replace(/'/g, "&#39;")})'>
+                        <h3>${htmlTitle}</h3>
+                    </div>
+                `;
+            }).join('');
+        }
+
+        function showGrades(stageObj) {
+            document.getElementById('stages-view').style.display = 'none';
+            document.getElementById('grades-view').style.display = 'block';
+            document.getElementById('selected-stage-name').innerText = stageObj.title;
+            // Update Title
+            document.getElementById('hero-main-title').innerText = "كل المناهج الدراسية بين يديك";
+
+            const grid = document.getElementById('grades-grid');
+            const stickers = ['📚', '✏️', '💡', '🔬', '🌍', '📐', '🎨', '🚀'];
+            grid.innerHTML = stageObj.grades.map(g => {
+                let shortNameMatch = g.name.match(titleExtractRegex);
+                let shortName = shortNameMatch ? shortNameMatch[0] : g.name;
+
+                return `
+                    <div class="grade-card" onclick="goToGrade(${g.val}, '${shortName}')">
+                        <div class="grade-num">
+                            <span class="num-text">${g.num || g.val}</span>
+                            <span style="font-size:40px; position:absolute; top: -10px; right: -10px; animation: float 3s infinite; transform: rotate(-45deg);">${stickers[(g.val || 1) % 8]}</span>
+                        </div>
+                        <h4>${shortName}.</h4>
+                    </div>
+                `;
+            }).join('');
+
+            window.scrollTo({ top: document.querySelector('.content-area').offsetTop - 100, behavior: 'smooth' });
+        }
+
+        function showStages() {
+            document.getElementById('stages-view').style.display = 'block';
+            document.getElementById('grades-view').style.display = 'none';
+            document.getElementById('hero-main-title').innerText = "كل ما تحتاجه للدراسة بين يديك";
+        }
+
+        function goToGrade(val, name) {
+            window.location.href = `grade.html?g=${val}&name=${encodeURIComponent(name)}`;
+        }
+    </script>
+
+
+</body>
+
+</html>
