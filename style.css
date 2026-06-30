@@ -1627,6 +1627,20 @@ section {
         /* لتوسيط رمز الواتساب الأبيض بصرياً بتجاهل ذيله */
     }
 
+    #fb-floating-btn {
+        bottom: 110px !important;
+    }
+
+    #fb-floating-btn i {
+        display: inline-block !important;
+        margin: 0 !important;
+        padding: 0 !important;
+        line-height: normal !important;
+        text-align: center !important;
+        font-size: 36px !important;
+        transform: translate(0px, 1px) !important;
+    }
+
     /* زوم الصفحات الداخلية (الإدارة، تسجيل الدخول، والمحتوى الداخلي) */
     .login-wrapper {
         zoom: 1.35 !important;
