@@ -1384,6 +1384,12 @@ window.unlockCourse = function (title, code) {
 
 
 document.addEventListener("DOMContentLoaded", async () => {
+    // Populate all stage selects for login and admin pages
+    const stageSelects = ['reg-stage', 'ct-stage', 'ex-stage', 'lnk-stage', 'af-stage'];
+    stageSelects.forEach(id => {
+        if (window.updateCountryStages) window.updateCountryStages(null, id, null);
+    });
+
     if (!localStorage.getItem('spedia_country')) localStorage.setItem('spedia_country', 'EG');
     // window.forceFakeData(); (Removed to fix crash)
     window.renderMegaMenu();
