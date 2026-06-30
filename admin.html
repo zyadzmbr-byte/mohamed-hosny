@@ -5,7 +5,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=800">
     <title>لوحة الإدارة - Spedia</title>
-    <link rel="stylesheet" href="style.css?v=5">
+    <link rel="stylesheet" href="style.css?v=9">
     <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700;800;900&display=swap"
         rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
@@ -195,7 +195,7 @@
             <button onclick="showSection('tab-custom', this)">إرسال محتوى لمستخدم</button>
             <button onclick="showSection('tab-re-chat', this)">نظام التواصل</button>
             <button onclick="showSection('tab-monthly-reports', this)">التقارير الشهرية</button>
-            
+
         </div>
 
         <div class="restricted-nav" id="restricted-nav"
@@ -230,7 +230,7 @@
                 <i class="fas fa-file-invoice" style="font-size: 40px; display: block; margin-bottom: 15px;"></i>
                 التقارير الشهرية
             </div>
-            
+
         </div>
 
         <!-- Sections Content (Same as before but with working forms) -->
@@ -288,7 +288,7 @@
                         ">
                         <option value="book">كتاب / مذكرة إلكترونية</option>
                         <option value="course">كورس واشتراك (فيديو يوتيوب)</option>
-                        
+
                     </select>
                 </div>
                 <div class="form-group">
@@ -299,7 +299,7 @@
                     <label>كود التفعيل (كلمة المرور) - لغلق المحتوى (إن وجد)</label>
                     <input type="text" id="ct-course-code">
                 </div>
-                
+
                 <div class="form-group">
                     <label>المرحلة</label>
                     <select id="ct-stage"
@@ -345,7 +345,7 @@
         <div id="tab-exams" class="admin-section">
             <h2>إضافة امتحان</h2>
             <form onsubmit="window.addExam(event)">
-                
+
                 <div class="form-group">
                     <label>المرحلة</label>
                     <select id="ex-stage"
@@ -413,7 +413,7 @@
         <div id="tab-links" class="admin-section">
             <h2>إضافة رابط حصة أونلاين</h2>
             <form onsubmit="window.addClassLink(event)">
-                
+
                 <div class="form-group">
                     <label>المرحلة</label>
                     <select id="lnk-stage"
@@ -449,7 +449,7 @@
         <div id="tab-files" class="admin-section">
             <h2>إرسال المحتوى الورقي والملفات للطلاب</h2>
             <form onsubmit="window.sendAdminFile(event)">
-                
+
                 <div class="form-group">
                     <label>المرحلة / السنة الدراسية</label>
                     <select id="af-stage"
@@ -704,7 +704,7 @@
     <!-- Firebase SDKs -->
     <script type="module" src="firebase-init.js"></script>
     <script type="module" src="firebase-data.js"></script>
-    <script src="script.js"></script>
+    <script src="script.js?v=9"></script>
     <script>
         function showSection(id, btn) {
             document.querySelectorAll('.admin-section').forEach(s => s.classList.remove('active'));

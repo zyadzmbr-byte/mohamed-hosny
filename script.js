@@ -1,34 +1,37 @@
 const WA_NUMBER = "01016612010";
 const WA_LINK = `https://wa.me/2${WA_NUMBER}`;
 
+window.GLOBAL_STAGES = [
+    { title: 'المرحلة الإعدادية', grades: [{ name: 'الأول الإعدادي', val: 7, num: 1 }, { name: 'الثاني الإعدادي', val: 8, num: 2 }, { name: 'الثالث الإعدادي', val: 9, num: 3 }] },
+    { title: 'الثانوية العلمي', grades: [{ name: 'الصف الأول الثانوى', val: 10, num: 1 }, { name: 'الثاني الثانوى', val: 11, num: 2 }, { name: 'الثالث الثانوى', val: 12, num: 3 }] },
+    { title: 'الثانوية الأدبي', grades: [{ name: 'الصف الأول الثانوى', val: 13, num: 1 }, { name: 'الثاني الثانوى', val: 14, num: 2 }, { name: 'الثالث الثانوى', val: 15, num: 3 }] }
+];
+
 // Helper for Admin Dashboard content selection
-window.updateCountryStages = function (countryId, stageId, gradeId) {
-    const country = document.getElementById(countryId).value;
+window.updateCountryStages = function (countryId, stageId, gradeId, autoLoad = false) {
     const stageSelect = document.getElementById(stageId);
     if (!stageSelect) return;
     stageSelect.innerHTML = '<option value="">اختر المرحلة</option>';
-    if (country === 'ALL') {
-        stageSelect.innerHTML += '<option value="ALL">كل المراحل</option>';
-    } else if (COUNTRY_SYSTEMS[country]) {
-        COUNTRY_SYSTEMS[country].forEach((stage, idx) => {
-            let opt = document.createElement('option');
-            opt.value = idx;
-            opt.textContent = stage.title;
-            stageSelect.appendChild(opt);
-        });
-    }
+    stageSelect.innerHTML += '<option value="ALL">كل المراحل</option>';
+    window.GLOBAL_STAGES.forEach((stage, idx) => {
+        let opt = document.createElement('option');
+        opt.value = idx;
+        opt.textContent = stage.title;
+        stageSelect.appendChild(opt);
+    });
 };
 
 window.updateGrades = function (countryId, stageId, gradeId) {
-    const country = document.getElementById(countryId).value;
-    const stageIdx = document.getElementById(stageId).value;
+    const stageSelect = document.getElementById(stageId);
+    if (!stageSelect) return;
+    const stageIdx = stageSelect.value;
     const gradeSelect = document.getElementById(gradeId);
     if (!gradeSelect) return;
     gradeSelect.innerHTML = '<option value="">اختر الصف</option>';
-    if (country === 'ALL' || stageIdx === 'ALL') {
+    if (stageIdx === 'ALL' || !stageIdx) {
         gradeSelect.innerHTML += '<option value="ALL">كل الصفوف</option>';
-    } else if (COUNTRY_SYSTEMS[country] && COUNTRY_SYSTEMS[country][stageIdx]) {
-        COUNTRY_SYSTEMS[country][stageIdx].grades.forEach(g => {
+    } else if (window.GLOBAL_STAGES && window.GLOBAL_STAGES[stageIdx]) {
+        window.GLOBAL_STAGES[stageIdx].grades.forEach(g => {
             let opt = document.createElement('option');
             opt.value = g.val;
             opt.textContent = g.name;
@@ -1857,4 +1860,13 @@ document.addEventListener('click', function (e) {
     if (aDropdown && aDropdown.style.display === 'block' && (!aBtn || !aBtn.contains(e.target)) && !aDropdown.contains(e.target)) {
         aDropdown.style.display = 'none';
     }
+});
+
+document.addEventListener('DOMContentLoaded', () => {
+    const stagePrefixes = ['ct', 'ex', 'lnk', 'af', 'filter'];
+    stagePrefixes.forEach(prefix => {
+        if (document.getElementById(prefix + '-stage')) {
+            window.updateCountryStages(null, prefix + '-stage', prefix + '-grade', true);
+        }
+    });
 });
