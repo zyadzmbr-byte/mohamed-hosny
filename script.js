@@ -995,10 +995,23 @@ window.finishQuiz = async function (title) {
 /* DASHBOARD LOGIC */
 window.loadStudentData = async function (user) {
     let profileImg = user.profileImg || localStorage.getItem('spedia_profile_img_' + user.code);
+    let sideImg = document.getElementById('sidebar-profile-img');
+    let sideAvatar = document.getElementById('sidebar-profile-avatar');
+
     if (profileImg) {
-        let sideImg = document.getElementById('sidebar-profile-img');
-        if (sideImg) sideImg.src = profileImg;
+        if (sideAvatar) sideAvatar.style.display = 'none';
+        if (sideImg) {
+            sideImg.style.display = 'block';
+            sideImg.src = profileImg;
+        }
         localStorage.setItem('spedia_profile_img_' + user.code, profileImg);
+    } else {
+        if (sideImg) sideImg.style.display = 'none';
+        if (sideAvatar) {
+            sideAvatar.style.display = 'flex';
+            let initials = user.name ? user.name.substring(0, 2) : 'ط';
+            sideAvatar.innerText = initials;
+        }
     }
 
     const cCode = localStorage.getItem('spedia_country') || 'EG';
@@ -1299,17 +1312,23 @@ window.toggleSidebar = function () {
 }
 
 window.promptAdmin = async function () {
-    let pass = prompt("بوابة منصة محمد حسني التعلمية للإدارة - يرجى كتابة الرقم السري (الأساسي أو المساعد):");
+    let pass = prompt("بوابة منصة محمد حسني التعلمية للإدارة - يرجى كتابة الرقم السري:");
 
-    if (pass === "135700" || pass === "246800") {
-        const isAdmin1 = (pass === "135700");
-        const adminEmail = isAdmin1 ? "admin1@admin.com" : "admin2@admin.com";
-        const adminType = isAdmin1 ? "full" : "restricted";
+    if (pass === "135700" || pass === "246800" || pass === "369120") {
+        let adminEmail = "admin1@admin.com";
+        let adminType = "full";
+
+        if (pass === "246800") {
+            adminEmail = "admin2@admin.com";
+            adminType = "teacher";
+        } else if (pass === "369120") {
+            adminEmail = "admin3@admin.com";
+            adminType = "secretary";
+        }
 
         sessionStorage.setItem('isAdmin', 'yes');
         sessionStorage.setItem('adminType', adminType);
 
-        // Firebase Login with specific accounts as requested
         try {
             const { auth } = await import('./firebase-init.js');
             const { signInWithEmailAndPassword } = await import('https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js');
@@ -1317,7 +1336,6 @@ window.promptAdmin = async function () {
             window.location.href = "admin.html";
         } catch (e) {
             console.error("Firebase Auth Error:", e);
-            // Fallback for UI access (permissions still checked by Firestore)
             window.location.href = "admin.html";
         }
     }
@@ -1358,7 +1376,13 @@ window.updateProfileImg = async function (input) {
                 try { await window.fsData.addUser(user); } catch (e) { }
             }
 
-            document.getElementById('sidebar-profile-img').src = imgUrl;
+            let sideImg = document.getElementById('sidebar-profile-img');
+            let sideAvatar = document.getElementById('sidebar-profile-avatar');
+            if (sideAvatar) sideAvatar.style.display = 'none';
+            if (sideImg) {
+                sideImg.style.display = 'block';
+                sideImg.src = imgUrl;
+            }
         } catch (e) {
             alert('خطأ أثناء رفع الصورة: ' + e.message);
         }

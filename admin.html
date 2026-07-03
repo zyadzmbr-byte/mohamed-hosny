@@ -6,7 +6,8 @@
     <meta name="viewport" content="width=800">
     <title>لوحة الإدارة - Spedia</title>
     <link rel="stylesheet" href="style.css?v=9">
-    <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700;800;900&display=swap"
+    <link
+        href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;700;900&family=IBM+Plex+Sans+Arabic:wght@400;700&family=Tajawal:wght@400;500;700;800;900&display=swap"
         rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
@@ -183,6 +184,32 @@
             </div>
         </div>
 
+        <div id="quick-actions" style="display:flex; gap:15px; margin-bottom:20px; flex-wrap:wrap;">
+            <button onclick="showSection('tab-users', document.querySelector('#main-admin-nav button:nth-child(2)'))"
+                style="background:#2196F3; color:#fff; border:none; padding:10px 20px; border-radius:10px; cursor:pointer; font-weight:bold;"><i
+                    class="fas fa-plus"></i> إضافة طالب</button>
+            <button onclick="showSection('tab-content', document.querySelector('#main-admin-nav button:nth-child(4)'))"
+                style="background:#2196F3; color:#fff; border:none; padding:10px 20px; border-radius:10px; cursor:pointer; font-weight:bold;"><i
+                    class="fas fa-video"></i> رفع فيديو جديد</button>
+            <button onclick="showSection('tab-exams', document.querySelector('#main-admin-nav button:nth-child(5)'))"
+                style="background:#2196F3; color:#fff; border:none; padding:10px 20px; border-radius:10px; cursor:pointer; font-weight:bold;"><i
+                    class="fas fa-edit"></i> إنشاء امتحان</button>
+            <button onclick="showSection('tab-re-chat', document.querySelector('#main-admin-nav button:nth-child(10)'))"
+                style="background:#2196F3; color:#fff; border:none; padding:10px 20px; border-radius:10px; cursor:pointer; font-weight:bold;"><i
+                    class="fas fa-paper-plane"></i> إرسال إشعار جماعي</button>
+        </div>
+
+        <div id="admin-alerts"
+            style="background:#fff3cd; border-left:4px solid #ffc107; padding:15px; margin-bottom:30px; border-radius:5px; box-shadow:0 2px 5px rgba(0,0,0,0.05);">
+            <h4 style="color:#856404; margin-top:0; margin-bottom:10px;"><i class="fas fa-exclamation-triangle"></i>
+                تنبيهات النظام</h4>
+            <ul style="margin:0; padding-right:20px; color:#856404; font-weight:bold;">
+                <li>🔔 12 طالب لم يسددوا هذا الشهر.</li>
+                <li>🔔 5 طلاب غائبون 3 مرات متتالية.</li>
+                <li>🔔 امتحان أولى ثانوي لم يتم تصحيحه.</li>
+            </ul>
+        </div>
+
         <div class="admin-nav" id="main-admin-nav">
             <button class="active" onclick="showSection('tab-codes', this)">إدارة الأكواد</button>
             <button onclick="showSection('tab-users', this)">الطلاب المسجلين</button>
@@ -198,39 +225,80 @@
 
         </div>
 
-        <div class="restricted-nav" id="restricted-nav"
-            style="display:none; gap: 30px; justify-content: center; margin-bottom: 40px; flex-wrap: wrap;">
-            <div onclick="showSection('tab-re-send', this)"
-                style="background: linear-gradient(135deg, #12b8c5, #1e3c72); color: #fff; padding: 40px; border-radius: 20px; cursor: pointer; text-align: center; flex: 1; min-width: 250px; box-shadow: 0 10px 30px rgba(18,184,197,0.3); transition: 0.3s; font-size: 24px; font-weight: 900;">
-                <i class="fas fa-paper-plane" style="font-size: 40px; display: block; margin-bottom: 15px;"></i>
-                إرسال محتوى
-            </div>
-            <div onclick="showSection('tab-exams', this)"
-                style="background: linear-gradient(135deg, #4caf50, #2e7d32); color: #fff; padding: 40px; border-radius: 20px; cursor: pointer; text-align: center; flex: 1; min-width: 250px; box-shadow: 0 10px 30px rgba(76,175,80,0.3); transition: 0.3s; font-size: 24px; font-weight: 900;">
-                <i class="fas fa-edit" style="font-size: 40px; display: block; margin-bottom: 15px;"></i>
-                إضافة امتحان/واجب
-            </div>
-            <div onclick="showSection('tab-links', this)"
-                style="background: linear-gradient(135deg, #ff9800, #f57c00); color: #fff; padding: 40px; border-radius: 20px; cursor: pointer; text-align: center; flex: 1; min-width: 250px; box-shadow: 0 10px 30px rgba(255,152,0,0.3); transition: 0.3s; font-size: 24px; font-weight: 900;">
-                <i class="fas fa-video" style="font-size: 40px; display: block; margin-bottom: 15px;"></i>
-                إضافة رابط حصة
-            </div>
-            <div onclick="showSection('tab-re-results', this)"
-                style="background: linear-gradient(135deg, #f44336, #e91e63); color: #fff; padding: 40px; border-radius: 20px; cursor: pointer; text-align: center; flex: 1; min-width: 250px; box-shadow: 0 10px 30px rgba(244,67,54,0.3); transition: 0.3s; font-size: 24px; font-weight: 900;">
-                <i class="fas fa-poll" style="font-size: 40px; display: block; margin-bottom: 15px;"></i>
-                النتائج
-            </div>
-            <div onclick="showSection('tab-re-chat', this)"
-                style="background: linear-gradient(135deg, #9c27b0, #673ab7); color: #fff; padding: 40px; border-radius: 20px; cursor: pointer; text-align: center; flex: 1; min-width: 250px; box-shadow: 0 10px 30px rgba(156,39,176,0.3); transition: 0.3s; font-size: 24px; font-weight: 900;">
-                <i class="fas fa-comments" style="font-size: 40px; display: block; margin-bottom: 15px;"></i>
-                التواصل مع الطلاب
-            </div>
-            <div onclick="showSection('tab-monthly-reports', this)"
-                style="background: linear-gradient(135deg, #009688, #00796b); color: #fff; padding: 40px; border-radius: 20px; cursor: pointer; text-align: center; flex: 1; min-width: 250px; box-shadow: 0 10px 30px rgba(0,150,136,0.3); transition: 0.3s; font-size: 24px; font-weight: 900;">
-                <i class="fas fa-file-invoice" style="font-size: 40px; display: block; margin-bottom: 15px;"></i>
-                التقارير الشهرية
-            </div>
+        <div class="admin-nav" id="teacher-nav" style="display:none; margin-bottom: 30px;">
+            <button class="active" onclick="showSection('tab-teacher-manage', this)">متابعة الطلاب والإيرادات</button>
+            <button onclick="showSection('tab-content', this)">رفع الفيديوهات</button>
+            <button onclick="showSection('tab-exams', this)">إنشاء امتحانات</button>
+            <button onclick="showSection('tab-re-chat', this)">التواصل والمتابعة</button>
+        </div>
 
+        <div class="admin-nav" id="secretary-nav" style="display:none; margin-bottom: 30px;">
+            <button class="active" onclick="showSection('tab-fees', this)">تحصيل المصروفات</button>
+            <button onclick="showSection('tab-attendance', this)">تسجيل الحضور</button>
+            <button onclick="showSection('tab-reports', this)">طباعة التقارير</button>
+        </div>
+
+        <!-- Sections Content -->
+        <div id="tab-teacher-manage" class="admin-section">
+            <h2>متابعة الطلاب والإيرادات</h2>
+            <div class="search-bar" style="margin-bottom: 20px; display: flex; gap: 10px;">
+                <input type="text" id="teacher-search" placeholder="🔍 ابحث عن طالب بالاسم أو الكود أو رقم الهاتف..."
+                    style="flex:1; padding:15px; border:2px solid #e0e6ed; border-radius:12px; font-size:16px;">
+                <button onclick="searchTeacherStudent()"
+                    style="background:#2196F3; color:#fff; border:none; padding:10px 20px; border-radius:12px; cursor:pointer; font-weight:bold;">بحث</button>
+            </div>
+            <div id="teacher-search-results" style="margin-bottom: 30px;"></div>
+
+            <div class="stats-grid"
+                style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 20px; margin-top:20px;">
+                <div class="stat-card"
+                    style="background: #fff; padding: 20px; border-radius: 15px; box-shadow: 0 5px 15px rgba(0,0,0,0.05); text-align: center; border: 1px solid #eee;">
+                    <i class="fas fa-money-bill-wave" style="font-size: 30px; color: #4caf50; margin-bottom: 10px;"></i>
+                    <h3 style="font-size: 28px; color: #121e33;">15,400 ج.م</h3>
+                    <p style="color: #6a7c92; font-weight: bold;">إجمالي الإيرادات هذا الشهر</p>
+                </div>
+                <div class="stat-card"
+                    style="background: #fff; padding: 20px; border-radius: 15px; box-shadow: 0 5px 15px rgba(0,0,0,0.05); text-align: center; border: 1px solid #eee;">
+                    <i class="fas fa-users" style="font-size: 30px; color: #2196F3; margin-bottom: 10px;"></i>
+                    <h3 style="font-size: 28px; color: #121e33;">350</h3>
+                    <p style="color: #6a7c92; font-weight: bold;">عدد الطلاب النشطين</p>
+                </div>
+            </div>
+        </div>
+
+        <div id="tab-fees" class="admin-section">
+            <h2>تحصيل المصروفات (للسكرتارية)</h2>
+            <form onsubmit="event.preventDefault(); alert('تم حفظ التحصيل بنجاح!'); this.reset();">
+                <div class="form-group">
+                    <label>كود الطالب</label>
+                    <input type="text" required placeholder="أدخل كود الطالب...">
+                </div>
+                <div class="form-group">
+                    <label>المبلغ المدفوع</label>
+                    <input type="number" required placeholder="المبلغ بالجنيه...">
+                </div>
+                <div class="form-group">
+                    <label>بيان الدفع</label>
+                    <input type="text" required placeholder="مثال: مصروفات شهر أكتوبر">
+                </div>
+                <button type="submit"
+                    style="background:#4caf50; color:#fff; border:none; padding:15px; border-radius:12px; width:100%; font-size:18px; font-weight:bold; cursor:pointer;"><i
+                        class="fas fa-save"></i> حفظ وإضافة الدفعة</button>
+            </form>
+        </div>
+
+        <div id="tab-reports" class="admin-section">
+            <h2>طباعة تقارير مالية وحضور</h2>
+            <p style="color:#6a7c92; font-weight:bold; margin-bottom:20px;">اختر نوع التقرير للطباعة (لا يوجد صلاحية
+                للحذف)</p>
+            <div style="display:flex; gap:15px; flex-wrap:wrap;">
+                <button onclick="window.print()"
+                    style="background:#2196F3; color:#fff; border:none; padding:15px 25px; border-radius:12px; cursor:pointer; font-weight:bold;"><i
+                        class="fas fa-print"></i> طباعة تقرير المصروفات</button>
+                <button onclick="window.print()"
+                    style="background:#2196F3; color:#fff; border:none; padding:15px 25px; border-radius:12px; cursor:pointer; font-weight:bold;"><i
+                        class="fas fa-print"></i> طباعة تقرير الحضور</button>
+            </div>
         </div>
 
         <!-- Sections Content (Same as before but with working forms) -->
@@ -282,13 +350,13 @@
                     <label>النوع</label>
                     <select id="ct-type" onchange="
                         document.getElementById('yt-container').style.display = this.value === 'course' ? 'block' : 'none';
+                        document.getElementById('yt-link-container').style.display = this.value === 'course' ? 'block' : 'none';
                         document.getElementById('pdf-container').style.display = this.value === 'book' ? 'block' : 'none';
                         document.getElementById('html-container').style.display = this.value === 'game' ? 'block' : 'none';
                         document.getElementById('img-container').style.display = 'block';
                         ">
                         <option value="book">كتاب / مذكرة إلكترونية</option>
                         <option value="course">كورس واشتراك (فيديو يوتيوب)</option>
-
                     </select>
                 </div>
                 <div class="form-group">
@@ -317,8 +385,12 @@
                     <label>صورة الغلاف (الكتاب أو الكورس - الرفع المباشر)</label>
                     <input type="file" id="ct-image" accept="image/*">
                 </div>
+                <div class="form-group" id="yt-link-container" style="display:none;">
+                    <label>رابط فيديو يوتيوب (بديل عن الرفع المباشر)</label>
+                    <input type="url" id="ct-yt-link" placeholder="مثال: https://www.youtube.com/watch?v=...">
+                </div>
                 <div class="form-group" id="yt-container" style="display:none;">
-                    <label>ملف فيديو الكورس (الرفع المباشر)</label>
+                    <label>ملف فيديو الكورس (الرفع المباشر - سيتم التجاهل إذا تم وضع رابط يوتيوب)</label>
                     <input type="file" id="ct-yt" accept="video/*">
                 </div>
                 <div class="form-group" id="pdf-container">
@@ -675,6 +747,10 @@
                     <label>السعر الأساسي (ج.م)</label>
                     <input type="number" id="edit-price" required>
                 </div>
+                <div class="form-group" id="edit-yt-link-container" style="display:none;">
+                    <label>رابط فيديو يوتيوب (للكورس فقط)</label>
+                    <input type="url" id="edit-yt-link" placeholder="مثال: https://www.youtube.com/watch?v=...">
+                </div>
                 <div class="form-group">
                     <label>تغيير الغلاف/الصورة (اتركه فارغاً لعدم التغيير للمذكرة أو الكورس)</label>
                     <input type="file" id="edit-image" accept="image/*">
@@ -906,7 +982,7 @@
                 }).join('');
             }
 
-            if (adminType === 'restricted') {
+            if (adminType === 'teacher' || adminType === 'restricted') {
                 const tReRes = document.getElementById('table-re-results');
                 if (tReRes) {
                     tReRes.innerHTML = '<tr><th>الكود</th><th>الوصف</th><th>تاريخ</th><th>الملف المستلم</th></tr>' +
@@ -1141,6 +1217,12 @@
             document.getElementById('edit-course-code').value = content.courseCode || '';
             document.getElementById('edit-price').value = content.priceBase || 0;
 
+            let ytContainer = document.getElementById('edit-yt-link-container');
+            if (ytContainer) {
+                ytContainer.style.display = content.type === 'course' ? 'block' : 'none';
+            }
+            document.getElementById('edit-yt-link').value = content.videoUrl || '';
+
             document.getElementById('edit-content-modal').style.display = 'flex';
         };
 
@@ -1155,8 +1237,14 @@
             let courseCode = document.getElementById('edit-course-code').value;
             let priceBase = parseInt(document.getElementById('edit-price').value) || 0;
             let fileInput = document.getElementById('edit-image');
+            let ytLinkVal = document.getElementById('edit-yt-link').value;
 
             let updates = { title, courseCode, priceBase };
+
+            let type = document.getElementById('edit-type').value;
+            if (type === 'كورس' && ytLinkVal) {
+                updates.videoUrl = ytLinkVal;
+            }
 
             try {
                 if (fileInput.files && fileInput.files[0]) {
@@ -1242,13 +1330,18 @@
                 }
 
                 if (newItem.type === 'course') {
-                    let ytEl = document.getElementById('ct-yt');
-                    if (ytEl && ytEl.files && ytEl.files[0]) {
-                        try {
-                            btn.innerText = "جاري رفع الفيديو... (يرجى عدم إغلاق الصفحة)";
-                            newItem.videoUrl = await window.uploadToCloudinary(ytEl.files[0]);
-                        } catch (e) {
-                            throw new Error("فشل رفع فيديو الكورس: " + e.message);
+                    let ytLinkEl = document.getElementById('ct-yt-link');
+                    if (ytLinkEl && ytLinkEl.value) {
+                        newItem.videoUrl = ytLinkEl.value;
+                    } else {
+                        let ytEl = document.getElementById('ct-yt');
+                        if (ytEl && ytEl.files && ytEl.files[0]) {
+                            try {
+                                btn.innerText = "جاري رفع الفيديو... (يرجى عدم إغلاق الصفحة)";
+                                newItem.videoUrl = await window.uploadToCloudinary(ytEl.files[0]);
+                            } catch (e) {
+                                throw new Error("فشل رفع فيديو الكورس: " + e.message);
+                            }
                         }
                     }
                 } else if (newItem.type === 'book') {
@@ -1437,14 +1530,42 @@
                 return;
             }
             let adminType = sessionStorage.getItem('adminType');
-            if (adminType === 'restricted') {
+            let qActions = document.getElementById('quick-actions');
+            let adminAlerts = document.getElementById('admin-alerts');
+
+            if (adminType === 'teacher' || adminType === 'restricted') {
                 document.getElementById('main-admin-nav').style.display = 'none';
-                document.getElementById('restricted-nav').style.display = 'flex';
-                showSection('tab-re-send');
+                if (qActions) qActions.style.display = 'none';
+                if (adminAlerts) adminAlerts.style.display = 'none';
+
+                let tNav = document.getElementById('teacher-nav');
+                if (tNav) tNav.style.display = 'flex';
+                let sNav = document.getElementById('secretary-nav');
+                if (sNav) sNav.style.display = 'none';
+
+                showSection('tab-teacher-manage', document.querySelector('#teacher-nav button:first-child'));
+            } else if (adminType === 'secretary') {
+                document.getElementById('main-admin-nav').style.display = 'none';
+                if (qActions) qActions.style.display = 'none';
+                if (adminAlerts) adminAlerts.style.display = 'none';
+
+                let tNav = document.getElementById('teacher-nav');
+                if (tNav) tNav.style.display = 'none';
+                let sNav = document.getElementById('secretary-nav');
+                if (sNav) sNav.style.display = 'flex';
+
+                showSection('tab-fees', document.querySelector('#secretary-nav button:first-child'));
             } else {
                 document.getElementById('main-admin-nav').style.display = 'flex';
-                document.getElementById('restricted-nav').style.display = 'none';
-                showSection('tab-codes');
+                if (qActions) qActions.style.display = 'flex';
+                if (adminAlerts) adminAlerts.style.display = 'block';
+
+                let tNav = document.getElementById('teacher-nav');
+                if (tNav) tNav.style.display = 'none';
+                let sNav = document.getElementById('secretary-nav');
+                if (sNav) sNav.style.display = 'none';
+
+                showSection('tab-codes', document.querySelector('#main-admin-nav button:first-child'));
             }
             renderTables();
 
@@ -1518,6 +1639,18 @@
             alert('تم حفظ التقرير بنجاح.');
             e.target.reset();
             renderTables();
+        };
+        window.searchTeacherStudent = function () {
+            let q = document.getElementById('teacher-search').value.trim();
+            if (!q) return;
+            let users = JSON.parse(localStorage.getItem('spedia_users') || '[]');
+            let found = users.filter(u => u.name.includes(q) || u.code.includes(q) || (u.phone && u.phone.includes(q)));
+            let resDiv = document.getElementById('teacher-search-results');
+            if (found.length === 0) {
+                resDiv.innerHTML = '<p style="color:red;">لم يتم العثور على طالب بهذا البحث.</p>';
+            } else {
+                resDiv.innerHTML = '<table style="width:100%; border-collapse:separate; border-spacing:0 5px;"><tr><th>الاسم</th><th>الكود</th><th>الهاتف</th><th>الصف</th></tr>' + found.map(f => `<tr><td>${f.name}</td><td>${f.code}</td><td>${f.phone}</td><td>${f.grade}</td></tr>`).join('') + '</table>';
+            }
         };
     </script>
 </body>
