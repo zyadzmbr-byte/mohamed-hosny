@@ -14,7 +14,7 @@
         .huge-hero {
             position: relative;
             padding: 160px 20px 80px;
-            background: radial-gradient(circle at center top, rgba(18, 184, 197, 0.1) 0%, rgba(255, 255, 255, 0) 70%);
+            background: radial-gradient(circle at center top, rgba(255, 193, 7, 0.1) 0%, rgba(255, 255, 255, 0) 70%);
             border-bottom: 2px solid #f1f6fa;
             text-align: center;
             overflow: hidden;
@@ -71,7 +71,7 @@
 
         .large-stat:hover {
             transform: translateY(-20px);
-            box-shadow: 0 35px 60px rgba(18, 184, 197, 0.2);
+            box-shadow: 0 35px 60px rgba(255, 193, 7, 0.2);
         }
 
         .large-stat h3 {
@@ -307,7 +307,7 @@
             <a href="index.html" class="logo text-dark"
                 style="display:flex; align-items:center; gap:10px; text-decoration:none;">
                 <img src="img_logo.jpg" alt="Logo"
-                    style="width: 50px; height: 50px; border-radius: 50%; object-fit:cover; border: 2px solid #12b8c5;">
+                    style="width: 50px; height: 50px; border-radius: 50%; object-fit:cover; border: 2px solid #FFC107;">
                 <div class="logo-text" style="display:flex; flex-direction:column; line-height:1;">
                     <span class="ar" style="font-size:28px; font-weight:900; color:var(--primary-color);">منصة محمد حسني
                         التعلمية</span>
@@ -318,7 +318,7 @@
                 <!-- Discover -->
                 <div class="discover-container">
                     <a href="explore.html" class="btn-discover"
-                        style="padding:10px 25px; font-size:16px; border-radius:20px; background:linear-gradient(135deg, #12b8c5, #1e3c72); color:#fff !important; box-shadow:0 4px 10px rgba(18,184,197,0.2); text-decoration:none; display:flex; align-items:center; gap:8px;">
+                        style="padding:10px 25px; font-size:16px; border-radius:20px; background:linear-gradient(135deg, #FFC107, #1e3c72); color:#fff !important; box-shadow:0 4px 10px rgba(18,184,197,0.2); text-decoration:none; display:flex; align-items:center; gap:8px;">
                         <i class="fas fa-rocket"></i> <span data-i18n="discover">اكتشف المواد</span>
                     </a>
                     <div class="mega-menu" id="mega-menu-main">
@@ -331,13 +331,13 @@
                 <!-- Country -->
                 <!-- Cart -->
                 <a href="#" class="nav-icon-circle cart-icon" onclick="openCart(event)"
-                    style="width:45px; height:45px; background:#f4f7fa; color:#12b8c5; font-size:20px; box-shadow:0 4px 10px rgba(0,0,0,0.05); text-decoration:none; display:flex; justify-content:center; align-items:center;">
+                    style="width:45px; height:45px; background:#f4f7fa; color:#FFC107; font-size:20px; box-shadow:0 4px 10px rgba(0,0,0,0.05); text-decoration:none; display:flex; justify-content:center; align-items:center;">
                     <i class="fas fa-shopping-cart"></i>
                 </a>
 
                 <!-- Login -->
                 <a href="login.html" class="btn-login"
-                    style="padding:10px 25px; font-size:16px; border-radius:20px; background:#fff; color:#12b8c5 !important; border:2px solid #12b8c5; font-weight:800; text-decoration:none; display:flex; align-items:center; gap:8px;">
+                    style="padding:10px 25px; font-size:16px; border-radius:20px; background:#fff; color:#FFC107 !important; border:2px solid #FFC107; font-weight:800; text-decoration:none; display:flex; align-items:center; gap:8px;">
                     <i class="fas fa-user-circle"></i> <span data-i18n="login">دخول</span>
                 </a>
             </div>
@@ -349,10 +349,24 @@
         style="position:fixed; bottom:20px; left:20px; z-index:99999; background:linear-gradient(135deg, #121e33, #1e3c72); color:#fff; border:none; width:65px; height:65px; border-radius:50%; font-family:'Tajawal'; font-weight:800; box-shadow:0 10px 20px rgba(0,0,0,0.4); cursor:pointer; font-size:25px; transition:0.3s; display:flex; align-items:center; justify-content:center; border:2px solid rgba(255,255,255,0.2);">
         <i class="fas fa-user-shield"></i>
     </button>
-    <a href="https://wa.me/201234567890" target="_blank" title="تواصل الدعم"
-        style="position:fixed; bottom:20px; right:20px; z-index:99999; background:linear-gradient(135deg, #25D366, #128C7E); color:#fff; width:65px; height:65px; border-radius:50%; box-shadow:0 10px 20px rgba(0,0,0,0.4); display:flex; align-items:center; justify-content:center; font-size:30px; transition:0.3s; text-decoration:none;">
-        <i class="fab fa-whatsapp"></i>
-    </a>
+    <div style="position:fixed; bottom:20px; right:20px; z-index:99999; display:flex; flex-direction:column; gap:10px;">
+        <a href="#" target="_blank" title="فيسبوك"
+            style="background:linear-gradient(135deg, #1877F2, #0d5ea6); color:#fff; width:65px; height:65px; border-radius:50%; box-shadow:0 10px 20px rgba(0,0,0,0.4); display:flex; align-items:center; justify-content:center; font-size:30px; transition:0.3s; text-decoration:none;">
+            <i class="fab fa-facebook-f"></i>
+        </a>
+        <a href="https://youtube.com/@mohamedhosny25?si=3vdYCsH-n3tm0U9l" target="_blank" title="يوتيوب"
+            style="background:linear-gradient(135deg, #FF0000, #CC0000); color:#fff; width:65px; height:65px; border-radius:50%; box-shadow:0 10px 20px rgba(0,0,0,0.4); display:flex; align-items:center; justify-content:center; font-size:30px; transition:0.3s; text-decoration:none;">
+            <i class="fab fa-youtube"></i>
+        </a>
+        <a href="https://www.tiktok.com/@mhosny8778" target="_blank" title="تيك توك"
+            style="background:linear-gradient(135deg, #010101, #333333); color:#fff; width:65px; height:65px; border-radius:50%; box-shadow:0 10px 20px rgba(0,0,0,0.4); display:flex; align-items:center; justify-content:center; font-size:30px; transition:0.3s; text-decoration:none;">
+            <i class="fab fa-tiktok"></i>
+        </a>
+        <a href="https://wa.me/201016612010" target="_blank" title="تواصل الدعم"
+            style="background:linear-gradient(135deg, #25D366, #128C7E); color:#fff; width:65px; height:65px; border-radius:50%; box-shadow:0 10px 20px rgba(0,0,0,0.4); display:flex; align-items:center; justify-content:center; font-size:30px; transition:0.3s; text-decoration:none;">
+            <i class="fab fa-whatsapp"></i>
+        </a>
+    </div>
 
     <script>
         function promptAdmin() {
@@ -380,19 +394,19 @@
     <!-- Global Base Style Override -->
     <style>
         body {
-            background-color: #ebfcfa !important;
+            background-color: #FFFDE7 !important;
             /* The precise soft mint/cyan of the screenshots */
         }
 
         .ultra-btn {
-            background: linear-gradient(135deg, #2ddbe8, #12b8c5);
+            background: linear-gradient(135deg, #2ddbe8, #FFC107);
             color: #fff !important;
             padding: 15px 40px;
             border-radius: 50px;
             font-size: 24px;
             font-weight: 800;
             display: inline-block;
-            box-shadow: 0 10px 20px rgba(18, 184, 197, 0.3);
+            box-shadow: 0 10px 20px rgba(255, 193, 7, 0.3);
             transition: 0.3s;
             border: none;
             cursor: pointer;
@@ -465,7 +479,7 @@
         <div class="explore-wave" style="position:absolute; bottom:-1px; left:0; width:100%; z-index:5;">
             <svg viewBox="0 0 1440 320" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg"
                 style="display:block; width:100%; height:clamp(60px, 12vw, 150px);">
-                <path fill="#ebfcfa" fill-opacity="1"
+                <path fill="#FFFDE7" fill-opacity="1"
                     d="M0,224L60,208C120,192,240,160,360,160C480,160,600,192,720,202.7C840,213,960,203,1080,176C1200,149,1320,107,1380,85.3L1440,64L1440,320L1380,320C1320,320,1200,320,1080,320C960,320,840,320,720,320C600,320,480,320,360,320C240,320,120,320,60,320L0,320Z">
                 </path>
             </svg>
@@ -485,7 +499,7 @@
         </div>
         <div style="flex:1; min-width:300px; text-align:right;">
             <h1 style="font-size:55px; font-weight:900; color:#121e33; line-height:1.2;">
-                <span style="color:#12b8c5;">دعم معنوي</span><br>
+                <span style="color:#FFC107;">دعم معنوي</span><br>
                 <span class="highlight" style="font-size:45px;">مستمر للطلاب</span>
             </h1>
             <p style="font-size:24px; color:#6a7c92; font-weight:700; margin-top:20px;">نقف بجانب الطالب خطوة بخطوة
@@ -527,7 +541,7 @@
         </div>
         <div style="flex:1; min-width:300px; text-align:right;">
             <h1 style="font-size:55px; font-weight:900; color:#121e33; line-height:1.2;">
-                <span style="color:#12b8c5;">رحلات ترفيهية</span><br>
+                <span style="color:#FFC107;">رحلات ترفيهية</span><br>
                 <span class="highlight" style="font-size:45px;">ودعم نفسي</span>
             </h1>
             <p style="font-size:24px; color:#6a7c92; font-weight:700; margin-top:20px;">نؤمن بأن الترفيه جزء من رحلة
@@ -569,7 +583,7 @@
         </div>
         <div style="flex:1; min-width:300px; text-align:right;">
             <h1 style="font-size:55px; font-weight:900; color:#121e33; line-height:1.2;">
-                <span style="color:#12b8c5;">دعم وتقدير</span><br>
+                <span style="color:#FFC107;">دعم وتقدير</span><br>
                 <span class="highlight" style="font-size:45px;">للطلاب المتفوقين</span>
             </h1>
             <p style="font-size:24px; color:#6a7c92; font-weight:700; margin-top:20px;">نحن نقدر جهود طلابنا ونكافئهم
@@ -588,6 +602,20 @@
             <h2 style="font-size: 40px; font-weight: 900; color: #132644; margin-top: 15px;">منصة محمد حسني التعلمية
                 <br> <span class="highlight" style="font-size: 32px; color: #1e3c72;">طريقك للمستقبل</span>
             </h2>
+            <div style="display:flex; justify-content:center; gap:20px; flex-wrap:wrap; margin-top:20px;">
+                <a href="#" target="_blank" title="فيسبوك"
+                    style="background:#1877F2; color:#fff; width:50px; height:50px; border-radius:50%; display:flex; align-items:center; justify-content:center; font-size:24px; text-decoration:none; transition:0.3s; box-shadow: 0 10px 20px rgba(0,0,0,0.2);"
+                    onmouseover="this.style.transform='scale(1.1)'" onmouseout="this.style.transform='scale(1)'"><i
+                        class="fab fa-facebook-f"></i></a>
+                <a href="https://www.tiktok.com/@mhosny8778" target="_blank" title="تيك توك"
+                    style="background:#000; color:#fff; width:50px; height:50px; border-radius:50%; display:flex; align-items:center; justify-content:center; font-size:24px; text-decoration:none; transition:0.3s; box-shadow: 0 10px 20px rgba(0,0,0,0.2);"
+                    onmouseover="this.style.transform='scale(1.1)'" onmouseout="this.style.transform='scale(1)'"><i
+                        class="fab fa-tiktok"></i></a>
+                <a href="https://youtube.com/@mohamedhosny25?si=3vdYCsH-n3tm0U9l" target="_blank" title="يوتيوب"
+                    style="background:#FF0000; color:#fff; width:50px; height:50px; border-radius:50%; display:flex; align-items:center; justify-content:center; font-size:24px; text-decoration:none; transition:0.3s; box-shadow: 0 10px 20px rgba(0,0,0,0.2);"
+                    onmouseover="this.style.transform='scale(1.1)'" onmouseout="this.style.transform='scale(1)'"><i
+                        class="fab fa-youtube"></i></a>
+            </div>
         </div>
     </section>
 

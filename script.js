@@ -42,42 +42,35 @@ window.updateGrades = function (countryId, stageId, gradeId) {
 
 const COUNTRY_SYSTEMS = {
     KW: [
-        { title: 'المرحلة الابتدائية', grades: [{ name: 'الصف الأول', val: 1, num: 1 }, { name: 'الصف الثاني', val: 2, num: 2 }, { name: 'الصف الثالث', val: 3, num: 3 }, { name: 'الصف الرابع', val: 4, num: 4 }, { name: 'الصف الخامس', val: 5, num: 5 }] },
         { title: 'المرحلة المتوسطة', grades: [{ name: 'الصف السادس', val: 6, num: 6 }, { name: 'الصف السابع', val: 7, num: 7 }, { name: 'الصف الثامن', val: 8, num: 8 }, { name: 'الصف التاسع', val: 9, num: 9 }] },
         { title: 'الثانوية العلمي', grades: [{ name: 'الصف العاشر', val: 10, num: 10 }, { name: 'الصف الحادي عشر', val: 11, num: 11 }, { name: 'الصف الثاني عشر', val: 12, num: 12 }] },
         { title: 'الثانوية الأدبي', grades: [{ name: 'الصف العاشر', val: 13, num: 10 }, { name: 'الصف الحادي عشر', val: 14, num: 11 }, { name: 'الصف الثاني عشر', val: 15, num: 12 }] }
     ],
     EG: [
-        { title: 'المرحلة الابتدائية', grades: [{ name: 'الأول الابتدائي', val: 1, num: 1 }, { name: 'الثاني', val: 2, num: 2 }, { name: 'الثالث', val: 3, num: 3 }, { name: 'الرابع', val: 4, num: 4 }, { name: 'الخامس', val: 5, num: 5 }, { name: 'السادس', val: 6, num: 6 }] },
         { title: 'المرحلة الإعدادية', grades: [{ name: 'الأول الإعدادي', val: 7, num: 1 }, { name: 'الثاني الإعدادي', val: 8, num: 2 }, { name: 'الثالث الإعدادي', val: 9, num: 3 }] },
         { title: 'الثانوية العلمي', grades: [{ name: 'الصف الأول', val: 10, num: 1 }, { name: 'الثاني', val: 11, num: 2 }, { name: 'الثالث', val: 12, num: 3 }] },
         { title: 'الثانوية الأدبي', grades: [{ name: 'الصف الأول', val: 13, num: 1 }, { name: 'الثاني', val: 14, num: 2 }, { name: 'الثالث', val: 15, num: 3 }] }
     ],
     SA: [
-        { title: 'الابتدائية', grades: [{ name: 'الأول الابتدائي', val: 1, num: 1 }, { name: 'الثاني', val: 2, num: 2 }, { name: 'الثالث', val: 3, num: 3 }, { name: 'الرابع', val: 4, num: 4 }, { name: 'الخامس', val: 5, num: 5 }, { name: 'السادس', val: 6, num: 6 }] },
         { title: 'المتوسطة', grades: [{ name: 'الأول المتوسط', val: 7, num: 1 }, { name: 'الثاني', val: 8, num: 2 }, { name: 'الثالث', val: 9, num: 3 }] },
         { title: 'الثانوية العلمي', grades: [{ name: 'الصف الأول', val: 10, num: 1 }, { name: 'الثاني', val: 11, num: 2 }, { name: 'الثالث', val: 12, num: 3 }] },
         { title: 'الثانوية الأدبي', grades: [{ name: 'الصف الأول', val: 13, num: 1 }, { name: 'الثاني', val: 14, num: 2 }, { name: 'الثالث', val: 15, num: 3 }] }
     ],
     OM: [
-        { title: 'التعليم الأساسي 1', grades: [{ name: 'الصف الأول', val: 1, num: 1 }, { name: 'الثاني', val: 2, num: 2 }, { name: 'الثالث', val: 3, num: 3 }, { name: 'الرابع', val: 4, num: 4 }] },
         { title: 'التعليم الأساسي 2', grades: [{ name: 'الخامس', val: 5, num: 5 }, { name: 'السادس', val: 6, num: 6 }, { name: 'السابع', val: 7, num: 7 }, { name: 'الثامن', val: 8, num: 8 }, { name: 'التاسع', val: 9, num: 9 }, { name: 'العاشر', val: 10, num: 10 }] },
         { title: 'الثانوية العلمي', grades: [{ name: 'الحادي عشر', val: 11, num: 11 }, { name: 'الثاني عشر', val: 12, num: 12 }] },
         { title: 'الثانوية الأدبي', grades: [{ name: 'الحادي عشر', val: 14, num: 11 }, { name: 'الثاني عشر', val: 15, num: 12 }] }
     ],
     QA: [
-        { title: 'المرحلة الابتدائية', grades: [{ name: 'الأول الابتدائي', val: 1, num: 1 }, { name: 'الثاني', val: 2, num: 2 }, { name: 'الثالث', val: 3, num: 3 }, { name: 'الرابع', val: 4, num: 4 }, { name: 'الخامس', val: 5, num: 5 }, { name: 'السادس', val: 6, num: 6 }] },
         { title: 'المرحلة الإعدادية', grades: [{ name: 'الأول الإعدادي', val: 7, num: 1 }, { name: 'الثاني', val: 8, num: 2 }, { name: 'الثالث', val: 9, num: 3 }] },
         { title: 'الثانوية العلمي', grades: [{ name: 'العاشر', val: 10, num: 1 }, { name: 'الحادي عشر', val: 11, num: 2 }, { name: 'الثاني عشر', val: 12, num: 3 }] },
         { title: 'الثانوية الأدبي', grades: [{ name: 'العاشر', val: 13, num: 1 }, { name: 'الحادي عشر', val: 14, num: 2 }, { name: 'الثاني عشر', val: 15, num: 3 }] }
     ],
     AE: [
-        { title: 'الحلقة الأولى', grades: [{ name: 'الصف الأول', val: 1, num: 1 }, { name: 'الثاني', val: 2, num: 2 }, { name: 'الثالث', val: 3, num: 3 }, { name: 'الرابع', val: 4, num: 4 }] },
         { title: 'الحلقة الثانية', grades: [{ name: 'الخامس', val: 5, num: 5 }, { name: 'السادس', val: 6, num: 6 }, { name: 'السابع', val: 7, num: 7 }, { name: 'الثامن', val: 8, num: 8 }] },
         { title: 'الحلقة الثالثة', grades: [{ name: 'التاسع', val: 9, num: 9 }, { name: 'العاشر', val: 10, num: 10 }, { name: 'الحادي عشر', val: 11, num: 11 }, { name: 'الثاني عشر', val: 12, num: 12 }] }
     ],
     BH: [
-        { title: 'المرحلة الابتدائية', grades: [{ name: 'الأول الابتدائي', val: 1, num: 1 }, { name: 'الثاني', val: 2, num: 2 }, { name: 'الثالث', val: 3, num: 3 }, { name: 'الرابع', val: 4, num: 4 }, { name: 'الخامس', val: 5, num: 5 }, { name: 'السادس', val: 6, num: 6 }] },
         { title: 'المرحلة الإعدادية', grades: [{ name: 'الأول الإعدادي', val: 7, num: 1 }, { name: 'الثاني', val: 8, num: 2 }, { name: 'الثالث', val: 9, num: 3 }] },
         { title: 'المرحلة الثانوية', grades: [{ name: 'الأول الثانوي', val: 10, num: 1 }, { name: 'الثاني الثانوي', val: 11, num: 2 }, { name: 'الثالث الثانوي', val: 12, num: 3 }] }
     ]

@@ -1,10 +1,10 @@
 /* Variables & Reset */
 :root {
-    --primary-color: #12b8c5;
-    --primary-dark: #0e9ba6;
+    --primary-color: #FFFF00;
+    --primary-dark: #FFD700;
     --text-dark: #121e33;
     --text-light: #6a7c92;
-    --bg-light: #e8fbff;
+    --bg-light: #FFF8E1;
     --white: #ffffff;
     --transition: all 0.3s ease;
 }
@@ -30,7 +30,7 @@ html {
 }
 
 body {
-    background: linear-gradient(to bottom, #ebfcfa 0%, var(--bg-light) 50%, #ebfcfa 100%) !important;
+    background: linear-gradient(to bottom, #FFFDE7 0%, var(--bg-light) 50%, #FFFDE7 100%) !important;
     color: var(--text-dark);
     padding-bottom: 120px;
     min-height: 100vh;
