@@ -429,6 +429,33 @@ window.renderCurrentPage = async function () {
         const elGrade = document.getElementById('dash-grade');
         if (elGrade) elGrade.innerText = `طالب مسجل كود: ${user.code}`;
 
+        const elDays = document.getElementById('days-remaining');
+        if (elDays && user.registrationDate) {
+            let daysPassed = (Date.now() - user.registrationDate) / (1000 * 60 * 60 * 24);
+            let remaining = Math.max(0, 30 - Math.floor(daysPassed));
+            elDays.innerText = `متبقي ${remaining} يوم على انتهاء التفعيل`;
+            elDays.style.display = 'block';
+        }
+
+        const elAnns = document.getElementById('dynamic-announcements');
+        if (elAnns) {
+            let annsStr = localStorage.getItem('spedia_announcements');
+            let defaultAnns = [
+                "📅 مواعيد الحجز الجديدة متاحة الآن!",
+                "⏰ امتحان الشهر يوم الخميس القادم",
+                "🎁 استخدم كود خصم (TOP10) لخصم 10%"
+            ];
+            let anns = defaultAnns;
+            if (annsStr) {
+                try {
+                    let parsed = JSON.parse(annsStr);
+                    anns = parsed.filter(a => a.trim() !== "");
+                } catch(e) {}
+            }
+            if (anns.length === 0) anns = defaultAnns;
+            elAnns.innerHTML = anns.join(' &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ');
+        }
+
         await window.loadStudentData(user);
     }
     else if (path.includes('admin.html')) {
@@ -646,6 +673,14 @@ window.handleLogin = async function (e) {
         return;
     }
 
+    if (user.registrationDate) {
+        let daysPassed = (Date.now() - user.registrationDate) / (1000 * 60 * 60 * 24);
+        if (daysPassed > 30) {
+            alert("انتهت صلاحية الكود الخاص بك (مر 30 يوماً). يرجى التواصل مع الإدارة للتجديد.");
+            return;
+        }
+    }
+
     localStorage.setItem('spedia_currentUser', JSON.stringify(user));
     window.location.href = 'dashboard.html';
 };
@@ -664,7 +699,7 @@ window.finishRegister = async function (e) {
 
     if (!code || !name || !phone || !grade) return alert("الرجاء إكمال كافة البيانات");
 
-    let newUser = { code, name, phone, grade, id: Date.now(), role: 'student' };
+    let newUser = { code, name, phone, grade, id: Date.now(), role: 'student', registrationDate: Date.now() };
 
     if (window.fsData && window.fsData.addUser) {
         try {

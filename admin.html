@@ -212,6 +212,7 @@
 
         <div class="admin-nav" id="main-admin-nav">
             <button class="active" onclick="showSection('tab-codes', this)">إدارة الأكواد</button>
+            <button onclick="showSection('tab-extra-mods', this)">تعديلات اضافية</button>
             <button onclick="showSection('tab-users', this)">الطلاب المسجلين</button>
             <button onclick="showSection('tab-attendance', this)">الحضور والتقييمات</button>
             <button onclick="showSection('tab-content', this)">المحتوى والكورسات</button>
@@ -254,13 +255,13 @@
                 <div class="stat-card"
                     style="background: #fff; padding: 20px; border-radius: 15px; box-shadow: 0 5px 15px rgba(0,0,0,0.05); text-align: center; border: 1px solid #eee;">
                     <i class="fas fa-money-bill-wave" style="font-size: 30px; color: #4caf50; margin-bottom: 10px;"></i>
-                    <h3 style="font-size: 28px; color: #121e33;">15,400 ج.م</h3>
+                    <h3 id="stat-revenue" style="font-size: 28px; color: #121e33;">0 ج.م</h3>
                     <p style="color: #6a7c92; font-weight: bold;">إجمالي الإيرادات هذا الشهر</p>
                 </div>
                 <div class="stat-card"
                     style="background: #fff; padding: 20px; border-radius: 15px; box-shadow: 0 5px 15px rgba(0,0,0,0.05); text-align: center; border: 1px solid #eee;">
                     <i class="fas fa-users" style="font-size: 30px; color: #2196F3; margin-bottom: 10px;"></i>
-                    <h3 style="font-size: 28px; color: #121e33;">350</h3>
+                    <h3 id="stat-students" style="font-size: 28px; color: #121e33;">0</h3>
                     <p style="color: #6a7c92; font-weight: bold;">عدد الطلاب النشطين</p>
                 </div>
             </div>
@@ -268,18 +269,18 @@
 
         <div id="tab-fees" class="admin-section">
             <h2>تحصيل المصروفات (للسكرتارية)</h2>
-            <form onsubmit="event.preventDefault(); alert('تم حفظ التحصيل بنجاح!'); this.reset();">
+            <form onsubmit="window.saveFees(event)">
                 <div class="form-group">
                     <label>كود الطالب</label>
-                    <input type="text" required placeholder="أدخل كود الطالب...">
+                    <input type="text" id="fee-code" required placeholder="أدخل كود الطالب...">
                 </div>
                 <div class="form-group">
                     <label>المبلغ المدفوع</label>
-                    <input type="number" required placeholder="المبلغ بالجنيه...">
+                    <input type="number" id="fee-amount" required placeholder="المبلغ بالجنيه...">
                 </div>
                 <div class="form-group">
                     <label>بيان الدفع</label>
-                    <input type="text" required placeholder="مثال: مصروفات شهر أكتوبر">
+                    <input type="text" id="fee-desc" required placeholder="مثال: مصروفات شهر أكتوبر">
                 </div>
                 <button type="submit"
                     style="background:#4caf50; color:#fff; border:none; padding:15px; border-radius:12px; width:100%; font-size:18px; font-weight:bold; cursor:pointer;"><i
@@ -314,6 +315,66 @@
             <div style="overflow-x:auto;">
                 <table id="table-sub-codes"></table>
             </div>
+        </div>
+
+        <div id="tab-extra-mods" class="admin-section">
+            <h2>تعديلات اضافية</h2>
+            
+            <h3 class="mt-30">تحديد الطلاب الأوائل (10 طلاب)</h3>
+            <form onsubmit="window.saveTopStudents(event)">
+                <div class="form-group" style="display: flex; gap: 10px;">
+                    <div style="flex:1;">
+                        <label>السنة الدراسية</label>
+                        <select id="top-year" required>
+                            <option value="">اختر السنة...</option>
+                            <option value="2024 - 2025">2024 - 2025</option>
+                            <option value="2025 - 2026">2025 - 2026</option>
+                            <option value="2026 - 2027">2026 - 2027</option>
+                        </select>
+                    </div>
+                    <div style="flex:1;">
+                        <label>الفصل الدراسي</label>
+                        <select id="top-semester" required>
+                            <option value="">اختر الفصل...</option>
+                            <option value="الفصل الدراسي الأول">الفصل الدراسي الأول</option>
+                            <option value="الفصل الدراسي الثاني">الفصل الدراسي الثاني</option>
+                        </select>
+                    </div>
+                </div>
+                <div id="top-students-container" style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px;">
+                    <!-- JS will populate -->
+                </div>
+                <button type="submit" class="btn-primary w-100 mt-20">حفظ قائمة الأوائل</button>
+            </form>
+            
+            <h3 class="mt-30" style="border-top: 1px solid #eee; padding-top: 20px;">توليد كود محتوى (استخدام مرة واحدة)</h3>
+            <form onsubmit="window.generateContentCode(event)">
+                <div class="form-group">
+                    <label>اختر المحتوى (كورس / كتاب)</label>
+                    <select id="content-selector" required>
+                        <option value="">جاري التحميل...</option>
+                    </select>
+                </div>
+                <button type="submit" class="btn-primary w-100">توليد كود 4 أرقام</button>
+            </form>
+            <div id="generated-code-display" style="margin-top: 15px; font-size: 24px; font-weight: bold; color: #4caf50; text-align: center; display: none;"></div>
+            
+            <h3 class="mt-30" style="border-top: 1px solid #eee; padding-top: 20px;">تعديل الشريط المتحرك (إعلانات لوحة الطالب)</h3>
+            <form onsubmit="window.saveAnnouncements(event)">
+                <div class="form-group">
+                    <label>الجملة الأولى (يمكنك تفريغها لحذفها)</label>
+                    <input type="text" id="ann-1" placeholder="مثال: 📅 مواعيد الحجز الجديدة متاحة الآن!">
+                </div>
+                <div class="form-group">
+                    <label>الجملة الثانية (يمكنك تفريغها لحذفها)</label>
+                    <input type="text" id="ann-2" placeholder="مثال: ⏰ امتحان الشهر يوم الخميس القادم">
+                </div>
+                <div class="form-group">
+                    <label>الجملة الثالثة (يمكنك تفريغها لحذفها)</label>
+                    <input type="text" id="ann-3" placeholder="مثال: 🎁 استخدم كود خصم (TOP10) لخصم 10%">
+                </div>
+                <button type="submit" class="btn-primary w-100">حفظ الإعلانات وتحديث الشريط</button>
+            </form>
         </div>
 
         <div id="tab-users" class="admin-section">
@@ -863,10 +924,10 @@
             const tUsers = document.getElementById('table-users');
             if (tUsers) {
                 let ths = `<th>الكود</th><th>الاسم</th><th>الهاتف</th><th>الصف</th>`;
-                if (adminType === 'full') ths += `<th>حذف</th>`;
+                if (adminType === 'full') ths += `<th>تجديد الاشتراك</th><th>حذف</th>`;
                 tUsers.innerHTML = `<tr>${ths}</tr>` + users.map(u => {
                     let tr = `<td>${u.code}</td><td>${u.name}</td><td>${adminType === 'restricted' ? '********' : u.phone}</td><td>${u.grade}</td>`;
-                    if (adminType === 'full') tr += `<td><button onclick="window.deleteItemGeneric('users', '${u.fsId || u.code}', 'spedia_users', 'code')" style="background:#f44336; color:#fff; border:none; padding:5px 10px; border-radius:5px; cursor:pointer;">حذف</button></td>`;
+                    if (adminType === 'full') tr += `<td><button onclick="window.renewStudent('${u.code}')" style="background:#4caf50; color:#fff; border:none; padding:5px 10px; border-radius:5px; cursor:pointer;">تجديد</button></td><td><button onclick="window.deleteItemGeneric('users', '${u.fsId || u.code}', 'spedia_users', 'code')" style="background:#f44336; color:#fff; border:none; padding:5px 10px; border-radius:5px; cursor:pointer;">حذف</button></td>`;
                     return `<tr>${tr}</tr>`;
                 }).join('');
             }
@@ -900,9 +961,17 @@
                 } catch (e) { }
             }
             let localContent = JSON.parse(localStorage.getItem('spedia_content') || '[]');
-            // Merge to avoid duplicates
             localContent.forEach(lc => { if (!contentList.find(cc => cc.id === lc.id)) contentList.push(lc); });
             localStorage.setItem('spedia_content', JSON.stringify(contentList));
+
+            // Populate Stats
+            let statStudents = document.getElementById('stat-students');
+            if (statStudents) statStudents.innerText = users.length;
+            
+            let fees = JSON.parse(localStorage.getItem('spedia_fees') || '[]');
+            let totalRevenue = fees.reduce((sum, f) => sum + parseInt(f.amount || 0), 0);
+            let statRevenue = document.getElementById('stat-revenue');
+            if (statRevenue) statRevenue.innerText = totalRevenue + " ج.م";
 
             const tContent = document.getElementById('table-content-manager');
             if (tContent) {
@@ -915,6 +984,11 @@
                         <button onclick="window.deleteContent('${c.fsId ? c.fsId : c.id}')" style="background:#f44336; color:#fff; border:none; padding:5px 10px; border-radius:5px; cursor:pointer; width:100%;"><i class="fas fa-trash"></i> حذف</button>
                     </td>
                 </tr>`).join('');
+            }
+            
+            const contentSel = document.getElementById('content-selector');
+            if (contentSel) {
+                contentSel.innerHTML = '<option value="">اختر المحتوى...</option>' + contentList.map(c => `<option value="${c.fsId || c.id}">${c.title} (${c.type === 'course' ? 'كورس' : 'كتاب/مذكرة'})</option>`).join('');
             }
 
             let links = JSON.parse(localStorage.getItem('spedia_class_links') || '[]');
@@ -1018,6 +1092,135 @@
                     treports.map(t => `<tr><td>${t.teacherName}</td><td>${t.lesson}</td><td>${t.date}</td></tr>`).join('');
             }
         }
+
+        window.renewStudent = async function(code) {
+            if (!confirm('هل تريد تجديد اشتراك الطالب لـ 30 يوماً إضافية؟')) return;
+            
+            let users = JSON.parse(localStorage.getItem('spedia_users') || '[]');
+            let userIndex = users.findIndex(u => u.code === code);
+            if (userIndex > -1) {
+                users[userIndex].registrationDate = Date.now();
+                localStorage.setItem('spedia_users', JSON.stringify(users));
+                
+                if (window.fsData && window.fsData.updateGeneric && users[userIndex].fsId) {
+                    try {
+                        await window.fsData.updateGeneric('users', users[userIndex].fsId, { registrationDate: Date.now() });
+                    } catch (e) { console.warn(e); }
+                }
+                alert('تم التجديد بنجاح!');
+                renderTables();
+            } else {
+                alert('الطالب غير موجود.');
+            }
+        };
+
+        window.saveFees = function(e) {
+            e.preventDefault();
+            let code = document.getElementById('fee-code').value;
+            let amount = document.getElementById('fee-amount').value;
+            let desc = document.getElementById('fee-desc').value;
+            
+            let fees = JSON.parse(localStorage.getItem('spedia_fees') || '[]');
+            fees.push({ id: Date.now(), code, amount, desc, date: new Date().toLocaleDateString('ar-EG') });
+            localStorage.setItem('spedia_fees', JSON.stringify(fees));
+            
+            alert('تم حفظ التحصيل بنجاح!');
+            e.target.reset();
+            renderTables();
+        };
+
+        window.saveTopStudents = function(e) {
+            e.preventDefault();
+            let semester = document.getElementById('top-semester').value;
+            let year = document.getElementById('top-year').value;
+            let tops = [];
+            for(let i=1; i<=10; i++) {
+                let code = document.getElementById('top-code-' + i).value;
+                let rank = document.getElementById('top-rank-' + i).value;
+                if(code) tops.push({ code, rank });
+            }
+            localStorage.setItem('spedia_top_students', JSON.stringify({ semester, year, students: tops }));
+            alert('تم حفظ قائمة الأوائل بنجاح! سيتم عرضها في الصفحة الرئيسية.');
+        };
+
+        window.generateContentCode = function(e) {
+            e.preventDefault();
+            let contentId = document.getElementById('content-selector').value;
+            if(!contentId) return alert('يرجى اختيار المحتوى');
+            
+            let cList = JSON.parse(localStorage.getItem('spedia_content') || '[]');
+            let content = cList.find(c => c.id.toString() === contentId || c.fsId === contentId);
+            if(!content) return;
+            
+            let rnd = Math.floor(1000 + Math.random() * 9000).toString();
+            let subCode = { code: rnd, type: content.type, title: content.title, contentId: contentId, date: new Date().toLocaleDateString('ar-EG'), isUsed: false };
+            
+            let subCodes = JSON.parse(localStorage.getItem('spedia_sub_codes') || '[]');
+            subCodes.push(subCode);
+            localStorage.setItem('spedia_sub_codes', JSON.stringify(subCodes));
+            
+            if (window.fsData && window.fsData.addGeneric) {
+                window.fsData.addGeneric('subscription_codes', subCode).catch(e=>console.warn(e));
+            }
+            
+            let display = document.getElementById('generated-code-display');
+            display.innerText = `الكود المولد: ${rnd}`;
+            display.style.display = 'block';
+            renderTables();
+        };
+
+        window.saveAnnouncements = function(e) {
+            e.preventDefault();
+            let a1 = document.getElementById('ann-1').value;
+            let a2 = document.getElementById('ann-2').value;
+            let a3 = document.getElementById('ann-3').value;
+            let anns = [a1, a2, a3];
+            localStorage.setItem('spedia_announcements', JSON.stringify(anns));
+            alert('تم حفظ وتحديث الإعلانات بنجاح!');
+        };
+
+        document.addEventListener('DOMContentLoaded', () => {
+            let container = document.getElementById('top-students-container');
+            if(container) {
+                let html = '';
+                for(let i=1; i<=10; i++) {
+                    html += `
+                    <div style="background:#f4f7fa; padding:10px; border-radius:10px; border:1px solid #eee;">
+                        <label style="font-weight:bold; font-size:14px; margin-bottom:5px;">الطالب رقم ${i}</label>
+                        <input type="text" id="top-code-${i}" placeholder="كود الطالب" style="width:100%; padding:8px; margin-bottom:5px; border-radius:5px; border:1px solid #ccc;">
+                        <input type="text" id="top-rank-${i}" placeholder="الترتيب" style="width:100%; padding:8px; border-radius:5px; border:1px solid #ccc;">
+                    </div>`;
+                }
+                container.innerHTML = html;
+                
+                let existingStr = localStorage.getItem('spedia_top_students');
+                if(existingStr) {
+                    try {
+                        let existing = JSON.parse(existingStr);
+                        document.getElementById('top-semester').value = existing.semester || '';
+                        if(document.getElementById('top-year')) document.getElementById('top-year').value = existing.year || '';
+                        existing.students.forEach((s, idx) => {
+                            let i = idx + 1;
+                            if(document.getElementById('top-code-'+i)) {
+                                document.getElementById('top-code-'+i).value = s.code;
+                                document.getElementById('top-rank-'+i).value = s.rank;
+                            }
+                        });
+                    } catch(e){}
+                }
+            }
+            
+            // Load Announcements
+            let existingAnnsStr = localStorage.getItem('spedia_announcements');
+            if(existingAnnsStr) {
+                try {
+                    let existingAnns = JSON.parse(existingAnnsStr);
+                    if(document.getElementById('ann-1')) document.getElementById('ann-1').value = existingAnns[0] || '';
+                    if(document.getElementById('ann-2')) document.getElementById('ann-2').value = existingAnns[1] || '';
+                    if(document.getElementById('ann-3')) document.getElementById('ann-3').value = existingAnns[2] || '';
+                } catch(e){}
+            }
+        });
 
         window.deleteItemGeneric = async function (collection, idVal, lsKey, idProp) {
             if (!confirm('هل تأكد حذف هذا العنصر نهائياً؟')) return;
@@ -1400,7 +1603,16 @@
             qDiv.dataset.type = type;
             qDiv.style.cssText = "background:#f8fafc; border:1px solid #e0e6ed; padding:15px; border-radius:10px; position:relative; margin-top:10px;";
             qDiv.innerHTML = `<button type="button" onclick="this.parentElement.remove()" style="position:absolute; top:5px; left:5px;">X</button>`;
-            if (type === 'mcq') qDiv.innerHTML += `<input type="text" class="q-text" placeholder="السؤال" style="width:100%;"><div style="display:grid; grid-template-columns:1fr 1fr; gap:5px; margin-top:5px;"><input type="text" class="q-opt" placeholder="الصح"><input type="text" class="q-opt" placeholder="2"><input type="text" class="q-opt" placeholder="3"><input type="text" class="q-opt" placeholder="4"></div>`;
+            if (type === 'mcq') {
+                let rId = Date.now() + Math.floor(Math.random()*1000);
+                qDiv.innerHTML += `<input type="text" class="q-text" placeholder="السؤال" style="width:100%;">
+                <div style="display:grid; grid-template-columns:1fr; gap:5px; margin-top:5px;">
+                    <div style="display:flex; align-items:center; gap:5px;" title="اختر كإجابة صحيحة"><input type="radio" name="mcq_correct_${rId}" value="0" checked><input type="text" class="q-opt" placeholder="الاختيار 1" style="flex:1;"></div>
+                    <div style="display:flex; align-items:center; gap:5px;" title="اختر كإجابة صحيحة"><input type="radio" name="mcq_correct_${rId}" value="1"><input type="text" class="q-opt" placeholder="الاختيار 2" style="flex:1;"></div>
+                    <div style="display:flex; align-items:center; gap:5px;" title="اختر كإجابة صحيحة"><input type="radio" name="mcq_correct_${rId}" value="2"><input type="text" class="q-opt" placeholder="الاختيار 3" style="flex:1;"></div>
+                    <div style="display:flex; align-items:center; gap:5px;" title="اختر كإجابة صحيحة"><input type="radio" name="mcq_correct_${rId}" value="3"><input type="text" class="q-opt" placeholder="الاختيار 4" style="flex:1;"></div>
+                </div>`;
+            }
             else if (type === 'tf') qDiv.innerHTML += `<input type="text" class="q-text" placeholder="العبارة" style="width:100%;"><select class="q-tf-answer"><option value="true">صح</option><option value="false">خطأ</option></select>`;
             else qDiv.innerHTML += `<input type="text" class="q-text" placeholder="السؤال" style="width:100%;">`;
             container.appendChild(qDiv);
@@ -1412,7 +1624,12 @@
                 let qs = [];
                 document.querySelectorAll('.q-block').forEach(b => {
                     let t = b.dataset.type;
-                    if (t === 'mcq') qs.push({ type: 'mcq', text: b.querySelector('.q-text').value, options: Array.from(b.querySelectorAll('.q-opt')).map(i => i.value) });
+                    if (t === 'mcq') {
+                        let opts = Array.from(b.querySelectorAll('.q-opt')).map(i => i.value);
+                        let correctRadio = b.querySelector('input[type="radio"]:checked');
+                        let correctIndex = correctRadio ? parseInt(correctRadio.value) : 0;
+                        qs.push({ type: 'mcq', text: b.querySelector('.q-text').value, options: opts, correctAnswer: opts[correctIndex] });
+                    }
                     else if (t === 'tf') qs.push({ type: 'tf', text: b.querySelector('.q-text').value, answer: b.querySelector('.q-tf-answer').value });
                     else qs.push({ type: 'essay', text: b.querySelector('.q-text').value });
                 });

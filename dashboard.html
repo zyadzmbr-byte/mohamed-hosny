@@ -28,7 +28,7 @@
     </style>
 </head>
 
-<body class="dashboard-body" style="background:#f4f7fa;">
+<body class="dashboard-body" style="background:#f4f7fa; transform: scale(0.95); transform-origin: top center; overflow-x: hidden;">
 
     <div class="dashboard-layout">
         <!-- Sidebar -->
@@ -65,6 +65,7 @@
                     <h4 id="dash-name" style="font-size:20px; margin:0;">طالب منصة محمد حسني التعلمية</h4>
                 </div>
                 <p id="dash-grade" style="color:var(--primary-color); font-weight:700; font-size:16px;">الصف العاشر</p>
+                <div id="days-remaining" style="margin-top: 10px; font-weight: bold; background: #ffebee; color: #d32f2f; padding: 5px; border-radius: 5px; text-align: center; display: none;"></div>
             </div>
 
             <ul class="sidebar-menu" style="padding:0 15px;">
@@ -146,11 +147,9 @@
                             بطل! <i class="fas fa-rocket" style="color:yellow; margin-right:10px;"></i></h2>
                         <div class="moving-banner"
                             style="background: rgba(255,255,255,0.2); padding: 10px; border-radius: 10px; margin-bottom: 20px; white-space: nowrap; overflow: hidden; width:100%;">
-                            <div
+                            <div id="dynamic-announcements"
                                 style="display: inline-block; animation: marquee 15s linear infinite; font-weight: bold; font-size: 18px;">
-                                📅 مواعيد الحجز الجديدة متاحة الآن! &nbsp;&nbsp;&nbsp;&nbsp; ⏰ امتحان الشهر يوم الخميس
-                                القادم &nbsp;&nbsp;&nbsp;&nbsp; 🎁 استخدم كود خصم (TOP10) لخصم 10%
-                                &nbsp;&nbsp;&nbsp;&nbsp; 📢 ترقبوا إعلان مراجعات ليلة الامتحان المجانية قريباً
+                                <!-- JS will populate -->
                             </div>
                         </div>
                         <a href="index.html" class="btn-primary"
@@ -172,18 +171,6 @@
                 </div>
 
                 <div id="dash-home" class="dash-tab-section" style="display:block;">
-                    <div class="continue-watching"
-                        style="background: linear-gradient(135deg, #121e33, #1e3c72); color: #fff; padding: 20px; border-radius: 15px; display: flex; justify-content: space-between; align-items: center; margin-bottom: 30px; box-shadow: 0 10px 20px rgba(0,0,0,0.1); flex-wrap: wrap; gap: 15px;">
-                        <div>
-                            <h4 style="margin: 0 0 5px 0; color: #12b8c5;"><i class="fas fa-play-circle"></i> استكمل من
-                                حيث توقفت</h4>
-                            <p style="margin: 0; font-size: 18px; font-weight: bold; font-family: 'Cairo', sans-serif;">
-                                المفعول المطلق - الجزء الثاني</p>
-                        </div>
-                        <button class="btn-primary"
-                            style="background: #12b8c5; padding: 10px 20px; font-size: 16px; border-radius: 10px; color: #fff; border:none; cursor:pointer;">استكمال
-                            المشاهدة <i class="fas fa-arrow-left" style="margin-right:8px;"></i></button>
-                    </div>
                     <div class="two-columns" style="gap:40px; display: flex; flex-wrap: wrap;">
                         <div class="column" style="flex:1; min-width:300px;">
                             <h3 class="section-title"><i class="fas fa-bell" style="color:var(--primary-color);"></i>
