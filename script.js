@@ -196,13 +196,19 @@ window.injectBookTransition = function () {
     document.querySelectorAll('a').forEach(a => {
         a.addEventListener('click', function (e) {
             let target = this.getAttribute('href');
-            if (target && !target.startsWith('#') && !target.startsWith('javascript')) {
+            let targetAttr = this.getAttribute('target');
+            if (target && !target.startsWith('#') && !target.startsWith('javascript') && targetAttr !== '_blank' && !target.startsWith('tel:') && !target.startsWith('mailto:')) {
                 e.preventDefault();
                 loader.style.display = 'flex';
                 document.querySelector('.book-left').style.transform = 'perspective(1500px) rotateY(0deg)';
                 document.querySelector('.book-right').style.transform = 'perspective(1500px) rotateY(0deg)';
                 document.querySelector('.book-logo').style.opacity = '1';
-                setTimeout(() => window.location.href = target, 800);
+                setTimeout(() => {
+                    window.location.href = target;
+                    setTimeout(() => {
+                        loader.style.display = 'none';
+                    }, 2000); // Safety fallback if page doesn't unload
+                }, 800);
             }
         });
     });

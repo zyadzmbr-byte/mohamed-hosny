@@ -177,17 +177,8 @@
                                 إشعارات ذكية</h3>
                             <div
                                 style="background:#fff; border-radius:15px; padding:15px; box-shadow:0 5px 15px rgba(0,0,0,0.05);">
-                                <div
-                                    style="padding:10px; border-right:4px solid #12b8c5; background:#f4f7fa; margin-bottom:10px; border-radius:5px;">
-                                    <strong>📢 تم رفع واجب جديد:</strong> يرجى حل واجب الفيزياء قبل الغد.
-                                </div>
-                                <div
-                                    style="padding:10px; border-right:4px solid #4caf50; background:#f4f7fa; margin-bottom:10px; border-radius:5px;">
-                                    <strong>🎥 حصة جديدة:</strong> تمت إضافة حصة المفعول المطلق للحساب الخاص بك.
-                                </div>
-                                <div
-                                    style="padding:10px; border-right:4px solid #ff9800; background:#f4f7fa; border-radius:5px;">
-                                    <strong>⏰ تذكير:</strong> موعد امتحان الرياضيات بعد يومين، استعد جيداً!
+                                <div id="student-notifications-empty" style="padding:10px; text-align:center; color:#6a7c92;">
+                                    لا توجد إشعارات حالياً
                                 </div>
                             </div>
                         </div>
@@ -196,24 +187,7 @@
                                 والمنافسة (أفضل 10 طلاب)</h3>
                             <div id="student-ranking"
                                 style="background:#fff; border-radius:15px; padding:15px; box-shadow:0 5px 15px rgba(0,0,0,0.05);">
-                                <div
-                                    style="display:flex; justify-content:space-between; align-items:center; padding:10px; border-bottom:1px solid #eee;">
-                                    <span style="font-weight:bold; font-size:18px;"><i class="fas fa-medal"
-                                            style="color:gold;"></i> 🥇 الأول: أحمد محمود</span>
-                                    <span style="font-weight:bold; color:#4caf50;">98%</span>
-                                </div>
-                                <div
-                                    style="display:flex; justify-content:space-between; align-items:center; padding:10px; border-bottom:1px solid #eee;">
-                                    <span style="font-weight:bold; font-size:18px;"><i class="fas fa-medal"
-                                            style="color:silver;"></i> 🥈 الثاني: سارة علي</span>
-                                    <span style="font-weight:bold; color:#4caf50;">97%</span>
-                                </div>
-                                <div
-                                    style="display:flex; justify-content:space-between; align-items:center; padding:10px;">
-                                    <span style="font-weight:bold; font-size:18px;"><i class="fas fa-medal"
-                                            style="color:#cd7f32;"></i> 🥉 الثالث: عمر خالد</span>
-                                    <span style="font-weight:bold; color:#4caf50;">95%</span>
-                                </div>
+                                <div style="text-align:center; color:#6a7c92; padding:10px;">سيتم تحديث الترتيب قريباً</div>
                             </div>
 
                             <h3 class="section-title" style="color:#e91e63; margin-top:30px;"><i
@@ -221,21 +195,7 @@
                             <div style="display:flex; gap:15px; flex-wrap:wrap;">
                                 <div
                                     style="background:#fff; padding:15px; border-radius:15px; text-align:center; box-shadow:0 5px 15px rgba(0,0,0,0.05); flex:1; min-width:120px;">
-                                    <i class="fas fa-certificate"
-                                        style="font-size:30px; color:#ff9800; margin-bottom:10px;"></i>
-                                    <p style="font-weight:bold; margin:0;">🏅 شهادة إتمام</p>
-                                </div>
-                                <div
-                                    style="background:#fff; padding:15px; border-radius:15px; text-align:center; box-shadow:0 5px 15px rgba(0,0,0,0.05); flex:1; min-width:120px;">
-                                    <i class="fas fa-star"
-                                        style="font-size:30px; color:#4caf50; margin-bottom:10px;"></i>
-                                    <p style="font-weight:bold; margin:0;">⭐ شارة التميز</p>
-                                </div>
-                                <div
-                                    style="background:#fff; padding:15px; border-radius:15px; text-align:center; box-shadow:0 5px 15px rgba(0,0,0,0.05); flex:1; min-width:120px;">
-                                    <i class="fas fa-fire"
-                                        style="font-size:30px; color:#f44336; margin-bottom:10px;"></i>
-                                    <p style="font-weight:bold; margin:0;">🔥 بطل الأسبوع</p>
+                                    <p style="color:#6a7c92; margin:0;">لا توجد إنجازات حتى الآن</p>
                                 </div>
                             </div>
                         </div>
@@ -245,6 +205,10 @@
                 <div id="dash-required" class="dash-tab-section" style="display:none;">
                     <h3 class="section-title"><i class="fas fa-tasks" style="color:var(--primary-color);"></i>
                         الامتحانات والواجبات والاختبارات القصيرة (المطلوب)</h3>
+                    <div style="margin-bottom: 20px; background:#fff; padding:15px; border-radius:15px; display:flex; gap:10px; box-shadow:0 5px 15px rgba(0,0,0,0.05);">
+                        <input type="text" id="manual-exam-id" placeholder="أدخل كود أو اسم الامتحان لفتحه..." style="flex:1; padding:10px; border:1px solid #ccc; border-radius:10px;">
+                        <button class="btn-primary" onclick="submitExam(document.getElementById('manual-exam-id').value.trim())">فتح الامتحان</button>
+                    </div>
                     <div id="student-exams" class="subject-mini-cards">
                         <!-- Populated dynamically based on Grade -->
                     </div>
@@ -336,25 +300,25 @@
                     <div class="stat-card"
                         style="background: #fff; padding: 20px; border-radius: 15px; box-shadow: 0 5px 15px rgba(0,0,0,0.05); text-align: center;">
                         <i class="fas fa-book-reader" style="font-size: 30px; color: #12b8c5; margin-bottom: 10px;"></i>
-                        <h3 style="font-size: 28px; color: #121e33; font-family: 'Cairo', sans-serif;">32</h3>
+                        <h3 id="stat-completed-lessons" style="font-size: 28px; color: #121e33; font-family: 'Cairo', sans-serif;">0</h3>
                         <p style="color: #6a7c92; font-weight: bold;">📚 درس مكتمل</p>
                     </div>
                     <div class="stat-card"
                         style="background: #fff; padding: 20px; border-radius: 15px; box-shadow: 0 5px 15px rgba(0,0,0,0.05); text-align: center;">
                         <i class="fas fa-tasks" style="font-size: 30px; color: #ff9800; margin-bottom: 10px;"></i>
-                        <h3 style="font-size: 28px; color: #121e33; font-family: 'Cairo', sans-serif;">5</h3>
+                        <h3 id="stat-pending-homework" style="font-size: 28px; color: #121e33; font-family: 'Cairo', sans-serif;">0</h3>
                         <p style="color: #6a7c92; font-weight: bold;">📝 واجبات متبقية</p>
                     </div>
                     <div class="stat-card"
                         style="background: #fff; padding: 20px; border-radius: 15px; box-shadow: 0 5px 15px rgba(0,0,0,0.05); text-align: center;">
                         <i class="fas fa-chart-line" style="font-size: 30px; color: #9c27b0; margin-bottom: 10px;"></i>
-                        <h3 style="font-size: 28px; color: #121e33; font-family: 'Cairo', sans-serif;">92%</h3>
+                        <h3 id="stat-avg-score" style="font-size: 28px; color: #121e33; font-family: 'Cairo', sans-serif;">0%</h3>
                         <p style="color: #6a7c92; font-weight: bold;">📊 متوسط الدرجات</p>
                     </div>
                     <div class="stat-card"
                         style="background: #fff; padding: 20px; border-radius: 15px; box-shadow: 0 5px 15px rgba(0,0,0,0.05); text-align: center;">
                         <i class="fas fa-fire" style="font-size: 30px; color: #f44336; margin-bottom: 10px;"></i>
-                        <h3 style="font-size: 28px; color: #121e33; font-family: 'Cairo', sans-serif;">78%</h3>
+                        <h3 id="stat-completion-rate" style="font-size: 28px; color: #121e33; font-family: 'Cairo', sans-serif;">0%</h3>
                         <p style="color: #6a7c92; font-weight: bold;">🔥 نسبة الإنجاز</p>
                     </div>
                 </div>
