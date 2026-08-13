@@ -1829,6 +1829,13 @@ document.addEventListener('click', function (e) {
     }
 });
 
+window.toggleSidebar = function() {
+    let sidebar = document.getElementById('sidebar');
+    if (sidebar) {
+        sidebar.classList.toggle('open');
+    }
+};
+
 document.addEventListener('DOMContentLoaded', () => {
     const stagePrefixes = ['ct', 'ex', 'lnk', 'af', 'filter'];
     stagePrefixes.forEach(prefix => {

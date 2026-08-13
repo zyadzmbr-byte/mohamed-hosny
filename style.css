@@ -844,7 +844,7 @@ section {
 
 /* Sidebar */
 .sidebar {
-    width: 280px;
+    width: 240px;
     background: var(--white);
     box-shadow: -5px 0 20px rgba(0, 0, 0, 0.05);
     /* RTL shadow */
@@ -959,7 +959,7 @@ section {
 /* Main Content Area */
 .dashboard-main {
     flex: 1;
-    margin-right: 280px;
+    margin-right: 240px;
     /* Space for sidebar RTL */
     display: flex;
     flex-direction: column;
@@ -1668,5 +1668,55 @@ section {
 
     .stat-circle {
         transform: scale(0.8) !important;
+    }
+
+    /* Mobile Dashboard CSS */
+    .dashboard-layout {
+        flex-direction: column;
+    }
+    .sidebar {
+        transform: translateX(100%);
+        width: 260px !important;
+        box-shadow: none;
+        transition: 0.3s;
+    }
+    .sidebar.open {
+        transform: translateX(0);
+        box-shadow: -5px 0 20px rgba(0,0,0,0.3);
+    }
+    .dashboard-main {
+        margin-right: 0 !important;
+        width: 100% !important;
+    }
+    .d-lg-none {
+        display: block !important;
+    }
+    .stats-grid {
+        grid-template-columns: 1fr !important;
+    }
+    .two-columns {
+        grid-template-columns: 1fr !important;
+    }
+    .welcome-banner {
+        flex-direction: column;
+        text-align: center;
+    }
+    .welcome-banner img {
+        margin-top: 20px;
+        width: 150px;
+    }
+    .dashboard-header {
+        padding: 15px;
+    }
+    .search-bar {
+        width: auto !important;
+        flex: 1;
+    }
+    /* Enforce shiny black color on texts for better clarity on mobile */
+    .dashboard-body, .dashboard-body p, .dashboard-body span, .dashboard-body h1, .dashboard-body h2, .dashboard-body h3, .dashboard-body h4 {
+        color: #000000 !important;
+    }
+    .subject-mini-card .info p, .subject-mini-card .info span {
+        color: #000000 !important;
     }
 }
