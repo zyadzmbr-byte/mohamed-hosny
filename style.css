@@ -16,6 +16,10 @@
     font-family: 'Tajawal', sans-serif;
 }
 
+html {
+    scroll-behavior: smooth;
+}
+
 html,
 body {
     width: 100%;
@@ -1376,6 +1380,7 @@ section {
     opacity: 0;
     transform: translateY(30px);
     transition: opacity 0.8s ease-out, transform 0.8s ease-out;
+    will-change: opacity, transform;
 }
 
 .animate-on-scroll.animated {

@@ -308,7 +308,7 @@ window.attachGlobalEvents = function () {
         window.addEventListener('scroll', () => {
             if (window.scrollY > 300) scrollBtn.classList.add('visible');
             else scrollBtn.classList.remove('visible');
-        });
+        }, { passive: true });
         scrollBtn.addEventListener('click', () => {
             window.scrollTo({ top: 0, behavior: 'smooth' });
         });
@@ -504,6 +504,9 @@ window.renderCards = function (containerId, items, whatsappPrefix, btnText, isMy
                 btnHtml = `<a href="${htmlLink}" target="_blank" class="btn-primary w-100" style="display:block; text-align:center; box-sizing:border-box; width:100%; padding:15px; border-radius:12px; font-size:18px; background:linear-gradient(135deg, #9c27b0, #6a1b9a); text-decoration:none;"><i class="fas fa-gamepad" style="font-size:24px;"></i> تشغيل اللعبة/التطبيق </a>`;
             } else {
                 let pdfLink = item.pdfUrl || '#';
+                if (pdfLink.toLowerCase().includes('.pdf') && pdfLink.includes('f_auto')) {
+                    pdfLink = pdfLink.replace(/\/f_auto,q_auto\//gi, '/').replace(/\/f_auto\//gi, '/');
+                }
                 btnHtml = `<a href="${pdfLink}" target="_blank" class="btn-primary w-100" style="display:block; text-align:center; box-sizing:border-box; width:100%; padding:15px; border-radius:12px; font-size:18px; background:linear-gradient(135deg, #4caf50, #2e7d32); text-decoration:none;"><i class="fas fa-book-open" style="font-size:24px;"></i> تصفح الكتاب </a>`;
             }
         } else {
@@ -1664,7 +1667,7 @@ window.uploadToCloudinary = async function (file) {
 
     const data = await response.json();
     let url = data.secure_url;
-    if (data.resource_type === 'image') {
+    if (data.resource_type === 'image' && !url.toLowerCase().endsWith('.pdf')) {
         url = url.replace('/upload/', '/upload/f_auto,q_auto/');
     }
     return url;

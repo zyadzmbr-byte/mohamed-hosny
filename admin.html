@@ -881,9 +881,11 @@
                         }
                     } catch (e) { }
                 }
-                users = await window.fsData.getAllUsers();
-                att = await window.fsData.getAttendance();
-                if (window.fsData.getAllSubscriptionCodes) subCodes = await window.fsData.getAllSubscriptionCodes();
+                try { users = await window.fsData.getAllUsers(); } catch(e) { users = JSON.parse(localStorage.getItem('spedia_users') || '[]'); }
+                try { att = await window.fsData.getAttendance(); } catch(e) { att = JSON.parse(localStorage.getItem('spedia_attendance') || '[]'); }
+                if (window.fsData.getAllSubscriptionCodes) {
+                    try { subCodes = await window.fsData.getAllSubscriptionCodes(); } catch(e) { subCodes = JSON.parse(localStorage.getItem('spedia_sub_codes') || '[]'); }
+                }
             } else {
                 users = JSON.parse(localStorage.getItem('spedia_users') || '[]');
                 att = JSON.parse(localStorage.getItem('spedia_attendance') || '[]');
@@ -891,7 +893,7 @@
             }
             let subs = [];
             if (window.fsData) {
-                subs = await window.fsData.getAllSubmissions();
+                try { subs = await window.fsData.getAllSubmissions(); } catch(e) { subs = JSON.parse(localStorage.getItem('spedia_submissions') || '[]'); }
             } else {
                 subs = JSON.parse(localStorage.getItem('spedia_submissions') || '[]');
             }
@@ -1147,8 +1149,11 @@
             if(!contentId) return alert('يرجى اختيار المحتوى');
             
             let cList = JSON.parse(localStorage.getItem('spedia_content') || '[]');
-            let content = cList.find(c => c.id.toString() === contentId || c.fsId === contentId);
-            if(!content) return;
+            let content = cList.find(c => (c.id && c.id.toString() === contentId) || c.fsId === contentId);
+            if(!content) {
+                alert('حدث خطأ في العثور على المحتوى المحدد.');
+                return;
+            }
             
             let rnd = Math.floor(1000 + Math.random() * 9000).toString();
             let subCode = { code: rnd, type: content.type, title: content.title, contentId: contentId, date: new Date().toLocaleDateString('ar-EG'), isUsed: false };
@@ -1157,8 +1162,8 @@
             subCodes.push(subCode);
             localStorage.setItem('spedia_sub_codes', JSON.stringify(subCodes));
             
-            if (window.fsData && window.fsData.addGeneric) {
-                window.fsData.addGeneric('subscription_codes', subCode).catch(e=>console.warn(e));
+            if (window.fsData && window.fsData.addSubscriptionCode) {
+                window.fsData.addSubscriptionCode(subCode).catch(e=>console.warn(e));
             }
             
             let display = document.getElementById('generated-code-display');
