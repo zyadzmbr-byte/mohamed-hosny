@@ -422,11 +422,6 @@
                     <label>عنوان المحتوى</label>
                     <input type="text" id="ct-title" required>
                 </div>
-                <div class="form-group" id="course-code-container">
-                    <label>كود التفعيل (كلمة المرور) - لغلق المحتوى (إن وجد)</label>
-                    <input type="text" id="ct-course-code">
-                </div>
-
                 <div class="form-group">
                     <label>المرحلة</label>
                     <select id="ct-stage"
@@ -460,10 +455,7 @@
                     <label>ملف اللعبة / التطبيق (HTML - الرفع المباشر)</label>
                     <input type="file" id="ct-html" accept=".html,.zip">
                 </div>
-                <div class="form-group">
-                    <label>السعر الأساسي (ج.م)</label>
-                    <input type="number" id="ct-price" required>
-                </div>
+
                 <button type="submit" class="btn-primary w-100" id="btn-save-content">حفظ المحتوى</button>
             </form>
 
@@ -798,14 +790,7 @@
                     <label>عنوان المحتوى</label>
                     <input type="text" id="edit-title" required>
                 </div>
-                <div class="form-group">
-                    <label>كود التفعيل (كلمة المرور)</label>
-                    <input type="text" id="edit-course-code">
-                </div>
-                <div class="form-group">
-                    <label>السعر الأساسي (ج.م)</label>
-                    <input type="number" id="edit-price" required>
-                </div>
+
                 <div class="form-group" id="edit-yt-link-container" style="display:none;">
                     <label>رابط فيديو يوتيوب (للكورس فقط)</label>
                     <input type="url" id="edit-yt-link" placeholder="مثال: https://www.youtube.com/watch?v=...">
@@ -856,7 +841,7 @@
             let newUserEval = { code, note, date: new Date().toLocaleDateString('ar-EG') };
 
             if (window.fsData && window.fsData.addEval) {
-                try { await window.fsData.addEval(newUserEval); } catch (er) { console.warn("Firebase Eval Add Error:", er); }
+                try { await Promise.race([window.fsData.addEval(newUserEval), new Promise((_,_r) => setTimeout(()=>_r(new Error('timeout')), 1500))]); } catch (er) { console.warn("Firebase Eval Add Error:", er); }
             }
 
             let evals = JSON.parse(localStorage.getItem('spedia_evals') || '[]');
@@ -874,17 +859,17 @@
             if (window.fsData) {
                 if (window.fsData.getAllCodes) {
                     try {
-                        let fbCodes = await window.fsData.getAllCodes();
+                        let fbCodes = await Promise.race([window.fsData.getAllCodes(), new Promise((_,_r) => setTimeout(()=>_r(new Error('timeout')), 1500))]);
                         if (fbCodes && fbCodes.length > 0) {
                             codes = fbCodes;
                             localStorage.setItem('spedia_codes', JSON.stringify(codes));
                         }
                     } catch (e) { }
                 }
-                try { users = await window.fsData.getAllUsers(); } catch(e) { users = JSON.parse(localStorage.getItem('spedia_users') || '[]'); }
-                try { att = await window.fsData.getAttendance(); } catch(e) { att = JSON.parse(localStorage.getItem('spedia_attendance') || '[]'); }
+                try { users = await Promise.race([window.fsData.getAllUsers(), new Promise((_,_r) => setTimeout(()=>_r(new Error('timeout')), 1500))]); } catch(e) { users = JSON.parse(localStorage.getItem('spedia_users') || '[]'); }
+                try { att = await Promise.race([window.fsData.getAttendance(), new Promise((_,_r) => setTimeout(()=>_r(new Error('timeout')), 1500))]); } catch(e) { att = JSON.parse(localStorage.getItem('spedia_attendance') || '[]'); }
                 if (window.fsData.getAllSubscriptionCodes) {
-                    try { subCodes = await window.fsData.getAllSubscriptionCodes(); } catch(e) { subCodes = JSON.parse(localStorage.getItem('spedia_sub_codes') || '[]'); }
+                    try { subCodes = await Promise.race([window.fsData.getAllSubscriptionCodes(), new Promise((_,_r) => setTimeout(()=>_r(new Error('timeout')), 1500))]); } catch(e) { subCodes = JSON.parse(localStorage.getItem('spedia_sub_codes') || '[]'); }
                 }
             } else {
                 users = JSON.parse(localStorage.getItem('spedia_users') || '[]');
@@ -893,7 +878,7 @@
             }
             let subs = [];
             if (window.fsData) {
-                try { subs = await window.fsData.getAllSubmissions(); } catch(e) { subs = JSON.parse(localStorage.getItem('spedia_submissions') || '[]'); }
+                try { subs = await Promise.race([window.fsData.getAllSubmissions(), new Promise((_,_r) => setTimeout(()=>_r(new Error('timeout')), 1500))]); } catch(e) { subs = JSON.parse(localStorage.getItem('spedia_submissions') || '[]'); }
             } else {
                 subs = JSON.parse(localStorage.getItem('spedia_submissions') || '[]');
             }
@@ -957,7 +942,7 @@
             let contentList = [];
             if (window.fsData && window.fsData.getAllContent) {
                 try {
-                    contentList = await window.fsData.getAllContent();
+                    contentList = await Promise.race([window.fsData.getAllContent(), new Promise((_,_r) => setTimeout(()=>_r(new Error('timeout')), 1500))]);
                 } catch (e) { }
             }
             let localContent = JSON.parse(localStorage.getItem('spedia_content') || '[]');
@@ -993,7 +978,7 @@
 
             let links = JSON.parse(localStorage.getItem('spedia_class_links') || '[]');
             if (window.fsData && window.fsData.getAllClassLinks) {
-                try { links = await window.fsData.getAllClassLinks(); localStorage.setItem('spedia_class_links', JSON.stringify(links)); } catch (e) { }
+                try { links = await Promise.race([window.fsData.getAllClassLinks(), new Promise((_,_r) => setTimeout(()=>_r(new Error('timeout')), 1500))]); localStorage.setItem('spedia_class_links', JSON.stringify(links)); } catch (e) { }
             }
             const tLinks = document.getElementById('table-links');
             if (tLinks) {
@@ -1006,7 +991,7 @@
 
             let sFiles = JSON.parse(localStorage.getItem('spedia_student_files') || '[]');
             if (window.fsData && window.fsData.getAllStudentFiles) {
-                try { sFiles = await window.fsData.getAllStudentFiles(); localStorage.setItem('spedia_student_files', JSON.stringify(sFiles)); } catch (e) { }
+                try { sFiles = await Promise.race([window.fsData.getAllStudentFiles(), new Promise((_,_r) => setTimeout(()=>_r(new Error('timeout')), 1500))]); localStorage.setItem('spedia_student_files', JSON.stringify(sFiles)); } catch (e) { }
             }
             const tSFiles = document.getElementById('table-student-files');
             if (tSFiles) {
@@ -1021,7 +1006,7 @@
 
             let allCreatedExams = [];
             if (window.fsData && window.fsData.getAllExams) {
-                try { allCreatedExams = await window.fsData.getAllExams(); } catch (e) { }
+                try { allCreatedExams = await Promise.race([window.fsData.getAllExams(), new Promise((_,_r) => setTimeout(()=>_r(new Error('timeout')), 1500))]); } catch (e) { }
             } else {
                 allCreatedExams = JSON.parse(localStorage.getItem('spedia_exams') || '[]');
             }
@@ -1073,7 +1058,7 @@
             if (chatTable) {
                 let chats = JSON.parse(localStorage.getItem('spedia_chat') || '[]');
                 if (window.fsData && window.fsData.getAllChatMessages) {
-                    try { chats = await window.fsData.getAllChatMessages(); localStorage.setItem('spedia_chat', JSON.stringify(chats)); } catch (e) { }
+                    try { chats = await Promise.race([window.fsData.getAllChatMessages(), new Promise((_,_r) => setTimeout(()=>_r(new Error('timeout')), 1500))]); localStorage.setItem('spedia_chat', JSON.stringify(chats)); } catch (e) { }
                 }
                 chatTable.innerHTML = `<tr><th>كود الطالب</th><th>المرسل / المدرس</th><th>الرسالة</th><th>التاريخ</th></tr>` +
                     chats.map(c => {
@@ -1086,7 +1071,7 @@
             if (tReportTable) {
                 let treports = JSON.parse(localStorage.getItem('spedia_teacher_reports') || '[]');
                 if (window.fsData && window.fsData.getAllTeacherReports) {
-                    try { treports = await window.fsData.getAllTeacherReports(); localStorage.setItem('spedia_teacher_reports', JSON.stringify(treports)); } catch (e) { }
+                    try { treports = await Promise.race([window.fsData.getAllTeacherReports(), new Promise((_,_r) => setTimeout(()=>_r(new Error('timeout')), 1500))]); localStorage.setItem('spedia_teacher_reports', JSON.stringify(treports)); } catch (e) { }
                 }
                 tReportTable.innerHTML = `<tr><th>اسم المدرس / الأدمن</th><th>عنوان الحصة</th><th>التاريخ</th></tr>` +
                     treports.map(t => `<tr><td>${t.teacherName}</td><td>${t.lesson}</td><td>${t.date}</td></tr>`).join('');
@@ -1104,7 +1089,7 @@
                 
                 if (window.fsData && window.fsData.updateGeneric && users[userIndex].fsId) {
                     try {
-                        await window.fsData.updateGeneric('users', users[userIndex].fsId, { registrationDate: Date.now() });
+                        await Promise.race([window.fsData.updateGeneric('users', users[userIndex].fsId, { registrationDate: Date.now(), new Promise((_,_r) => setTimeout(()=>_r(new Error('timeout')), 1500))]) });
                     } catch (e) { console.warn(e); }
                 }
                 alert('تم التجديد بنجاح!');
@@ -1237,7 +1222,7 @@
             localStorage.setItem(lsKey, JSON.stringify(arr));
 
             if (window.fsData && window.fsData.deleteGeneric) {
-                try { await window.fsData.deleteGeneric(collection, idVal, idProp); } catch (e) { console.warn(e); }
+                try { await Promise.race([window.fsData.deleteGeneric(collection, idVal, idProp), new Promise((_,_r) => setTimeout(()=>_r(new Error('timeout')), 1500))]); } catch (e) { console.warn(e); }
             }
             renderTables();
         };
@@ -1251,7 +1236,7 @@
 
             if (window.fsData && window.fsData.deleteClassLink) {
                 let dId = targetLnk && targetLnk.fsId ? targetLnk.fsId : id.toString();
-                try { await window.fsData.deleteClassLink(dId); } catch (e) { }
+                try { await Promise.race([window.fsData.deleteClassLink(dId), new Promise((_,_r) => setTimeout(()=>_r(new Error('timeout')), 1500))]); } catch (e) { }
             }
             renderTables();
         };
@@ -1269,7 +1254,7 @@
             };
 
             if (window.fsData && window.fsData.addClassLink) {
-                try { await window.fsData.addClassLink(lnk); } catch (er) { }
+                try { await Promise.race([window.fsData.addClassLink(lnk), new Promise((_,_r) => setTimeout(()=>_r(new Error('timeout')), 1500))]); } catch (er) { }
             }
 
             let links = JSON.parse(localStorage.getItem('spedia_class_links') || '[]');
@@ -1297,7 +1282,7 @@
                 };
 
                 if (window.fsData && window.fsData.addAdminFile) {
-                    try { await window.fsData.addAdminFile(fItem); } catch (er) { }
+                    try { await Promise.race([window.fsData.addAdminFile(fItem), new Promise((_,_r) => setTimeout(()=>_r(new Error('timeout')), 1500))]); } catch (er) { }
                 }
 
                 let aFiles = JSON.parse(localStorage.getItem('spedia_admin_files') || '[]');
@@ -1338,7 +1323,7 @@
                 };
 
                 if (window.fsData && window.fsData.addCustomContent) {
-                    try { await window.fsData.addCustomContent(cItem); } catch (er) { console.warn(er); }
+                    try { await Promise.race([window.fsData.addCustomContent(cItem), new Promise((_,_r) => setTimeout(()=>_r(new Error('timeout')), 1500))]); } catch (er) { console.warn(er); }
                 }
 
                 let ccLocal = JSON.parse(localStorage.getItem('spedia_custom_content') || '[]');
@@ -1381,7 +1366,7 @@
                 };
 
                 if (window.fsData && window.fsData.addCustomContent) {
-                    try { await window.fsData.addCustomContent(cItem); } catch (er) { console.warn(er); }
+                    try { await Promise.race([window.fsData.addCustomContent(cItem), new Promise((_,_r) => setTimeout(()=>_r(new Error('timeout')), 1500))]); } catch (er) { console.warn(er); }
                 }
 
                 let ccLocal = JSON.parse(localStorage.getItem('spedia_custom_content') || '[]');
@@ -1404,7 +1389,7 @@
 
             if (window.fsData && window.fsData.deleteContent) {
                 try {
-                    await window.fsData.deleteContent(id.toString());
+                    await Promise.race([window.fsData.deleteContent(id.toString(), new Promise((_,_r) => setTimeout(()=>_r(new Error('timeout')), 1500))]));
                 } catch (e) { console.warn(e) }
             }
             alert('تم الحذف بنجاح');
@@ -1420,8 +1405,6 @@
             document.getElementById('edit-fsid').value = content.fsId || '';
             document.getElementById('edit-type').value = content.type === 'course' ? 'كورس' : (content.type === 'game' ? 'لعبة' : 'كتاب/مذكرة');
             document.getElementById('edit-title').value = content.title || '';
-            document.getElementById('edit-course-code').value = content.courseCode || '';
-            document.getElementById('edit-price').value = content.priceBase || 0;
 
             let ytContainer = document.getElementById('edit-yt-link-container');
             if (ytContainer) {
@@ -1440,12 +1423,10 @@
             let id = document.getElementById('edit-id').value;
             let fsId = document.getElementById('edit-fsid').value;
             let title = document.getElementById('edit-title').value;
-            let courseCode = document.getElementById('edit-course-code').value;
-            let priceBase = parseInt(document.getElementById('edit-price').value) || 0;
+            let updates = { title };
             let fileInput = document.getElementById('edit-image');
             let ytLinkVal = document.getElementById('edit-yt-link').value;
 
-            let updates = { title, courseCode, priceBase };
 
             let type = document.getElementById('edit-type').value;
             if (type === 'كورس' && ytLinkVal) {
@@ -1467,7 +1448,7 @@
 
                 // update firebase
                 if (window.fsData && window.fsData.updateContent && fsId) {
-                    await window.fsData.updateContent(fsId, updates);
+                    await Promise.race([window.fsData.updateContent(fsId, updates), new Promise((_,_r) => setTimeout(()=>_r(new Error('timeout')), 1500))]);
                 }
 
                 alert('تم التعديل بنجاح!');
@@ -1486,14 +1467,32 @@
             let codeObj = { code: rnd, isUsed: false };
 
             if (window.fsData && window.fsData.addCode) {
-                try {
-                    await window.fsData.addCode(codeObj);
-                } catch (e) { console.warn("Firebase save error", e); }
+                window.fsData.addCode(codeObj).catch(e => console.warn("Firebase save error", e));
             }
 
-            let codes = JSON.parse(localStorage.getItem('spedia_codes') || '[]');
+            let codes = [];
+            try {
+                codes = JSON.parse(localStorage.getItem('spedia_codes') || '[]');
+            } catch (e) {
+                console.warn("Error parsing spedia_codes, resetting to empty array");
+                codes = [];
+            }
             codes.push(codeObj);
             localStorage.setItem('spedia_codes', JSON.stringify(codes));
+            
+            // تحديث واجهة المتصفح فوراً بدون انتظار
+            const tCodes = document.getElementById('table-codes');
+            if (tCodes) {
+                let adminType = sessionStorage.getItem('adminType');
+                let ths = `<th>الكود</th><th>مستخدم؟</th>`;
+                if (adminType === 'full') ths += `<th>حذف</th>`;
+                tCodes.innerHTML = `<tr>${ths}</tr>` + codes.map(c => {
+                    let tr = `<td>${c.code}</td><td style="color:${c.isUsed ? 'red' : 'green'}">${c.isUsed ? 'مستخدم' : 'متاح'}</td>`;
+                    if (adminType === 'full') tr += `<td><button onclick="window.deleteItemGeneric('codes', '${c.fsId || c.code}', 'spedia_codes', 'code')" style="background:#f44336; color:#fff; border:none; padding:5px 10px; border-radius:5px; cursor:pointer;">حذف</button></td>`;
+                    return `<tr>${tr}</tr>`;
+                }).join('');
+            }
+
             renderTables();
             if (btn) btn.innerText = "إنشاء كود";
         }
@@ -1509,18 +1508,15 @@
                 let titleEl = document.getElementById('ct-title');
                 let gradeEl = document.getElementById('ct-grade');
                 let countryEl = document.getElementById('ct-country');
-                let priceEl = document.getElementById('ct-price');
-                let codeEl = document.getElementById('ct-course-code');
 
                 let newItem = {
                     id: Date.now(),
                     type: ctType,
                     title: titleEl ? titleEl.value : '',
                     grade: gradeEl ? gradeEl.value : '',
-                    country: countryEl ? countryEl.value : 'EG',
-                    priceBase: (priceEl ? parseInt(priceEl.value) : 0) || 0,
-                    courseCode: codeEl ? codeEl.value : ''
+                    country: countryEl ? countryEl.value : 'EG'
                 };
+
 
                 let imgInput = document.getElementById('ct-image');
                 if (imgInput && imgInput.files && imgInput.files[0]) {
@@ -1651,7 +1647,7 @@
                     questionsList: qs,
                     studentCode: document.getElementById('ex-student-code') ? document.getElementById('ex-student-code').value.trim() : ''
                 };
-                if (window.fsData) await window.fsData.addExam(exam);
+                if (window.fsData) await Promise.race([window.fsData.addExam(exam), new Promise((_,_r) => setTimeout(()=>_r(new Error('timeout')), 1500))]);
                 else {
                     let ex = JSON.parse(localStorage.getItem('spedia_exams') || '[]');
                     ex.push(exam);
@@ -1667,13 +1663,13 @@
 
         let currentSub = null;
         window.openGrading = async function (code, title) {
-            let subs = window.fsData ? await window.fsData.getAllSubmissions() : JSON.parse(localStorage.getItem('spedia_submissions') || '[]');
+            let subs = window.fsData ? await Promise.race([window.fsData.getAllSubmissions(), new Promise((_,_r) => setTimeout(()=>_r(new Error('timeout')), 1500))]) : JSON.parse(localStorage.getItem('spedia_submissions') || '[]');
             currentSub = subs.find(s => s.code === code && s.examTitle === title);
             document.getElementById('grad-student-name').innerText = currentSub.name || code;
 
             let allExams = [];
             if (window.fsData && window.fsData.getAllExams) {
-                try { allExams = await window.fsData.getAllExams(); } catch (e) { }
+                try { allExams = await Promise.race([window.fsData.getAllExams(), new Promise((_,_r) => setTimeout(()=>_r(new Error('timeout')), 1500))]); } catch (e) { }
             } else {
                 allExams = JSON.parse(localStorage.getItem('spedia_exams') || '[]');
             }
@@ -1725,7 +1721,7 @@
             localStorage.setItem('spedia_results', JSON.stringify(results));
 
             if (window.fsData && window.fsData.addResult) {
-                try { await window.fsData.addResult(newResult); } catch (e) { }
+                try { await Promise.race([window.fsData.addResult(newResult), new Promise((_,_r) => setTimeout(()=>_r(new Error('timeout')), 1500))]); } catch (e) { }
             }
 
             // Update Submissions Status
@@ -1736,7 +1732,7 @@
                 localStorage.setItem('spedia_submissions', JSON.stringify(subs));
             }
             if (window.fsData && window.fsData.updateSubmission && currentSub.id) {
-                try { await window.fsData.updateSubmission(currentSub.id, { status: "تم التصحيح" }); } catch (e) { }
+                try { await Promise.race([window.fsData.updateSubmission(currentSub.id, { status: "تم التصحيح" }), new Promise((_,_r) => setTimeout(()=>_r(new Error('timeout')), 1500))]); } catch (e) { }
             }
 
             document.getElementById('grading-modal').style.display = 'none';
@@ -1806,7 +1802,7 @@
             localStorage.setItem('spedia_chat', JSON.stringify(chats));
 
             if (window.fsData && window.fsData.addChatMessage) {
-                try { await window.fsData.addChatMessage(chatMsg); } catch (er) { }
+                try { await Promise.race([window.fsData.addChatMessage(chatMsg), new Promise((_,_r) => setTimeout(()=>_r(new Error('timeout')), 1500))]); } catch (er) { }
             }
 
             let notifs = JSON.parse(localStorage.getItem('spedia_notifications') || '[]');
@@ -1831,7 +1827,7 @@
             localStorage.setItem('spedia_monthly_reports', JSON.stringify(reports));
 
             if (window.fsData && window.fsData.addMonthlyReport) {
-                try { await window.fsData.addMonthlyReport(report); } catch (er) { }
+                try { await Promise.race([window.fsData.addMonthlyReport(report), new Promise((_,_r) => setTimeout(()=>_r(new Error('timeout')), 1500))]); } catch (er) { }
             }
 
             let notifs = JSON.parse(localStorage.getItem('spedia_notifications') || '[]');
@@ -1853,7 +1849,7 @@
             localStorage.setItem('spedia_teacher_reports', JSON.stringify(tReports));
 
             if (window.fsData && window.fsData.addTeacherReport) {
-                try { await window.fsData.addTeacherReport(treport); } catch (er) { }
+                try { await Promise.race([window.fsData.addTeacherReport(treport), new Promise((_,_r) => setTimeout(()=>_r(new Error('timeout')), 1500))]); } catch (er) { }
             }
 
             alert('تم حفظ التقرير بنجاح.');

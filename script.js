@@ -214,44 +214,7 @@ window.injectBookTransition = function () {
     });
 };
 
-window.injectCartModal = function () {
-    if (!document.getElementById('cart-modal')) {
-        let modal = document.createElement('div');
-        modal.id = 'cart-modal';
-        modal.style.cssText = 'display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.6); z-index:100000; justify-content:center; align-items:center; backdrop-filter:blur(5px);';
-        modal.innerHTML = `
-            <div style="background:#fff; border-radius:20px; padding:30px; width:90%; max-width:500px; box-shadow:0 20px 50px rgba(0,0,0,0.2);">
-                <h3 style="font-size:24px; color:var(--primary-color); margin-bottom:20px; text-align:center;"><i class="fas fa-shopping-cart"></i> سلة المشتريات</h3>
-                <ul id="cart-items-list" style="list-style:none; padding:0; margin-bottom:20px; font-weight:bold; color:#121e33;"></ul>
-                <form id="cart-form" onsubmit="window.submitCartOrder(event)">
-                    <div style="margin-bottom:15px;">
-                        <input id="cart-name" type="text" placeholder="الاسم كامل" required style="width:100%; padding:10px; border:1px solid #ccc; border-radius:10px;">
-                    </div>
-                    <div style="margin-bottom:15px;">
-                        <input id="cart-code" type="text" placeholder="الكود (إن وجد)" style="width:100%; padding:10px; border:1px solid #ccc; border-radius:10px;">
-                    </div>
 
-                    <div style="margin-bottom:15px;">
-                        <select id="cart-payment" required style="width:100%; padding:10px; border:1px solid #ccc; border-radius:10px;">
-                            <option value="">طريقة الدفع</option>
-                            <option value="تحويل بنكي">تحويل بنكي</option>
-                            <option value="دفع إلكتروني">دفع إلكتروني</option>
-                            <option value="نقدي">نقدي (عند التوصيل)</option>
-                        </select>
-                    </div>
-                    <div style="margin-bottom:15px;">
-                        <input id="cart-phone" type="text" placeholder="رقم الهاتف للتواصل (واتساب)" required style="width:100%; padding:10px; border:1px solid #ccc; border-radius:10px;">
-                    </div>
-                    <div style="display:flex; gap:10px;">
-                        <button type="button" class="btn-primary" style="flex:1; background:#f44336;" onclick="document.getElementById('cart-modal').style.display='none'">إلغاء</button>
-                        <button type="submit" class="btn-primary" style="flex:1;">تأكيد وتواصل واتساب</button>
-                    </div>
-                </form>
-            </div>
-        `;
-        document.body.appendChild(modal);
-    }
-};
 
 window.renderMegaMenu = function () {
     const cCode = localStorage.getItem('spedia_country') || 'EG';
@@ -358,7 +321,7 @@ window.renderCurrentPage = async function () {
         let content = JSON.parse(localStorage.getItem('spedia_content') || '[]');
         if (window.fsData) {
             try {
-                let fsContent = await window.fsData.getAllContent();
+                let fsContent = await Promise.race([window.fsData.getAllContent(), new Promise((_,_r) => setTimeout(()=>_r(new Error('timeout')), 1500))]);
                 // Deduplicate items
                 let allContent = [...content, ...fsContent];
                 let uniqueMap = new Map();
@@ -393,7 +356,7 @@ window.renderCurrentPage = async function () {
         let content = JSON.parse(localStorage.getItem('spedia_content') || '[]');
         if (window.fsData) {
             try {
-                let fsContent = await window.fsData.getAllContent();
+                let fsContent = await Promise.race([window.fsData.getAllContent(), new Promise((_,_r) => setTimeout(()=>_r(new Error('timeout')), 1500))]);
                 content = [...content, ...fsContent];
             } catch (e) { console.warn(e); }
         }
@@ -401,7 +364,7 @@ window.renderCurrentPage = async function () {
         let subCodesList = [];
         if (window.fsData && window.fsData.getSubscriptionsByCode) {
             try {
-                subCodesList = await window.fsData.getSubscriptionsByCode(code);
+                subCodesList = await Promise.race([window.fsData.getSubscriptionsByCode(code), new Promise((_,_r) => setTimeout(()=>_r(new Error('timeout')), 1500))]);
             } catch (e) { console.warn(e); }
         } else {
             let subs = JSON.parse(localStorage.getItem('spedia_sub_codes') || '[]');
@@ -492,37 +455,18 @@ window.renderCards = function (containerId, items, whatsappPrefix, btnText, isMy
         div.className = 'subject-card animate-on-scroll';
 
         let btnHtml = '';
-        let unlocked = JSON.parse(localStorage.getItem('spedia_unlocked') || '[]');
-        let isUnlocked = unlocked.includes(item.title);
-
-        if (isUnlocked) {
-            if (item.type === 'course') {
-                let ytLink = item.videoUrl ? item.videoUrl : (item.youtubeId ? `https://www.youtube.com/watch?v=${item.youtubeId}` : '#');
-                btnHtml = `<button onclick="window.open('${ytLink}', '_blank')" class="btn-primary w-100" style="width:100%; padding:15px; border-radius:12px; font-size:18px; background:linear-gradient(135deg, #4caf50, #2e7d32);"><i class="fas fa-play-circle" style="font-size:24px;"></i> شاهد الفيديو الآن </button>`;
-            } else if (item.type === 'game') {
-                let htmlLink = item.htmlUrl || '#';
-                btnHtml = `<a href="${htmlLink}" target="_blank" class="btn-primary w-100" style="display:block; text-align:center; box-sizing:border-box; width:100%; padding:15px; border-radius:12px; font-size:18px; background:linear-gradient(135deg, #9c27b0, #6a1b9a); text-decoration:none;"><i class="fas fa-gamepad" style="font-size:24px;"></i> تشغيل اللعبة/التطبيق </a>`;
-            } else {
-                let pdfLink = item.pdfUrl || '#';
-                if (pdfLink.toLowerCase().includes('.pdf') && pdfLink.includes('f_auto')) {
-                    pdfLink = pdfLink.replace(/\/f_auto,q_auto\//gi, '/').replace(/\/f_auto\//gi, '/');
-                }
-                btnHtml = `<a href="${pdfLink}" target="_blank" class="btn-primary w-100" style="display:block; text-align:center; box-sizing:border-box; width:100%; padding:15px; border-radius:12px; font-size:18px; background:linear-gradient(135deg, #4caf50, #2e7d32); text-decoration:none;"><i class="fas fa-book-open" style="font-size:24px;"></i> تصفح الكتاب </a>`;
-            }
+        if (item.type === 'course') {
+            let ytLink = item.videoUrl ? item.videoUrl : (item.youtubeId ? `https://www.youtube.com/watch?v=${item.youtubeId}` : '#');
+            btnHtml = `<a href="${ytLink}" target="_blank" class="btn-primary w-100" style="display:block; text-align:center; box-sizing:border-box; width:100%; padding:15px; border-radius:12px; font-size:18px; background:linear-gradient(135deg, #4caf50, #2e7d32); text-decoration:none;"><i class="fas fa-play-circle" style="font-size:24px;"></i> شاهد الفيديو الآن </a>`;
+        } else if (item.type === 'game') {
+            let htmlLink = item.htmlUrl || '#';
+            btnHtml = `<a href="${htmlLink}" target="_blank" class="btn-primary w-100" style="display:block; text-align:center; box-sizing:border-box; width:100%; padding:15px; border-radius:12px; font-size:18px; background:linear-gradient(135deg, #9c27b0, #6a1b9a); text-decoration:none;"><i class="fas fa-gamepad" style="font-size:24px;"></i> تشغيل اللعبة/التطبيق </a>`;
         } else {
-            if (isMySubscriptions) {
-                btnHtml = `<div style="display:flex; flex-direction:column; gap:10px; width:100%;">
-                    <button onclick="window.unlockCourse('${item.title}', '${item.courseCode || ''}')" class="btn-primary w-100" style="width:100%; padding:15px; border-radius:12px; font-size:16px; background:linear-gradient(135deg, #f44336, #e53935);"><i class="fas fa-lock"></i> إدخال كود القفل من الإدارة</button>
-                    <a href="#" onclick="window.sendWhatsApp('أريد طلب كود فتح المحتوى لـ: ${item.title}'); return false;" style="display:block; text-align:center; color:#f44336; font-size:15px; font-weight:800; text-decoration:underline;">طلب كود فتح المحتوى</a>
-                </div>`;
-            } else {
-                let cartAction = `window.initiatePurchase('${item.title}', '${window.renderPrice(item.priceBase)}', '${item.type === 'course' ? 'كورس' : (item.type === 'game' ? 'لعبة' : 'كتاب')}')`;
-                let unlockBtn = item.courseCode ? `<button onclick="window.unlockCourse('${item.title}', '${item.courseCode}')" class="btn-primary" style="flex:1; padding:15px; border-radius:12px; font-size:16px; background:linear-gradient(135deg, #FF9800, #F57C00);"><i class="fas fa-key"></i> لدي كود</button>` : '';
-                btnHtml = `<div style="display:flex; gap:5px; width:100%;">
-                    <button onclick="${cartAction}" class="btn-primary w-100" style="flex:2; padding:15px; border-radius:12px; font-size:16px;"><i class="fas fa-shopping-cart"></i> ${btnText}</button>
-                    ${unlockBtn}
-                </div>`;
+            let pdfLink = item.pdfUrl || '#';
+            if (pdfLink.toLowerCase().includes('.pdf') && pdfLink.includes('f_auto')) {
+                pdfLink = pdfLink.replace(/\/f_auto,q_auto\//gi, '/').replace(/\/f_auto\//gi, '/');
             }
+            btnHtml = `<a href="${pdfLink}" target="_blank" class="btn-primary w-100" style="display:block; text-align:center; box-sizing:border-box; width:100%; padding:15px; border-radius:12px; font-size:18px; background:linear-gradient(135deg, #4caf50, #2e7d32); text-decoration:none;"><i class="fas fa-book-open" style="font-size:24px;"></i> تصفح الكتاب </a>`;
         }
 
         let imgStyle = item.type === 'course'
@@ -539,7 +483,7 @@ window.renderCards = function (containerId, items, whatsappPrefix, btnText, isMy
             </div>
             <div class="subject-body" style="text-align:center; padding:25px;">
                 <h3 style="font-size:20px; font-weight:800; color:var(--text-dark); margin-bottom:10px;">${item.title}</h3>
-                <h4 class="highlight mt-10" style="font-size:26px; font-weight:900; margin-bottom:20px;">${window.renderPrice(item.priceBase)}</h4>
+                <h4 class="highlight mt-10" style="font-size:26px; font-weight:900; margin-bottom:20px; color:#4caf50;">متاح مجاناً</h4>
                 ${btnHtml}
             </div>
         `;
@@ -552,94 +496,7 @@ window.sendWhatsApp = function (msg) {
     window.open(`${WA_LINK}?text=${encodeURIComponent(finalMsg)}`, '_blank');
 };
 
-function openCart(e) {
-    if (e) e.preventDefault();
-    let cart = JSON.parse(localStorage.getItem('spedia_cart') || '[]');
-    if (cart.length === 0) {
-        alert("سلة المشتريات فارغة. اختر الكورس أو الكتاب أولاً.");
-        return;
-    }
-    document.getElementById('cart-modal').style.display = 'flex';
-    document.getElementById('cart-items-list').innerHTML = cart.map(c => `<li>${c.title} - ${c.price}</li>`).join('');
-}
-window.openCart = openCart;
 
-window.initiatePurchase = function (title, price, typeText) {
-    if (!document.getElementById('sub-code-modal')) {
-        let modal = document.createElement('div');
-        modal.id = 'sub-code-modal';
-        modal.style.cssText = 'display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.7); z-index:100005; justify-content:center; align-items:center; backdrop-filter:blur(5px);';
-        modal.innerHTML = `
-            <div style="background:#fff; border-radius:20px; padding:30px; width:90%; max-width:500px; text-align:center; box-shadow:0 20px 50px rgba(0,0,0,0.2);">
-                <h3 style="margin-bottom:20px; color:#1e3c72;">كود الاشتراك</h3>
-                <p style="margin-bottom:20px; color:#555;">أدخل كودك المكون من 4 أرقام إذا كنت مسجلاً من قبل لإضافة المحتوى إلى حسابك.</p>
-                <input type="text" id="sub-exist-code" placeholder="مثال: 1234" maxlength="4" style="width:100%; padding:15px; margin-bottom:15px; font-size:20px; text-align:center; border:2px solid #ccc; border-radius:10px;">
-                <button id="btn-sub-continue" class="btn-primary w-100" style="margin-bottom:20px;">متابعة الشراء بهذا الكود</button>
-                <hr style="border:none; border-top:1px solid #eee; margin:20px 0;">
-                <p style="margin-bottom:15px; color:#555;font-weight:bold;">مستخدم جديد؟ قم بإنشاء كود مكون من 4 أرقام</p>
-                <button id="btn-sub-generate" class="btn-primary w-100" style="background:linear-gradient(135deg, #FF9800, #F57C00);">توليد كود تلقائي ومتابعة</button>
-                <button onclick="document.getElementById('sub-code-modal').style.display='none'" class="btn-secondary w-100 mt-10" style="background:none; color:#888; border:none; margin-top:15px;">إلغاء</button>
-            </div>
-        `;
-        document.body.appendChild(modal);
-
-        document.getElementById('btn-sub-continue').onclick = () => {
-            let code = document.getElementById('sub-exist-code').value.trim();
-            if (code.length < 4) return alert('الرجاء إدخال كود صحيح من 4 أرقام');
-            window.continuePurchaseWithCode(code);
-        };
-        document.getElementById('btn-sub-generate').onclick = () => {
-            let code = Math.floor(1000 + Math.random() * 9000).toString();
-            alert("تم توليد الكود الخاص بك: " + code + "\\nيرجى حفظه للدخول به لاحقاً.");
-            window.continuePurchaseWithCode(code);
-        };
-    }
-    document.getElementById('sub-code-modal').dataset.title = title;
-    document.getElementById('sub-code-modal').dataset.price = price;
-    document.getElementById('sub-code-modal').dataset.type = typeText;
-    document.getElementById('sub-exist-code').value = localStorage.getItem('spedia_my_sub_code') || '';
-    document.getElementById('sub-code-modal').style.display = 'flex';
-};
-
-window.continuePurchaseWithCode = async function (code) {
-    let modal = document.getElementById('sub-code-modal');
-    modal.style.display = 'none';
-    let title = modal.dataset.title;
-    let price = modal.dataset.price;
-    let typeText = modal.dataset.type;
-
-    localStorage.setItem('spedia_my_sub_code', code);
-
-    let subItem = { code: code, title: title, type: typeText === 'كورس' ? 'course' : 'book', date: new Date().toLocaleDateString('ar-EG') };
-
-    let fbSuccess = false;
-    if (window.fsData && window.fsData.addSubscriptionCode) {
-        try {
-            await window.fsData.addSubscriptionCode(subItem);
-            fbSuccess = true;
-        } catch (e) {
-            console.warn("Saving subscription to Firebase failed. Falling back to local storage.", e);
-        }
-    }
-
-    if (!fbSuccess) {
-        let subs = JSON.parse(localStorage.getItem('spedia_sub_codes') || '[]');
-        if (!subs.some(s => s.code === code && s.title === title)) {
-            subs.push(subItem);
-        }
-        localStorage.setItem('spedia_sub_codes', JSON.stringify(subs));
-    }
-
-    window.addToCart(title, price, typeText, code);
-};
-
-window.addToCart = function (title, price, typeText, code = '') {
-    let cart = JSON.parse(localStorage.getItem('spedia_cart') || '[]');
-    cart.push({ title: title, price: price, type: typeText, code: code });
-    localStorage.setItem('spedia_cart', JSON.stringify(cart));
-    alert("تم الإضافة إلى السلة! ومحتوياتك الآن مرتبطة بالكود: " + code);
-    if (window.renderCards) window.location.reload();
-};
 
 window.handleLogin = async function (e) {
     if (e) e.preventDefault();
@@ -648,7 +505,7 @@ window.handleLogin = async function (e) {
 
     let allUsers = [];
     if (window.fsData && window.fsData.getAllUsers) {
-        try { allUsers = await window.fsData.getAllUsers(); } catch (e) { }
+        try { allUsers = await Promise.race([window.fsData.getAllUsers(), new Promise((_,_r) => setTimeout(()=>_r(new Error('timeout')), 1500))]); } catch (e) { }
     }
     // Fallback to local
     if (!allUsers || allUsers.length === 0) {
@@ -659,7 +516,7 @@ window.handleLogin = async function (e) {
     if (!user) {
         let allCodes = [];
         if (window.fsData && window.fsData.getAllCodes) {
-            try { allCodes = await window.fsData.getAllCodes(); } catch (e) { }
+            try { allCodes = await Promise.race([window.fsData.getAllCodes(), new Promise((_,_r) => setTimeout(()=>_r(new Error('timeout')), 1500))]); } catch (e) { }
         }
         if (!allCodes || allCodes.length === 0) {
             allCodes = JSON.parse(localStorage.getItem('spedia_codes') || '[]');
@@ -712,7 +569,7 @@ window.finishRegister = async function (e) {
 
     if (window.fsData && window.fsData.addUser) {
         try {
-            await window.fsData.addUser(newUser);
+            await Promise.race([window.fsData.addUser(newUser), new Promise((_,_r) => setTimeout(()=>_r(new Error('timeout')), 1500))]);
         } catch (e) { }
     }
 
@@ -720,12 +577,12 @@ window.finishRegister = async function (e) {
     if (window.fsData && window.fsData.updateCode) {
         let fsId = document.getElementById('register-modal').dataset.fsId;
         if (fsId) {
-            try { await window.fsData.updateCode(fsId, { isUsed: true }); } catch (er) { }
+            try { await Promise.race([window.fsData.updateCode(fsId, { isUsed: true }), new Promise((_,_r) => setTimeout(()=>_r(new Error('timeout')), 1500))]); } catch (er) { }
         } else {
             try {
-                let allC = await window.fsData.getAllCodes();
+                let allC = await Promise.race([window.fsData.getAllCodes(), new Promise((_,_r) => setTimeout(()=>_r(new Error('timeout')), 1500))]);
                 let cObj = allC.find(c => c.code === code);
-                if (cObj && cObj.fsId) await window.fsData.updateCode(cObj.fsId, { isUsed: true });
+                if (cObj && cObj.fsId) await Promise.race([window.fsData.updateCode(cObj.fsId, { isUsed: true }), new Promise((_,_r) => setTimeout(()=>_r(new Error('timeout')), 1500))]);
             } catch (er) { }
         }
     }
@@ -751,21 +608,7 @@ window.closeRegisterModal = function () {
     if (document.getElementById('register-modal')) document.getElementById('register-modal').style.display = 'none';
 };
 
-window.submitCartOrder = function (e) {
-    e.preventDefault();
-    let cart = JSON.parse(localStorage.getItem('spedia_cart') || '[]');
-    let name = document.getElementById('cart-name').value;
-    let code = document.getElementById('cart-code').value;
-    let payment = document.getElementById('cart-payment').value;
-    let phone = document.getElementById('cart-phone').value;
 
-    let itemsStr = cart.map(c => c.title).join(' , ');
-    let msg = `طلب جديد:\nالاسم: ${name}\nالكود: ${code || 'لا يوجد'}\nطريقة الدفع: ${payment}\nللتواصل: ${phone}\nالمطلوب: ${itemsStr}`;
-
-    localStorage.removeItem('spedia_cart');
-    document.getElementById('cart-modal').style.display = 'none';
-    sendWhatsApp(msg);
-}
 
 window.openMySubscriptions = async function () {
     if (!document.getElementById('my-subs-login-modal')) {
@@ -795,7 +638,7 @@ window.openMySubscriptions = async function () {
             let fbSuccess = false;
             if (window.fsData && window.fsData.getSubscriptionsByCode) {
                 try {
-                    subCodes = await window.fsData.getSubscriptionsByCode(code);
+                    subCodes = await Promise.race([window.fsData.getSubscriptionsByCode(code), new Promise((_,_r) => setTimeout(()=>_r(new Error('timeout')), 1500))]);
                     fbSuccess = true;
                 } catch (e) { console.warn("Firebase fetch failed, fallback to local:", e); }
             }
@@ -823,20 +666,7 @@ window.openMySubscriptions = async function () {
     document.getElementById('my-subs-login-modal').style.display = 'flex';
 };
 
-window.injectMySubscriptionsBtn = function () {
-    let navActions = document.querySelector('.nav-actions');
-    if (navActions && !document.getElementById('my-subs-btn')) {
-        let btn = document.createElement('a');
-        btn.id = 'my-subs-btn';
-        btn.href = '#';
-        btn.onclick = (e) => { e.preventDefault(); window.openMySubscriptions(); };
-        btn.style.cssText = 'padding:10px 15px; font-size:14px; border-radius:20px; background:#fff; color:#FF9800; border:2px solid #FF9800; font-weight:800; text-decoration:none; display:flex; align-items:center; gap:5px; box-shadow:0 4px 10px rgba(0,0,0,0.05); transition:0.3s;';
-        btn.innerHTML = '<i class="fas fa-book-reader"></i> <span data-i18n="my_subs">كورساتي وكتبي</span>';
 
-        let cart = document.querySelector('.cart-icon');
-        if (cart) navActions.insertBefore(btn, cart);
-    }
-};
 
 window.submitExam = async function (title) {
     let user = JSON.parse(localStorage.getItem('spedia_currentUser'));
@@ -845,7 +675,7 @@ window.submitExam = async function (title) {
     let allExams = [];
     if (window.fsData && window.fsData.getAllExams) {
         try {
-            allExams = await window.fsData.getAllExams();
+            allExams = await Promise.race([window.fsData.getAllExams(), new Promise((_,_r) => setTimeout(()=>_r(new Error('timeout')), 1500))]);
         } catch (e) {
             allExams = JSON.parse(localStorage.getItem('spedia_exams') || '[]');
         }
@@ -977,7 +807,7 @@ window.finishQuiz = async function (title) {
     let allExams = [];
     if (window.fsData && window.fsData.getAllExams) {
         try {
-            allExams = await window.fsData.getAllExams();
+            allExams = await Promise.race([window.fsData.getAllExams(), new Promise((_,_r) => setTimeout(()=>_r(new Error('timeout')), 1500))]);
         } catch (e) {
             allExams = JSON.parse(localStorage.getItem('spedia_exams') || '[]');
         }
@@ -1055,7 +885,7 @@ window.loadStudentData = async function (user) {
 
     let exams = [];
     if (window.fsData) {
-        exams = await window.fsData.getAllExams();
+        exams = await Promise.race([window.fsData.getAllExams(), new Promise((_,_r) => setTimeout(()=>_r(new Error('timeout')), 1500))]);
     } else {
         exams = JSON.parse(localStorage.getItem('spedia_exams') || '[]');
     }
@@ -1089,7 +919,7 @@ window.loadStudentData = async function (user) {
 
     let results = [];
     if (window.fsData) {
-        results = await window.fsData.getUserResults(user.code);
+        results = await Promise.race([window.fsData.getUserResults(user.code), new Promise((_,_r) => setTimeout(()=>_r(new Error('timeout')), 1500))]);
     } else {
         results = JSON.parse(localStorage.getItem('spedia_results') || '[]');
         results = results.filter(r => r.code === user.code);
@@ -1118,7 +948,7 @@ window.loadStudentData = async function (user) {
 
     let evals = [];
     if (window.fsData && window.fsData.getAllEvals) {
-        try { evals = await window.fsData.getAllEvals(); localStorage.setItem('spedia_evals', JSON.stringify(evals)); } catch (e) { }
+        try { evals = await Promise.race([window.fsData.getAllEvals(), new Promise((_,_r) => setTimeout(()=>_r(new Error('timeout')), 1500))]); localStorage.setItem('spedia_evals', JSON.stringify(evals)); } catch (e) { }
     }
     if (!evals || !evals.length) {
         evals = JSON.parse(localStorage.getItem('spedia_evals') || localStorage.getItem('spedia_evaluations') || '[]');
@@ -1145,7 +975,7 @@ window.loadStudentData = async function (user) {
     // Set attendance days count
     let attendance = [];
     if (window.fsData) {
-        try { attendance = await window.fsData.getAttendance(); } catch (e) { }
+        try { attendance = await Promise.race([window.fsData.getAttendance(), new Promise((_,_r) => setTimeout(()=>_r(new Error('timeout')), 1500))]); } catch (e) { }
     } else {
         attendance = JSON.parse(localStorage.getItem('spedia_attendance') || '[]');
     }
@@ -1160,7 +990,7 @@ window.loadStudentData = async function (user) {
     if (lnkContainer) {
         let allLinks = [];
         if (window.fsData && window.fsData.getAllClassLinks) {
-            try { allLinks = await window.fsData.getAllClassLinks(); localStorage.setItem('spedia_class_links', JSON.stringify(allLinks)); } catch (e) { }
+            try { allLinks = await Promise.race([window.fsData.getAllClassLinks(), new Promise((_,_r) => setTimeout(()=>_r(new Error('timeout')), 1500))]); localStorage.setItem('spedia_class_links', JSON.stringify(allLinks)); } catch (e) { }
         }
         if (!allLinks || !allLinks.length) {
             allLinks = JSON.parse(localStorage.getItem('spedia_class_links') || '[]');
@@ -1190,7 +1020,7 @@ window.loadStudentData = async function (user) {
     if (adminFilesCont) {
         let aFiles = [];
         if (window.fsData && window.fsData.getAllAdminFiles) {
-            try { aFiles = await window.fsData.getAllAdminFiles(); localStorage.setItem('spedia_admin_files', JSON.stringify(aFiles)); } catch (e) { }
+            try { aFiles = await Promise.race([window.fsData.getAllAdminFiles(), new Promise((_,_r) => setTimeout(()=>_r(new Error('timeout')), 1500))]); localStorage.setItem('spedia_admin_files', JSON.stringify(aFiles)); } catch (e) { }
         }
         if (!aFiles || !aFiles.length) {
             aFiles = JSON.parse(localStorage.getItem('spedia_admin_files') || '[]');
@@ -1216,7 +1046,7 @@ window.loadStudentData = async function (user) {
     if (customCont) {
         let cFiles = [];
         if (window.fsData && window.fsData.getCustomContentByUser) {
-            try { cFiles = await window.fsData.getCustomContentByUser(user.code); } catch (e) { }
+            try { cFiles = await Promise.race([window.fsData.getCustomContentByUser(user.code), new Promise((_,_r) => setTimeout(()=>_r(new Error('timeout')), 1500))]); } catch (e) { }
         }
         if (!cFiles || !cFiles.length) {
             let localCC = JSON.parse(localStorage.getItem('spedia_custom_content') || '[]');
@@ -1245,7 +1075,7 @@ window.loadStudentData = async function (user) {
         let allChats = JSON.parse(localStorage.getItem('spedia_chat') || '[]');
         if (window.fsData && window.fsData.getAllChatMessages) {
             try {
-                allChats = await window.fsData.getAllChatMessages();
+                allChats = await Promise.race([window.fsData.getAllChatMessages(), new Promise((_,_r) => setTimeout(()=>_r(new Error('timeout')), 1500))]);
                 localStorage.setItem('spedia_chat', JSON.stringify(allChats));
             } catch (e) { }
         }
@@ -1271,7 +1101,7 @@ window.loadStudentData = async function (user) {
         let allReports = JSON.parse(localStorage.getItem('spedia_monthly_reports') || '[]');
         if (window.fsData && window.fsData.getAllMonthlyReports) {
             try {
-                allReports = await window.fsData.getAllMonthlyReports();
+                allReports = await Promise.race([window.fsData.getAllMonthlyReports(), new Promise((_,_r) => setTimeout(()=>_r(new Error('timeout')), 1500))]);
                 localStorage.setItem('spedia_monthly_reports', JSON.stringify(allReports));
             } catch (e) { }
         }
@@ -1317,7 +1147,7 @@ window.registerAttendance = async function () {
 
     let attendance = [];
     if (window.fsData) {
-        try { attendance = await window.fsData.getAttendance(); } catch (e) {
+        try { attendance = await Promise.race([window.fsData.getAttendance(), new Promise((_,_r) => setTimeout(()=>_r(new Error('timeout')), 1500))]); } catch (e) {
             attendance = JSON.parse(localStorage.getItem('spedia_attendance') || '[]');
         }
     } else {
@@ -1330,7 +1160,7 @@ window.registerAttendance = async function () {
     }
 
     if (window.fsData && window.fsData.addAttendance) {
-        try { await window.fsData.addAttendance(attObj); } catch (e) { }
+        try { await Promise.race([window.fsData.addAttendance(attObj), new Promise((_,_r) => setTimeout(()=>_r(new Error('timeout')), 1500))]); } catch (e) { }
     }
 
     attendance.push(attObj);
@@ -1410,7 +1240,7 @@ window.updateProfileImg = async function (input) {
             localStorage.setItem('spedia_currentUser', JSON.stringify(user));
 
             if (window.fsData && window.fsData.addUser) {
-                try { await window.fsData.addUser(user); } catch (e) { }
+                try { await Promise.race([window.fsData.addUser(user), new Promise((_,_r) => setTimeout(()=>_r(new Error('timeout')), 1500))]); } catch (e) { }
             }
 
             let sideImg = document.getElementById('sidebar-profile-img');
@@ -1470,10 +1300,9 @@ document.addEventListener("DOMContentLoaded", async () => {
     if (window.injectFloatingAdmin) window.injectFloatingAdmin();
     if (window.injectThemeButton) window.injectThemeButton();
     if (window.injectWhatsAppButton) window.injectWhatsAppButton();
-    if (window.injectCartModal) window.injectCartModal();
+
     if (window.injectBookTransition) window.injectBookTransition();
     if (window.injectGlobalAnimations) window.injectGlobalAnimations();
-    if (window.injectMySubscriptionsBtn) window.injectMySubscriptionsBtn();
 });
 
 window.injectThemeButton = function () {
@@ -1696,7 +1525,7 @@ window.uploadStudentFile = async function (e) {
         };
 
         if (window.fsData && window.fsData.addStudentFile) {
-            try { await window.fsData.addStudentFile(sFile); } catch (er) { }
+            try { await Promise.race([window.fsData.addStudentFile(sFile), new Promise((_,_r) => setTimeout(()=>_r(new Error('timeout')), 1500))]); } catch (er) { }
         }
 
         let sFiles = JSON.parse(localStorage.getItem('spedia_student_files') || '[]');
@@ -1737,7 +1566,7 @@ window.sendStudentMessage = async function (e) {
     localStorage.setItem('spedia_chat', JSON.stringify(chats));
 
     if (window.fsData && window.fsData.addChatMessage) {
-        try { await window.fsData.addChatMessage(chatMsg); } catch (er) { }
+        try { await Promise.race([window.fsData.addChatMessage(chatMsg), new Promise((_,_r) => setTimeout(()=>_r(new Error('timeout')), 1500))]); } catch (er) { }
     }
 
     // notify admin
