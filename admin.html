@@ -1389,7 +1389,7 @@
 
             if (window.fsData && window.fsData.deleteContent) {
                 try {
-                    await Promise.race([window.fsData.deleteContent(id.toString(), new Promise((_,_r) => setTimeout(()=>_r(new Error('timeout')), 1500))]));
+                    await Promise.race([window.fsData.deleteContent(id.toString()), new Promise((_,_r) => setTimeout(()=>_r(new Error('timeout')), 1500))]);
                 } catch (e) { console.warn(e) }
             }
             alert('تم الحذف بنجاح');
