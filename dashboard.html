@@ -81,8 +81,10 @@
                 <li><a href="#" onclick="registerAttendance()" style="border-radius:10px; margin-bottom:5px;"><i
                             class="fas fa-user-check"></i> <span style="color:#4caf50; font-weight:700;">تسجيل حضور
                             اليوم</span></a></li>
-                <li><a href="index.html" style="border-radius:10px; margin-bottom:5px;"><i class="fas fa-book-open"></i>
-                        <span>تصفح جميع الكورسات</span></a></li>
+                <li><a href="javascript:void(0)" onclick="goToMyGrade()" style="border-radius:10px; margin-bottom:5px;"><i class="fas fa-book-open"></i>
+                        <span>المحتوى والكورسات</span></a></li>
+                <li><a href="my-subscriptions.html" style="border-radius:10px; margin-bottom:5px;"><i class="fas fa-book-reader"></i>
+                        <span>كورساتي وكتب</span></a></li>
                 <li><a href="#" onclick="showDashTab('dash-links', this)"
                         style="border-radius:10px; margin-bottom:5px;"><i class="fas fa-link"></i> <span>روابط
                             الحصص</span></a></li>
@@ -152,9 +154,9 @@
                                 <!-- JS will populate -->
                             </div>
                         </div>
-                        <a href="index.html" class="btn-primary"
+                        <a href="javascript:void(0)" onclick="goToMyGrade()" class="btn-primary"
                             style="background:#fff; color:var(--primary-color); border-radius:15px; font-size:16px;">
-                            <i class="fas fa-book"></i> تصفح الكورسات
+                            <i class="fas fa-book"></i> المحتوى والكورسات
                         </a>
                         <style>
                             @keyframes marquee {

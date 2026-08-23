@@ -346,12 +346,13 @@ window.renderCurrentPage = async function () {
         if (gameCont) window.renderCards(gameCont.id, games, "أريد اللعب/التطبيق", "تشغيل/دخول اللعبة");
     }
     else if (path.includes('my-subscriptions.html')) {
-        let code = localStorage.getItem('spedia_my_sub_code');
-        if (!code) {
-            alert('يرجى الدخول بكود اشتراكك (من خلال رز الكورسات بالأعلى).');
-            window.location.href = 'index.html';
+        let user = JSON.parse(localStorage.getItem('spedia_currentUser') || 'null');
+        if (!user || !user.code) {
+            alert('يرجى تسجيل الدخول أولاً.');
+            window.location.href = 'login.html';
             return;
         }
+        let code = user.code;
 
         let content = JSON.parse(localStorage.getItem('spedia_content') || '[]');
         if (window.fsData) {
@@ -1676,3 +1677,19 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     });
 });
+
+window.goToMyGrade = function() {
+    let user = JSON.parse(localStorage.getItem('spedia_currentUser') || '{}');
+    if (user && user.grade) {
+        let gradeName = "الصف الخاص بك";
+        if (window.GLOBAL_STAGES) {
+            for (let s of window.GLOBAL_STAGES) {
+                let g = s.grades.find(x => x.val == user.grade);
+                if (g) gradeName = g.name;
+            }
+        }
+        window.location.href = `grade.html?g=${user.grade}&name=${encodeURIComponent(gradeName)}`;
+    } else {
+        window.location.href = 'explore.html';
+    }
+};
