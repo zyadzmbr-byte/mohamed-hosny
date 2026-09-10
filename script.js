@@ -330,8 +330,7 @@ window.renderCurrentPage = async function () {
             } catch (e) { console.warn(e); }
         }
 
-        // Filter by grade
-        let filteredContent = content.filter(c => c.grade == g || true);
+        let filteredContent = content.filter(c => c.grade == g);
 
         let books = filteredContent.filter(c => c.type == 'book');
         let courses = filteredContent.filter(c => c.type == 'course');
