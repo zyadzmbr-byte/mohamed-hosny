@@ -3,6 +3,7 @@ import {
     collection,
     addDoc,
     getDocs,
+    getDoc,
     query,
     where,
     onSnapshot,
@@ -119,8 +120,60 @@ window.fsData = {
 
     // USERS
     addUser: async (user) => {
-        const userDoc = doc(db, "users", user.code);
+        const userDoc = doc(db, "users", user.code.toString());
         return await setDoc(userDoc, user);
+    },
+    updateUser: async (code, data) => {
+        try {
+            const userDoc = doc(db, "users", code.toString());
+            await setDoc(userDoc, data, { merge: true });
+            return true;
+        } catch (e) {
+            console.warn("Direct updateUser failed, trying query fallback:", e);
+            try {
+                const q = query(collection(db, "users"), where("code", "==", code.toString()));
+                const snap = await getDocs(q);
+                if (!snap.empty) {
+                    for (let d of snap.docs) {
+                        await setDoc(doc(db, "users", d.id), data, { merge: true });
+                    }
+                    return true;
+                }
+            } catch (err2) {
+                console.error("Fallback updateUser error:", err2);
+            }
+            throw e;
+        }
+    },
+    getUserByCode: async (code) => {
+        try {
+            const userDoc = await getDoc(doc(db, "users", code.toString()));
+            if (userDoc.exists()) {
+                return { fsId: userDoc.id, ...userDoc.data() };
+            }
+            const q = query(collection(db, "users"), where("code", "==", code.toString()));
+            const snap = await getDocs(q);
+            if (!snap.empty) {
+                return { fsId: snap.docs[0].id, ...snap.docs[0].data() };
+            }
+        } catch (e) {
+            console.warn("getUserByCode error:", e);
+        }
+        return null;
+    },
+    resetUserSubscription: async (code, newTimestamp = Date.now()) => {
+        return await window.fsData.updateUser(code, { registrationDate: newTimestamp });
+    },
+    resetAllSubscriptions: async (newTimestamp = Date.now()) => {
+        try {
+            const snap = await getDocs(collection(db, "users"));
+            const promises = snap.docs.map(d => setDoc(doc(db, "users", d.id), { registrationDate: newTimestamp }, { merge: true }));
+            await Promise.all(promises);
+            return snap.docs.length;
+        } catch (e) {
+            console.error("resetAllSubscriptions error:", e);
+            throw e;
+        }
     },
     getAllUsers: async () => {
         const snap = await getDocs(collection(db, "users"));
@@ -234,6 +287,28 @@ window.fsData = {
     getAllTeacherReports: async () => {
         const snap = await getDocs(collection(db, "teacher_reports"));
         return snap.docs.map(doc => ({ fsId: doc.id, ...doc.data() }));
+    },
+
+    updateGeneric: async (colName, idToQuery, data, matchField = 'id') => {
+        try {
+            await setDoc(doc(db, colName, idToQuery.toString()), data, { merge: true });
+            return true;
+        } catch (e) {
+            try {
+                let qStr = matchField === 'id' && !isNaN(parseInt(idToQuery)) ? parseInt(idToQuery) : idToQuery.toString();
+                const q = query(collection(db, colName), where(matchField, "==", qStr));
+                const snap = await getDocs(q);
+                if (!snap.empty) {
+                    for (let document of snap.docs) {
+                        await setDoc(doc(db, colName, document.id), data, { merge: true });
+                    }
+                    return true;
+                }
+            } catch (err2) {
+                console.warn("updateGeneric fallback error:", err2);
+            }
+            throw e;
+        }
     },
 
     deleteGeneric: async (colName, idToQuery, matchField = 'id') => {

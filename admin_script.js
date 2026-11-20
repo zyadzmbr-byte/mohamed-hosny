@@ -251,25 +251,90 @@
             }
         }
 
-        window.renewStudent = async function(code) {
-            if (!confirm('هل تريد تجديد اشتراك الطالب لـ 30 يوماً إضافية؟')) return;
+        window.renewStudent = async function(code, daysToAdd = 30) {
+            let confirmMsg = daysToAdd === 30 
+                ? 'هل تريد تجديد / إعادة ضبط اشتراك الطالب لـ 30 يوماً من اليوم؟' 
+                : `هل تريد تجديد اشتراك الطالب لـ ${daysToAdd} يوماً إضافية؟`;
+            if (!confirm(confirmMsg)) return;
             
             let users = JSON.parse(localStorage.getItem('spedia_users') || '[]');
-            let userIndex = users.findIndex(u => u.code === code);
-            if (userIndex > -1) {
-                users[userIndex].registrationDate = Date.now();
-                localStorage.setItem('spedia_users', JSON.stringify(users));
-                
-                if (window.fsData && window.fsData.updateGeneric && users[userIndex].fsId) {
-                    try {
-                        await Promise.race([window.fsData.updateGeneric('users', users[userIndex].fsId, { registrationDate: Date.now(), new Promise((_,_r) => setTimeout(()=>_r(new Error('timeout')), 1500))]) });
-                    } catch (e) { console.warn(e); }
-                }
-                alert('تم التجديد بنجاح!');
-                renderTables();
-            } else {
-                alert('الطالب غير موجود.');
+            let userIndex = users.findIndex(u => String(u.code) === String(code));
+            
+            let userObj = userIndex > -1 ? users[userIndex] : null;
+            if (!userObj && window.fsData && window.fsData.getAllUsers) {
+                try {
+                    let fbUsers = await window.fsData.getAllUsers();
+                    userObj = fbUsers.find(u => String(u.code) === String(code));
+                    if (userObj) {
+                        users.push(userObj);
+                        userIndex = users.length - 1;
+                    }
+                } catch(e) {}
             }
+
+            if (!userObj && userIndex === -1) {
+                alert('عذراً، الطالب غير موجود في النظام.');
+                return;
+            }
+
+            let newDate = Date.now();
+            if (userObj.registrationDate && daysToAdd !== 30) {
+                let currentExpiry = userObj.registrationDate + (30 * 24 * 60 * 60 * 1000);
+                if (currentExpiry > Date.now()) {
+                    newDate = userObj.registrationDate + (daysToAdd * 24 * 60 * 60 * 1000);
+                }
+            }
+
+            userObj.registrationDate = newDate;
+            users[userIndex] = userObj;
+            localStorage.setItem('spedia_users', JSON.stringify(users));
+
+            let currUser = JSON.parse(localStorage.getItem('spedia_currentUser') || 'null');
+            if (currUser && String(currUser.code) === String(code)) {
+                currUser.registrationDate = newDate;
+                localStorage.setItem('spedia_currentUser', JSON.stringify(currUser));
+            }
+            
+            if (window.fsData) {
+                try {
+                    if (window.fsData.updateUser) {
+                        await window.fsData.updateUser(code, { registrationDate: newDate });
+                    } else if (window.fsData.updateGeneric) {
+                        await window.fsData.updateGeneric('users', userObj.fsId || code, { registrationDate: newDate }, 'code');
+                    }
+                } catch (e) {
+                    console.warn("Firebase update failed, kept locally:", e);
+                }
+            }
+            alert('تم إعادة ضبط وتجديد اشتراك الطالب بنجاح لمدة 30 يوماً!');
+            if (typeof renderTables === 'function') renderTables();
+        };
+
+        window.renewAllStudents = async function() {
+            let users = JSON.parse(localStorage.getItem('spedia_users') || '[]');
+            if (users.length === 0) {
+                alert('لا يوجد طلاب مسجلين لإعادة ضبط اشتراكاتهم.');
+                return;
+            }
+            if (!confirm(`هل أنت متأكد من إعادة ضبط اشتراك جميع الطلاب (${users.length} طالب) لشهر جديد (30 يوماً من اليوم)؟`)) return;
+
+            let now = Date.now();
+            users.forEach(u => u.registrationDate = now);
+            localStorage.setItem('spedia_users', JSON.stringify(users));
+
+            if (window.fsData) {
+                try {
+                    if (window.fsData.resetAllSubscriptions) {
+                        await window.fsData.resetAllSubscriptions(now);
+                    } else if (window.fsData.updateUser) {
+                        await Promise.all(users.map(u => window.fsData.updateUser(u.code, { registrationDate: now })));
+                    }
+                } catch(e) {
+                    console.warn("Firebase batch update error:", e);
+                }
+            }
+            alert(`تم بنجاح إعادة ضبط اشتراكات جميع الطلاب (${users.length} طالب) لشهر جديد!`);
+            if (typeof renderTables === 'function') renderTables();
         };
 
         window.saveFees = function(e) {

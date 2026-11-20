@@ -346,12 +346,67 @@ window.renderCurrentPage = async function () {
     }
     else if (path.includes('my-subscriptions.html')) {
         let user = JSON.parse(localStorage.getItem('spedia_currentUser') || 'null');
-        if (!user || !user.code) {
-            alert('يرجى تسجيل الدخول أولاً.');
+        let queryCode = localStorage.getItem('spedia_my_sub_code');
+        if ((!user || !user.code) && !queryCode) {
+            alert('يرجى تسجيل الدخول أولاً للوصول إلى مكتبتك.');
             window.location.href = 'login.html';
             return;
         }
-        let code = user.code;
+        let code = user ? user.code : queryCode;
+
+        // Sync with fresh Firebase user record if available
+        if (window.fsData && window.fsData.getUserByCode && code) {
+            try {
+                let freshUser = await Promise.race([window.fsData.getUserByCode(code), new Promise((_,_r) => setTimeout(()=>_r(new Error('timeout')), 1500))]);
+                if (freshUser) {
+                    user = { ...(user || {}), ...freshUser };
+                    localStorage.setItem('spedia_currentUser', JSON.stringify(user));
+                }
+            } catch(e) {}
+        }
+
+        // Render Hero Subscription status badge
+        const elName = document.getElementById('hero-student-name');
+        const elCode = document.getElementById('hero-student-code');
+        const elGrade = document.getElementById('hero-student-grade');
+        const elAvatar = document.getElementById('hero-avatar');
+        const elPill = document.getElementById('hero-sub-pill');
+        const elRenewBtn = document.getElementById('hero-renew-btn');
+
+        if (elName && user) elName.innerText = user.name || 'طالب مسجل';
+        if (elCode) elCode.innerText = code;
+        if (elGrade && user) elGrade.innerText = user.grade || 'طالب مسجل';
+        if (elAvatar && user) elAvatar.innerText = (user.name || 'ط').substring(0, 2);
+
+        let regTime = user && user.registrationDate ? user.registrationDate : 0;
+        let daysPassed = regTime ? (Date.now() - regTime) / (1000 * 60 * 60 * 24) : 999;
+        let remaining = Math.max(0, 30 - Math.floor(daysPassed));
+        let isExpired = daysPassed > 30;
+        let isNearExpiry = !isExpired && remaining <= 5;
+
+        if (elPill) {
+            if (isExpired) {
+                elPill.className = 'sub-pill expired';
+                elPill.innerHTML = '<i class="fas fa-times-circle"></i> <span>انتهى الاشتراك الشهري (يرجى التجديد)</span>';
+                if (elRenewBtn) {
+                    elRenewBtn.style.display = 'inline-flex';
+                    let waMsg = `أهلاً بك، انتهت صلاحية اشتراكي الشهري في منصة محمد حسني التعليمية وأرغب بالتجديد.\nكود الطالب: ${code}\nالاسم: ${user ? user.name : ''}`;
+                    elRenewBtn.href = `${WA_LINK}?text=${encodeURIComponent(waMsg)}`;
+                }
+            } else if (isNearExpiry) {
+                elPill.className = 'sub-pill warning';
+                elPill.innerHTML = `<i class="fas fa-hourglass-half"></i> <span>متبقي ${remaining} يوم على تجديد الاشتراك</span>`;
+                if (elRenewBtn) {
+                    elRenewBtn.style.display = 'inline-flex';
+                    let waMsg = `أهلاً بك، أود تجديد اشتراكي الشهري قبل انتهائه (متبقي ${remaining} يوم).\nكود الطالب: ${code}\nالاسم: ${user ? user.name : ''}`;
+                    elRenewBtn.href = `${WA_LINK}?text=${encodeURIComponent(waMsg)}`;
+                }
+            } else {
+                elPill.className = 'sub-pill active';
+                elPill.innerHTML = `<i class="fas fa-check-circle"></i> <span>اشتراك نشط - متبقي ${remaining} يوم</span>`;
+                if (elRenewBtn) elRenewBtn.style.display = 'none';
+            }
+        }
 
         let content = JSON.parse(localStorage.getItem('spedia_content') || '[]');
         if (window.fsData) {
@@ -368,7 +423,7 @@ window.renderCurrentPage = async function () {
             } catch (e) { console.warn(e); }
         } else {
             let subs = JSON.parse(localStorage.getItem('spedia_sub_codes') || '[]');
-            subCodesList = subs.filter(s => s.code === code);
+            subCodesList = subs.filter(s => String(s.code) === String(code));
         }
 
         let subscribedTitles = subCodesList.map(s => s.title);
@@ -384,13 +439,52 @@ window.renderCurrentPage = async function () {
         const bookCont = document.getElementById('books-grid');
         const gameCont = document.getElementById('games-grid');
 
+        const countCourses = document.getElementById('count-courses');
+        const countBooks = document.getElementById('count-books');
+        const countGames = document.getElementById('count-games');
+        if (countCourses) countCourses.innerText = `${courses.length} كورس`;
+        if (countBooks) countBooks.innerText = `${books.length} كتاب`;
+        if (countGames) countGames.innerText = `${games.length} لعبة`;
+
         if (bookCont) window.renderCards(bookCont.id, books, "", "إدخال كود القفل السري", true);
         if (courseCont) window.renderCards(courseCont.id, courses, "", "إدخال كود القفل السري", true);
         if (gameCont) window.renderCards(gameCont.id, games, "", "إدخال كود القفل السري", true);
+
+        // Filter and Search handlers for my-subscriptions
+        window.filterMyContent = function(cat, btn) {
+            document.querySelectorAll('.cat-tab').forEach(b => b.classList.remove('active'));
+            if (btn) btn.classList.add('active');
+            const secCourses = document.getElementById('section-courses');
+            const secBooks = document.getElementById('section-books');
+            const secGames = document.getElementById('section-games');
+            if (secCourses) secCourses.style.display = (cat === 'all' || cat === 'course') ? 'block' : 'none';
+            if (secBooks) secBooks.style.display = (cat === 'all' || cat === 'book') ? 'block' : 'none';
+            if (secGames) secGames.style.display = (cat === 'all' || cat === 'game') ? 'block' : 'none';
+        };
+
+        window.searchMyContent = function() {
+            let q = (document.getElementById('my-subs-search')?.value || '').trim().toLowerCase();
+            document.querySelectorAll('#courses-grid .subject-card, #books-grid .subject-card, #games-grid .subject-card').forEach(card => {
+                let title = (card.querySelector('h3')?.innerText || '').toLowerCase();
+                card.style.display = (!q || title.includes(q)) ? '' : 'none';
+            });
+        };
     }
     else if (path.includes('dashboard.html')) {
         let user = JSON.parse(localStorage.getItem('spedia_currentUser'));
         if (!user) { window.location.href = 'login.html'; return; }
+
+        // Fetch fresh user data from Firestore in case admin just renewed the monthly subscription
+        if (window.fsData && window.fsData.getUserByCode && user.code) {
+            try {
+                let freshUser = await Promise.race([window.fsData.getUserByCode(user.code), new Promise((_,_r) => setTimeout(()=>_r(new Error('timeout')), 1500))]);
+                if (freshUser && freshUser.registrationDate) {
+                    user.registrationDate = freshUser.registrationDate;
+                    if (freshUser.name) user.name = freshUser.name;
+                    localStorage.setItem('spedia_currentUser', JSON.stringify(user));
+                }
+            } catch (e) {}
+        }
 
         const elName = document.getElementById('dash-name');
         if (elName) elName.innerText = user.name;
@@ -402,7 +496,34 @@ window.renderCurrentPage = async function () {
         if (elDays && user.registrationDate) {
             let daysPassed = (Date.now() - user.registrationDate) / (1000 * 60 * 60 * 24);
             let remaining = Math.max(0, 30 - Math.floor(daysPassed));
-            elDays.innerText = `متبقي ${remaining} يوم على انتهاء التفعيل`;
+            let isExpired = daysPassed > 30;
+            let isNearExpiry = !isExpired && remaining <= 5;
+            let percent = Math.min(100, Math.max(0, Math.round((remaining / 30) * 100)));
+
+            let statusBg = isExpired ? '#fee2e2' : (isNearExpiry ? '#fef3c7' : '#dcfce7');
+            let statusColor = isExpired ? '#b91c1c' : (isNearExpiry ? '#b45309' : '#15803d');
+            let barColor = isExpired ? '#dc2626' : (isNearExpiry ? '#f59e0b' : '#10b981');
+            let statusText = isExpired ? 'انتهت صلاحية الاشتراك الشهري' : `متبقي ${remaining} يوم على انتهاء التفعيل`;
+
+            let renewBtnHtml = (isExpired || isNearExpiry) ? `
+                <a href="${WA_LINK}?text=${encodeURIComponent('أهلاً بك، أود تجديد اشتراكي الشهري في منصة محمد حسني التعلمية.\nكود الطالب: ' + user.code + '\nاسم الطالب: ' + user.name)}" target="_blank" style="display:inline-flex; align-items:center; gap:5px; margin-top:8px; background:#25D366; color:#fff !important; text-decoration:none; padding:7px 12px; border-radius:8px; font-size:12px; font-weight:bold; box-shadow:0 2px 8px rgba(37,211,102,0.3);">
+                    <i class="fab fa-whatsapp"></i> تجديد الاشتراك الآن
+                </a>
+            ` : '';
+
+            elDays.innerHTML = `
+                <div style="font-size:13px; font-weight:800; color:${statusColor}; margin-bottom:6px; display:flex; align-items:center; justify-content:center; gap:6px;">
+                    <i class="fas ${isExpired ? 'fa-times-circle' : (isNearExpiry ? 'fa-hourglass-half' : 'fa-check-circle')}"></i>
+                    <span>${statusText}</span>
+                </div>
+                <div style="background:rgba(0,0,0,0.08); height:6px; border-radius:10px; overflow:hidden; width:100%;">
+                    <div style="background:${barColor}; width:${percent}%; height:100%; border-radius:10px; transition:0.5s;"></div>
+                </div>
+                ${renewBtnHtml}
+            `;
+            elDays.style.background = statusBg;
+            elDays.style.padding = '12px';
+            elDays.style.borderRadius = '12px';
             elDays.style.display = 'block';
         }
 
@@ -447,7 +568,18 @@ window.renderCards = function (containerId, items, whatsappPrefix, btnText, isMy
     if (!cont) return;
     cont.innerHTML = '';
     if (items.length === 0) {
-        cont.innerHTML = '<p style="text-align:center;width:100%;color:#888;font-weight:bold;padding:40px;">لا يوجد محتوى. الإدارة ستضيفه قريباً.</p>';
+        if (isMySubscriptions) {
+            cont.innerHTML = `
+                <div class="empty-shelf-notice">
+                    <i class="fas fa-folder-open"></i>
+                    <h4>لا يوجد محتوى في هذا القسم حالياً</h4>
+                    <p>المحتوى الذي تشترك به يظهر هنا تلقائياً بمجرد تفعيله من الإدارة</p>
+                    <a href="explore.html" class="btn-browse-catalog"><i class="fas fa-compass"></i> استكشاف الكورسات والمذكرات</a>
+                </div>
+            `;
+        } else {
+            cont.innerHTML = '<p style="text-align:center;width:100%;color:#888;font-weight:bold;padding:40px;">لا يوجد محتوى متاح حالياً.</p>';
+        }
         return;
     }
     items.forEach(item => {
@@ -505,14 +637,19 @@ window.handleLogin = async function (e) {
 
     let allUsers = [];
     if (window.fsData && window.fsData.getAllUsers) {
-        try { allUsers = await Promise.race([window.fsData.getAllUsers(), new Promise((_,_r) => setTimeout(()=>_r(new Error('timeout')), 1500))]); } catch (e) { }
+        try { 
+            allUsers = await Promise.race([window.fsData.getAllUsers(), new Promise((_,_r) => setTimeout(()=>_r(new Error('timeout')), 1500))]); 
+            if (allUsers && allUsers.length > 0) {
+                localStorage.setItem('spedia_users', JSON.stringify(allUsers));
+            }
+        } catch (e) { }
     }
     // Fallback to local
     if (!allUsers || allUsers.length === 0) {
         allUsers = JSON.parse(localStorage.getItem('spedia_users') || '[]');
     }
 
-    let user = allUsers.find(u => u.code === code);
+    let user = allUsers.find(u => String(u.code) === String(code));
     if (!user) {
         let allCodes = [];
         if (window.fsData && window.fsData.getAllCodes) {
@@ -522,7 +659,7 @@ window.handleLogin = async function (e) {
             allCodes = JSON.parse(localStorage.getItem('spedia_codes') || '[]');
         }
 
-        let codeObj = allCodes.find(c => c.code === code);
+        let codeObj = allCodes.find(c => String(c.code) === String(code));
         if (codeObj) {
             if (codeObj.isUsed) {
                 alert("للأسف، الكود مستخدم بالفعل وبيانات الحساب غير موجودة.");
@@ -542,7 +679,11 @@ window.handleLogin = async function (e) {
     if (user.registrationDate) {
         let daysPassed = (Date.now() - user.registrationDate) / (1000 * 60 * 60 * 24);
         if (daysPassed > 30) {
-            alert("انتهت صلاحية الكود الخاص بك (مر 30 يوماً). يرجى التواصل مع الإدارة للتجديد.");
+            let renewConfirm = confirm("انتهت صلاحية اشتراكك الشهري (مر 30 يوماً).\n\nهل ترغب في التواصل مع الإدارة عبر واتساب لتجديد / إعادة ضبط الاشتراك فوراً؟");
+            if (renewConfirm) {
+                let msg = `أهلاً بك، انتهت صلاحية اشتراكي الشهري في منصة محمد حسني التعليمية، وأرغب في تجديد الاشتراك.\nكود الطالب: ${user.code}\nالاسم: ${user.name}`;
+                window.open(`${WA_LINK}?text=${encodeURIComponent(msg)}`, '_blank');
+            }
             return;
         }
     }

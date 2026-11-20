@@ -3,150 +3,747 @@
 
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=800">
-    <title>كورساتي وكتبي - منصة محمد حسني التعلمية</title>
-    <link rel="stylesheet" href="style.css?v=5">
-    <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700;800;900&display=swap"
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>مكتبتي واشتراكاتي - منصة محمد حسني التعلمية</title>
+    <link rel="stylesheet" href="style.css?v=10">
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800;900&family=Tajawal:wght@400;500;700;800;900&display=swap"
         rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
-        body {
-            background-color: #ffffff;
+        :root {
+            --primary: #12b8c5;
+            --primary-dark: #0e8c96;
+            --secondary: #1e3c72;
+            --secondary-dark: #122448;
+            --accent: #ff9800;
+            --bg-light: #f8fafc;
+            --card-border: #e8eef5;
         }
 
-        .explore-hero {
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            background-color: var(--bg-light);
+            font-family: 'Tajawal', sans-serif;
+            margin: 0;
+            padding: 0;
+            overflow-x: hidden;
+            color: #1e293b;
+        }
+
+        /* Top Navigation */
+        .my-sub-navbar {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(16px);
+            border-bottom: 1px solid #eef2f6;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.04);
+            padding: 12px 20px;
+        }
+
+        .my-sub-nav-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .my-sub-logo {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            text-decoration: none;
+        }
+
+        .my-sub-logo img {
+            width: 45px;
+            height: 45px;
+            border-radius: 50%;
+            object-fit: cover;
+            box-shadow: 0 4px 10px rgba(18, 184, 197, 0.2);
+        }
+
+        .my-sub-logo-title {
+            font-size: 20px;
+            font-weight: 900;
+            color: var(--secondary);
+            line-height: 1.2;
+        }
+
+        .my-sub-logo-sub {
+            font-size: 12px;
+            font-weight: 600;
+            color: #64748b;
+        }
+
+        .nav-actions-group {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .btn-nav-dashboard {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            background: linear-gradient(135deg, #12b8c5, #1e3c72);
+            color: #fff !important;
+            padding: 9px 18px;
+            border-radius: 12px;
+            text-decoration: none;
+            font-weight: 700;
+            font-size: 14px;
+            box-shadow: 0 4px 14px rgba(18, 184, 197, 0.3);
+            transition: 0.3s;
+        }
+
+        .btn-nav-dashboard:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 18px rgba(18, 184, 197, 0.4);
+        }
+
+        /* Hero Section */
+        .my-sub-hero {
             position: relative;
-            background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
-            padding: 100px 20px 100px;
+            background: linear-gradient(135deg, #122448 0%, #1e3c72 50%, #12b8c5 100%);
+            padding: 50px 20px 85px;
             text-align: center;
             overflow: hidden;
             color: #fff;
         }
 
-        .explore-wave {
+        .my-sub-hero-content {
+            max-width: 900px;
+            margin: 0 auto;
+            position: relative;
+            z-index: 10;
+        }
+
+        .my-sub-hero h1 {
+            font-size: clamp(26px, 5vw, 44px) !important;
+            font-weight: 900 !important;
+            margin: 0 0 10px 0 !important;
+            color: #ffffff !important;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 12px;
+            text-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+        }
+
+        .my-sub-hero p {
+            font-size: clamp(14px, 3vw, 17px) !important;
+            color: rgba(255, 255, 255, 0.9) !important;
+            margin: 0 0 25px 0 !important;
+            font-weight: 500;
+        }
+
+        /* Student Subscription Banner inside Hero */
+        .sub-status-card {
+            background: rgba(255, 255, 255, 0.12);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.25);
+            border-radius: 20px;
+            padding: 20px 25px;
+            margin: 0 auto;
+            max-width: 780px;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 20px;
+            flex-wrap: wrap;
+            text-align: right;
+        }
+
+        .sub-status-left {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .student-avatar {
+            width: 54px;
+            height: 54px;
+            border-radius: 50%;
+            background: #fff;
+            color: var(--secondary);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 22px;
+            font-weight: 900;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.15);
+            flex-shrink: 0;
+        }
+
+        .student-details h3 {
+            margin: 0 0 4px 0 !important;
+            font-size: 19px !important;
+            font-weight: 800;
+            color: #fff !important;
+        }
+
+        .student-details span {
+            font-size: 13px;
+            color: rgba(255, 255, 255, 0.85);
+            display: block;
+        }
+
+        .sub-status-right {
+            display: flex;
+            flex-direction: column;
+            align-items: flex-end;
+            gap: 8px;
+        }
+
+        .sub-pill {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 7px 16px;
+            border-radius: 30px;
+            font-size: 13px;
+            font-weight: 800;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        }
+
+        .sub-pill.active {
+            background: #10b981;
+            color: #fff !important;
+        }
+
+        .sub-pill.warning {
+            background: #f59e0b;
+            color: #fff !important;
+        }
+
+        .sub-pill.expired {
+            background: #ef4444;
+            color: #fff !important;
+            animation: pulse-danger 2s infinite;
+        }
+
+        @keyframes pulse-danger {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.04); }
+        }
+
+        .btn-renew-whatsapp {
+            background: #25D366;
+            color: #fff !important;
+            text-decoration: none;
+            padding: 7px 14px;
+            border-radius: 10px;
+            font-size: 13px;
+            font-weight: 700;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            box-shadow: 0 3px 10px rgba(37, 211, 102, 0.3);
+            transition: 0.2s;
+        }
+
+        .btn-renew-whatsapp:hover {
+            transform: scale(1.05);
+        }
+
+        /* Hero Wave */
+        .my-sub-wave {
             position: absolute;
             bottom: -1px;
             left: 0;
             width: 100%;
-            height: auto;
             line-height: 0;
             z-index: 5;
         }
 
-        .explore-wave svg {
+        .my-sub-wave svg {
             display: block;
             width: 100%;
-            height: clamp(60px, 12vw, 150px);
+            height: clamp(40px, 8vw, 90px);
         }
 
-        .hero-text h1 {
-            font-size: 52px;
-            font-weight: 900;
-            margin-bottom: 20px;
-            position: relative;
-            z-index: 10;
-            letter-spacing: -1px;
-            color: #fff;
-        }
-
-        .content-area {
+        /* Main Content */
+        .my-sub-main {
             max-width: 1200px;
             margin: 0 auto;
-            padding: 20px 20px 150px;
-            position: relative;
+            padding: 20px 20px 100px;
         }
 
-        .section-title {
-            font-size: 32px;
-            font-weight: 900;
-            color: #132644;
+        /* Filter Toolbar */
+        .content-filter-bar {
+            background: #fff;
+            padding: 14px 20px;
+            border-radius: 18px;
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.04);
+            border: 1px solid var(--card-border);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 15px;
+            flex-wrap: wrap;
             margin-bottom: 30px;
-            text-align: right;
         }
 
+        .cat-tabs {
+            display: flex;
+            gap: 8px;
+            flex-wrap: wrap;
+        }
+
+        .cat-tab {
+            padding: 9px 18px;
+            border-radius: 12px;
+            border: 1px solid #e2e8f0;
+            background: #f8fafc;
+            color: #475569;
+            font-size: 14px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: 0.2s;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .cat-tab:hover {
+            background: #f1f5f9;
+            color: var(--secondary);
+            border-color: #cbd5e1;
+        }
+
+        .cat-tab.active {
+            background: linear-gradient(135deg, #12b8c5, #1e3c72);
+            color: #fff !important;
+            border-color: transparent;
+            box-shadow: 0 4px 12px rgba(18, 184, 197, 0.3);
+        }
+
+        .search-inside-box {
+            position: relative;
+            flex: 1;
+            min-width: 240px;
+        }
+
+        .search-inside-box i {
+            position: absolute;
+            right: 14px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #94a3b8;
+        }
+
+        .search-inside-box input {
+            width: 100%;
+            padding: 10px 40px 10px 14px;
+            border: 1.5px solid #e2e8f0;
+            border-radius: 12px;
+            font-family: 'Tajawal', sans-serif;
+            font-size: 14px;
+            background: #f8fafc;
+            transition: 0.3s;
+        }
+
+        .search-inside-box input:focus {
+            border-color: var(--primary);
+            background: #fff;
+            outline: none;
+            box-shadow: 0 0 0 3px rgba(18, 184, 197, 0.15);
+        }
+
+        /* Section Titles */
+        .shelf-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 20px;
+            margin-top: 35px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid #edf2f7;
+        }
+
+        .shelf-header h2 {
+            font-size: 22px !important;
+            font-weight: 900 !important;
+            color: var(--secondary-dark) !important;
+            margin: 0 !important;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .shelf-count {
+            background: #e0f2fe;
+            color: #0284c7;
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 13px;
+            font-weight: 800;
+        }
+
+        /* Grids */
         .courses-grid,
         .books-grid {
             display: grid;
             grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-            gap: 25px;
-            margin-bottom: 60px;
+            gap: 22px;
+            margin-bottom: 40px;
         }
 
-        .course-card,
-        .book-card {
+        /* Enhanced Cards */
+        .subject-card {
             background: #fff;
-            border-radius: 25px;
+            border-radius: 20px;
             overflow: hidden;
-            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.05);
-            transition: 0.4s;
-            border: 1px solid #f1f6fa;
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.04);
+            border: 1px solid var(--card-border);
+            transition: 0.35s ease;
             position: relative;
+            display: flex;
+            flex-direction: column;
         }
 
-        .course-card:hover,
-        .book-card:hover {
-            transform: translateY(-10px);
-            box-shadow: 0 25px 45px rgba(18, 184, 197, 0.15);
-            border-color: #bef4f5;
+        .subject-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 18px 36px rgba(18, 184, 197, 0.15);
+            border-color: #99f6e4;
+        }
+
+        .subject-cover {
+            height: 190px;
+            position: relative;
+            overflow: hidden;
+            background: linear-gradient(135deg, #f1f5f9, #e2e8f0);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .subject-cover img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.4s ease;
+        }
+
+        .subject-card:hover .subject-cover img {
+            transform: scale(1.06);
+        }
+
+        .subject-body {
+            padding: 20px;
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            text-align: center;
+        }
+
+        .subject-body h3 {
+            font-size: 18px !important;
+            font-weight: 800 !important;
+            color: #0f172a !important;
+            margin: 0 0 10px 0 !important;
+            line-height: 1.4;
+        }
+
+        .subject-body .highlight {
+            font-size: 14px !important;
+            font-weight: 800 !important;
+            color: #10b981 !important;
+            margin-bottom: 16px !important;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 6px;
+            background: #dcfce7;
+            padding: 4px 12px;
+            border-radius: 12px;
+            width: fit-content;
+            margin-inline: auto;
+        }
+
+        .subject-body .btn-primary {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            padding: 13px 20px;
+            border-radius: 14px;
+            font-weight: 800;
+            font-size: 15px;
+            text-decoration: none;
+            transition: 0.25s;
+            box-shadow: 0 4px 14px rgba(0, 0, 0, 0.08);
+        }
+
+        .subject-body .btn-primary:hover {
+            transform: scale(1.03);
+            filter: brightness(1.08);
+        }
+
+        /* Empty State */
+        .empty-shelf-notice {
+            background: #fff;
+            border: 2px dashed #cbd5e1;
+            border-radius: 20px;
+            padding: 40px 20px;
+            text-align: center;
+            grid-column: 1 / -1;
+            margin: 10px 0;
+        }
+
+        .empty-shelf-notice i {
+            font-size: 44px;
+            color: #94a3b8;
+            margin-bottom: 12px;
+        }
+
+        .empty-shelf-notice h4 {
+            font-size: 18px;
+            color: #334155;
+            margin: 0 0 6px 0;
+        }
+
+        .empty-shelf-notice p {
+            color: #64748b;
+            font-size: 14px;
+            margin: 0 0 15px 0;
+        }
+
+        .btn-browse-catalog {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            background: linear-gradient(135deg, #12b8c5, #1e3c72);
+            color: #fff !important;
+            padding: 10px 22px;
+            border-radius: 12px;
+            text-decoration: none;
+            font-weight: 700;
+            font-size: 14px;
+            box-shadow: 0 4px 12px rgba(18, 184, 197, 0.25);
+        }
+
+        /* Mobile Version Polish */
+        @media (max-width: 768px) {
+            .my-sub-navbar {
+                padding: 10px 14px;
+            }
+
+            .my-sub-logo img {
+                width: 38px;
+                height: 38px;
+            }
+
+            .my-sub-logo-title {
+                font-size: 16px;
+            }
+
+            .my-sub-logo-sub {
+                display: none;
+            }
+
+            .btn-nav-dashboard {
+                padding: 7px 12px;
+                font-size: 13px;
+            }
+
+            .my-sub-hero {
+                padding: 35px 15px 65px;
+            }
+
+            .sub-status-card {
+                flex-direction: column;
+                align-items: stretch;
+                text-align: center;
+                padding: 16px;
+                gap: 14px;
+            }
+
+            .sub-status-left {
+                flex-direction: column;
+                text-align: center;
+            }
+
+            .sub-status-right {
+                align-items: center;
+                width: 100%;
+            }
+
+            .sub-pill {
+                width: 100%;
+                justify-content: center;
+            }
+
+            .btn-renew-whatsapp {
+                width: 100%;
+                justify-content: center;
+                padding: 10px;
+            }
+
+            .content-filter-bar {
+                flex-direction: column;
+                align-items: stretch;
+                padding: 12px;
+                gap: 10px;
+            }
+
+            .cat-tabs {
+                width: 100%;
+                display: grid;
+                grid-template-columns: 1fr 1fr;
+                gap: 6px;
+            }
+
+            .cat-tab {
+                justify-content: center;
+                padding: 9px 8px;
+                font-size: 13px;
+            }
+
+            .search-inside-box {
+                width: 100%;
+            }
+
+            .courses-grid,
+            .books-grid {
+                grid-template-columns: 1fr;
+                gap: 18px;
+            }
+
+            .shelf-header h2 {
+                font-size: 18px !important;
+            }
         }
     </style>
 </head>
 
 <body>
-    <header class="navbar"
-        style="background:rgba(255,255,255,0.95); backdrop-filter:blur(15px); border-bottom:1px solid #f1f1f1; position:sticky; top:0; z-index:1000; box-shadow:0 10px 30px rgba(0,0,0,0.05); padding:15px 5%;">
-        <div class="nav-container">
-            <a href="index.html" class="logo text-dark"
-                style="display:flex; align-items:center; gap:10px; text-decoration:none;">
-                <img src="img_logo.jpg" alt="Logo"
-                    style="width: 50px; height: 50px; border-radius: 50%; object-fit:cover;">
-                <div class="logo-text" style="display:flex; flex-direction:column; line-height:1;">
-                    <span class="ar" style="font-size:28px; font-weight:900; color:var(--primary-color);">منصة محمد حسني التعلمية</span>
+    <!-- Top Bar -->
+    <header class="my-sub-navbar">
+        <div class="my-sub-nav-container">
+            <a href="index.html" class="my-sub-logo">
+                <img src="img_logo.jpg" alt="Logo">
+                <div>
+                    <div class="my-sub-logo-title">منصة محمد حسني التعلمية</div>
+                    <div class="my-sub-logo-sub">المكتبة الرقمية والمحتوى المسجل</div>
                 </div>
             </a>
-            <!-- nav-actions removed per request -->
+            <div class="nav-actions-group">
+                <a href="dashboard.html" class="btn-nav-dashboard">
+                    <i class="fas fa-th-large"></i>
+                    <span>لوحة التحكم</span>
+                </a>
+            </div>
         </div>
     </header>
 
-    <section class="explore-hero">
-        <div class="hero-text">
-            <h1 id="hero-main-title"><i class="fas fa-book-reader"></i> مكتبتي الخاصة</h1>
-            <p>المحتوى الذي اشتركت به وتنتظر تفعيله أو مفعل لك</p>
+    <!-- Hero with Status Banner -->
+    <section class="my-sub-hero">
+        <div class="my-sub-hero-content">
+            <h1><i class="fas fa-book-reader"></i> مكتبتي واشتراكاتي الخاصة</h1>
+            <p>جميع الكورسات والكتب والمذكرات المفعلة والمتاحة على حسابك الدراسي</p>
+
+            <!-- Student Subscription Status Card -->
+            <div class="sub-status-card" id="student-sub-card">
+                <div class="sub-status-left">
+                    <div class="student-avatar" id="hero-avatar">ط</div>
+                    <div class="student-details">
+                        <h3 id="hero-student-name">طالب مسجل</h3>
+                        <span>كود الطالب: <strong id="hero-student-code">----</strong> &bull; <span id="hero-student-grade">الصف الدراسي</span></span>
+                    </div>
+                </div>
+                <div class="sub-status-right">
+                    <div class="sub-pill active" id="hero-sub-pill">
+                        <i class="fas fa-check-circle"></i>
+                        <span id="hero-sub-text">جاري فحص الاشتراك...</span>
+                    </div>
+                    <a href="#" id="hero-renew-btn" style="display:none;" class="btn-renew-whatsapp" target="_blank">
+                        <i class="fab fa-whatsapp"></i> تجديد الاشتراك الشهري
+                    </a>
+                </div>
+            </div>
         </div>
-        <div class="explore-wave">
+
+        <div class="my-sub-wave">
             <svg viewBox="0 0 1440 320" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
-                <path fill="#ffffff" fill-opacity="1"
+                <path fill="#f8fafc" fill-opacity="1"
                     d="M0,224L60,208C120,192,240,160,360,160C480,160,600,192,720,202.7C840,213,960,203,1080,176C1200,149,1320,107,1380,85.3L1440,64L1440,320L1380,320C1320,320,1200,320,1080,320C960,320,840,320,720,320C600,320,480,320,360,320C240,320,120,320,60,320L0,320Z">
                 </path>
             </svg>
         </div>
     </section>
 
-    <div class="content-area">
-        <div class="courses-section">
-            <h2 class="section-title">الكورسات المشترك بها</h2>
+    <!-- Main Content Area -->
+    <main class="my-sub-main">
+        <!-- Filter Toolbar -->
+        <div class="content-filter-bar">
+            <div class="cat-tabs">
+                <button type="button" class="cat-tab active" data-cat="all" onclick="window.filterMyContent('all', this)">
+                    <i class="fas fa-layer-group"></i> الكل
+                </button>
+                <button type="button" class="cat-tab" data-cat="course" onclick="window.filterMyContent('course', this)">
+                    <i class="fas fa-video"></i> الكورسات
+                </button>
+                <button type="button" class="cat-tab" data-cat="book" onclick="window.filterMyContent('book', this)">
+                    <i class="fas fa-book"></i> المذكرات والكتب
+                </button>
+                <button type="button" class="cat-tab" data-cat="game" onclick="window.filterMyContent('game', this)">
+                    <i class="fas fa-gamepad"></i> الألعاب والتطبيقات
+                </button>
+            </div>
+            <div class="search-inside-box">
+                <i class="fas fa-search"></i>
+                <input type="text" id="my-subs-search" oninput="window.searchMyContent()" placeholder="🔍 ابحث في مكتبتك...">
+            </div>
+        </div>
+
+        <!-- Courses Section -->
+        <div class="shelf-wrapper" id="section-courses">
+            <div class="shelf-header">
+                <h2><i class="fas fa-video" style="color:#e11d48;"></i> الكورسات المشترك بها</h2>
+                <span class="shelf-count" id="count-courses">0 كورس</span>
+            </div>
             <div class="courses-grid" id="courses-grid">
                 <!-- Injected via JS -->
             </div>
         </div>
-        <div class="books-section mt-50">
-            <h2 class="section-title">المذكرات و الكتب المطبوعة</h2>
+
+        <!-- Books Section -->
+        <div class="shelf-wrapper" id="section-books">
+            <div class="shelf-header">
+                <h2><i class="fas fa-book-open" style="color:#2563eb;"></i> المذكرات والكتب المطبوعة</h2>
+                <span class="shelf-count" id="count-books">0 كتاب</span>
+            </div>
             <div class="books-grid" id="books-grid">
                 <!-- Injected via JS -->
             </div>
         </div>
-        <div class="games-section mt-50">
-            <h2 class="section-title">الألعاب والاختبارات الإلكترونية (HTML)</h2>
+
+        <!-- Games Section -->
+        <div class="shelf-wrapper" id="section-games">
+            <div class="shelf-header">
+                <h2><i class="fas fa-gamepad" style="color:#9333ea;"></i> الألعاب والاختبارات التفاعلية (HTML)</h2>
+                <span class="shelf-count" id="count-games">0 لعبة</span>
+            </div>
             <div class="courses-grid" id="games-grid">
                 <!-- Injected via JS -->
             </div>
         </div>
-    </div>
+    </main>
 
-    <!-- Firebase SDKs -->
+    <!-- Firebase SDKs & Logic -->
     <script type="module" src="firebase-init.js"></script>
     <script type="module" src="firebase-data.js"></script>
-    <script src="script.js?v=5"></script>
+    <script src="script.js?v=10"></script>
 </body>
 
 </html>

@@ -3,8 +3,8 @@
 
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=800">
-    <title>لوحة الإدارة - Spedia</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>لوحة الإدارة - منصة محمد حسني التعلمية</title>
     <link rel="stylesheet" href="style.css?v=9">
     <link
         href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;700;900&family=IBM+Plex+Sans+Arabic:wght@400;700&family=Tajawal:wght@400;500;700;800;900&display=swap"
@@ -151,12 +151,416 @@
         .admin-title i {
             color: #12b8c5;
         }
+
+        /* Responsive Container & Navigation */
+        .admin-container {
+            padding: clamp(15px, 3vw, 35px) !important;
+            max-width: 1200px !important;
+            margin: 20px auto !important;
+            background: #fff;
+            border-radius: 20px !important;
+            box-shadow: 0 10px 35px rgba(0,0,0,0.08) !important;
+        }
+
+        /* KPI Cards */
+        .sub-kpi-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+            gap: 15px;
+            margin: 20px 0;
+        }
+        .sub-kpi-card {
+            background: #f8fafc;
+            border: 1px solid #e2e8f0;
+            border-radius: 14px;
+            padding: 16px;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            transition: 0.3s;
+        }
+        .sub-kpi-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 15px rgba(0,0,0,0.05);
+        }
+        .kpi-icon {
+            width: 48px;
+            height: 48px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 22px;
+            flex-shrink: 0;
+        }
+        .kpi-total .kpi-icon { background: #e0f2fe; color: #0284c7; }
+        .kpi-active .kpi-icon { background: #dcfce7; color: #16a34a; }
+        .kpi-warning .kpi-icon { background: #fef3c7; color: #d97706; }
+        .kpi-expired .kpi-icon { background: #fee2e2; color: #dc2626; }
+        .kpi-num {
+            display: block;
+            font-size: 24px;
+            font-weight: 900;
+            color: #0f172a;
+            line-height: 1.1;
+        }
+        .kpi-label {
+            font-size: 13px;
+            font-weight: 700;
+            color: #64748b;
+        }
+
+        /* Users Section Header & Toolbar */
+        .users-section-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 15px;
+            margin-bottom: 15px;
+            padding-bottom: 15px;
+            border-bottom: 2px solid #f1f5f9;
+        }
+        .header-action-btns {
+            display: flex;
+            gap: 10px;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+        .btn-batch-renew {
+            background: linear-gradient(135deg, #10b981, #059669);
+            color: #fff !important;
+            border: none;
+            padding: 12px 20px;
+            border-radius: 12px;
+            font-weight: 800;
+            font-size: 14px;
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            box-shadow: 0 4px 12px rgba(16, 185, 129, 0.3);
+            transition: 0.3s;
+        }
+        .btn-batch-renew:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 16px rgba(16, 185, 129, 0.4);
+        }
+        .btn-refresh {
+            background: #f1f5f9;
+            color: #334155 !important;
+            border: 1px solid #e2e8f0;
+            padding: 12px 18px;
+            border-radius: 12px;
+            font-weight: 700;
+            font-size: 14px;
+            cursor: pointer;
+            transition: 0.2s;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+        }
+        .btn-refresh:hover {
+            background: #e2e8f0;
+        }
+        .sub-toolbar {
+            display: flex;
+            gap: 15px;
+            flex-wrap: wrap;
+            margin-bottom: 20px;
+            align-items: center;
+            justify-content: space-between;
+        }
+        .search-box {
+            position: relative;
+            flex: 1;
+            min-width: 260px;
+        }
+        .search-box i {
+            position: absolute;
+            right: 15px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #94a3b8;
+        }
+        .search-box input {
+            width: 100%;
+            padding: 12px 42px 12px 15px;
+            border: 2px solid #e2e8f0;
+            border-radius: 12px;
+            font-family: 'Tajawal', sans-serif;
+            font-size: 14px;
+            background: #fff;
+            transition: 0.3s;
+            box-sizing: border-box;
+        }
+        .search-box input:focus {
+            border-color: #12b8c5;
+            outline: none;
+            box-shadow: 0 0 0 3px rgba(18, 184, 197, 0.15);
+        }
+        .filter-chips {
+            display: flex;
+            gap: 8px;
+            flex-wrap: wrap;
+        }
+        .filter-chip {
+            padding: 8px 16px;
+            border-radius: 20px;
+            border: 1px solid #cbd5e1;
+            background: #fff;
+            color: #475569;
+            font-size: 13px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: 0.2s;
+        }
+        .filter-chip:hover {
+            border-color: #12b8c5;
+            color: #12b8c5;
+        }
+        .filter-chip.active {
+            background: linear-gradient(135deg, #12b8c5, #1e3c72);
+            color: #fff !important;
+            border-color: transparent;
+        }
+
+        /* Status Badges */
+        .sub-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            padding: 6px 12px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 800;
+            white-space: nowrap;
+        }
+        .sub-badge.active {
+            background: #dcfce7;
+            color: #15803d !important;
+            border: 1px solid #86efac;
+        }
+        .sub-badge.warning {
+            background: #fef3c7;
+            color: #b45309 !important;
+            border: 1px solid #fde68a;
+        }
+        .sub-badge.expired {
+            background: #fee2e2;
+            color: #b91c1c !important;
+            border: 1px solid #fca5a5;
+        }
+
+        /* Action Buttons */
+        .btn-renew {
+            background: linear-gradient(135deg, #10b981, #047857);
+            color: #fff !important;
+            border: none;
+            padding: 8px 14px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 800;
+            font-size: 13px;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            transition: 0.2s;
+        }
+        .btn-renew:hover {
+            transform: scale(1.04);
+            box-shadow: 0 4px 10px rgba(16, 185, 129, 0.3);
+        }
+        .btn-custom-renew {
+            background: #f1f5f9;
+            color: #475569 !important;
+            border: 1px solid #cbd5e1;
+            padding: 8px 10px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 13px;
+        }
+        .btn-wa-student {
+            background: #25D366;
+            color: #fff !important;
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            text-decoration: none;
+            font-size: 16px;
+            transition: 0.2s;
+        }
+        .btn-wa-student:hover {
+            transform: scale(1.15);
+        }
+        .btn-delete-student {
+            background: #fee2e2;
+            color: #dc2626 !important;
+            border: 1px solid #fecaca;
+            padding: 8px 12px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 700;
+            font-size: 12px;
+            transition: 0.2s;
+        }
+        .btn-delete-student:hover {
+            background: #dc2626;
+            color: #fff !important;
+        }
+
+        /* Mobile Cards Layout */
+        .mobile-users-grid {
+            display: none;
+        }
+        .mobile-user-card {
+            background: #fff;
+            border: 1px solid #e2e8f0;
+            border-radius: 16px;
+            padding: 16px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.03);
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+        .mobile-card-top {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            gap: 10px;
+        }
+        .mobile-card-user {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+        .mobile-card-avatar {
+            width: 44px;
+            height: 44px;
+            border-radius: 12px;
+            background: linear-gradient(135deg, #12b8c5, #1e3c72);
+            color: #fff;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 900;
+            font-size: 16px;
+            flex-shrink: 0;
+        }
+        .mobile-card-details h4 {
+            margin: 0 0 2px 0;
+            font-size: 16px;
+            color: #0f172a;
+        }
+        .mobile-card-details span {
+            font-size: 13px;
+            color: #64748b;
+        }
+        .mobile-card-info-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 8px;
+            background: #f8fafc;
+            padding: 10px 12px;
+            border-radius: 10px;
+            font-size: 12px;
+        }
+        .mobile-card-info-item strong {
+            display: block;
+            color: #64748b;
+            margin-bottom: 2px;
+            font-size: 11px;
+        }
+        .mobile-card-actions {
+            display: flex;
+            gap: 8px;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+        .mobile-card-actions .btn-renew {
+            flex: 1;
+            justify-content: center;
+            padding: 12px;
+            font-size: 14px;
+        }
+
+        /* Mobile Breakpoints */
+        @media (max-width: 768px) {
+            .admin-container {
+                padding: 15px !important;
+                margin: 10px auto !important;
+                border-radius: 14px !important;
+            }
+            .admin-nav {
+                display: grid !important;
+                grid-template-columns: 1fr 1fr !important;
+                gap: 8px !important;
+                padding: 10px !important;
+            }
+            .admin-nav button {
+                font-size: 13px !important;
+                padding: 10px 8px !important;
+                text-align: center !important;
+            }
+            .table-responsive-wrapper {
+                display: none !important;
+            }
+            .mobile-users-grid {
+                display: flex !important;
+                flex-direction: column !important;
+                gap: 15px !important;
+            }
+            .users-section-header {
+                flex-direction: column !important;
+                align-items: stretch !important;
+                gap: 12px !important;
+            }
+            .header-action-btns {
+                width: 100% !important;
+                flex-direction: column !important;
+            }
+            .btn-batch-renew {
+                width: 100% !important;
+                justify-content: center !important;
+            }
+            .btn-refresh {
+                width: 100% !important;
+                justify-content: center !important;
+            }
+            .sub-kpi-grid {
+                grid-template-columns: 1fr 1fr !important;
+                gap: 10px !important;
+            }
+            .sub-toolbar {
+                flex-direction: column !important;
+                align-items: stretch !important;
+            }
+            .search-box {
+                width: 100% !important;
+            }
+            .filter-chips {
+                width: 100% !important;
+                overflow-x: auto;
+                padding-bottom: 5px;
+            }
+        }
+
+        @media (min-width: 769px) {
+            .mobile-users-grid {
+                display: none !important;
+            }
+            .table-responsive-wrapper {
+                display: block !important;
+                overflow-x: auto;
+            }
+        }
     </style>
 </head>
 
 <body class="dashboard-body" style="background:#f0f4f8;">
-    <div class="container"
-        style="padding:30px; max-width:900px; margin:40px auto; background:#fff; border-radius:15px; box-shadow:0 10px 30px rgba(0,0,0,0.08);">
+    <div class="container admin-container">
         <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:30px;">
             <h1
                 style="color:var(--primary-color); font-weight:900; font-size:24px; display:flex; align-items:center; gap:10px;">
@@ -376,10 +780,79 @@
         </div>
 
         <div id="tab-users" class="admin-section">
-            <h2>الطلاب المسجلين</h2>
-            <div style="overflow-x:auto;">
+            <div class="users-section-header">
+                <div>
+                    <h2 style="margin:0 0 5px 0; color:#121e33; display:flex; align-items:center; gap:10px;">
+                        <i class="fas fa-user-graduate" style="color:var(--primary-color);"></i>
+                        إدارة الطلاب والاشتراكات الشهرية
+                    </h2>
+                    <p style="color:#6a7c92; margin:0; font-size:14px; font-weight:600;">
+                        متابعة وتجديد وإعادة ضبط صلاحية الاشتراك الشهري (30 يوماً) لجميع الطلاب بسهولة
+                    </p>
+                </div>
+                <div class="header-action-btns">
+                    <button type="button" onclick="window.renewAllStudents()" class="btn-batch-renew" title="إعادة ضبط اشتراك كل الطلاب لشهر جديد">
+                        <i class="fas fa-calendar-check"></i> إعادة ضبط الجميع لشهر جديد
+                    </button>
+                    <button type="button" onclick="window.renderTables()" class="btn-refresh" title="تحديث من السيرفر">
+                        <i class="fas fa-sync-alt"></i> تحديث
+                    </button>
+                </div>
+            </div>
+
+            <!-- Summary KPI Cards -->
+            <div class="sub-kpi-grid">
+                <div class="sub-kpi-card kpi-total">
+                    <div class="kpi-icon"><i class="fas fa-users"></i></div>
+                    <div class="kpi-info">
+                        <span class="kpi-num" id="kpi-total-students">0</span>
+                        <span class="kpi-label">إجمالي الطلاب</span>
+                    </div>
+                </div>
+                <div class="sub-kpi-card kpi-active">
+                    <div class="kpi-icon"><i class="fas fa-check-circle"></i></div>
+                    <div class="kpi-info">
+                        <span class="kpi-num" id="kpi-active-subs">0</span>
+                        <span class="kpi-label">اشتراكات نشطة</span>
+                    </div>
+                </div>
+                <div class="sub-kpi-card kpi-warning">
+                    <div class="kpi-icon"><i class="fas fa-hourglass-half"></i></div>
+                    <div class="kpi-info">
+                        <span class="kpi-num" id="kpi-warning-subs">0</span>
+                        <span class="kpi-label">شارفت على الانتهاء</span>
+                    </div>
+                </div>
+                <div class="sub-kpi-card kpi-expired">
+                    <div class="kpi-icon"><i class="fas fa-user-times"></i></div>
+                    <div class="kpi-info">
+                        <span class="kpi-num" id="kpi-expired-subs">0</span>
+                        <span class="kpi-label">اشتراكات منتهية</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Filter & Search Toolbar -->
+            <div class="sub-toolbar">
+                <div class="search-box">
+                    <i class="fas fa-search"></i>
+                    <input type="text" id="student-search-input" oninput="window.filterStudentsTable()" placeholder="ابحث بالاسم، الكود، الهاتف، أو الصف...">
+                </div>
+                <div class="filter-chips">
+                    <button type="button" class="filter-chip active" data-filter="all" onclick="window.setStudentFilter('all', this)">الكل</button>
+                    <button type="button" class="filter-chip" data-filter="active" onclick="window.setStudentFilter('active', this)">النشطين فقط</button>
+                    <button type="button" class="filter-chip" data-filter="warning" onclick="window.setStudentFilter('warning', this)">قارب على الانتهاء</button>
+                    <button type="button" class="filter-chip" data-filter="expired" onclick="window.setStudentFilter('expired', this)">المنتهية فقط</button>
+                </div>
+            </div>
+
+            <!-- Desktop View: Responsive Table -->
+            <div class="table-responsive-wrapper">
                 <table id="table-users"></table>
             </div>
+
+            <!-- Mobile View: Modern Cards (shown automatically on mobile) -->
+            <div id="mobile-users-cards" class="mobile-users-grid"></div>
         </div>
 
         <div id="tab-attendance" class="admin-section">
@@ -866,7 +1339,15 @@
                         }
                     } catch (e) { }
                 }
-                try { users = await Promise.race([window.fsData.getAllUsers(), new Promise((_,_r) => setTimeout(()=>_r(new Error('timeout')), 1500))]); } catch(e) { users = JSON.parse(localStorage.getItem('spedia_users') || '[]'); }
+                try { 
+                    let fbUsers = await Promise.race([window.fsData.getAllUsers(), new Promise((_,_r) => setTimeout(()=>_r(new Error('timeout')), 1500))]); 
+                    if (fbUsers && fbUsers.length > 0) {
+                        users = fbUsers;
+                        localStorage.setItem('spedia_users', JSON.stringify(users));
+                    } else {
+                        users = JSON.parse(localStorage.getItem('spedia_users') || '[]');
+                    }
+                } catch(e) { users = JSON.parse(localStorage.getItem('spedia_users') || '[]'); }
                 try { att = await Promise.race([window.fsData.getAttendance(), new Promise((_,_r) => setTimeout(()=>_r(new Error('timeout')), 1500))]); } catch(e) { att = JSON.parse(localStorage.getItem('spedia_attendance') || '[]'); }
                 if (window.fsData.getAllSubscriptionCodes) {
                     try { subCodes = await Promise.race([window.fsData.getAllSubscriptionCodes(), new Promise((_,_r) => setTimeout(()=>_r(new Error('timeout')), 1500))]); } catch(e) { subCodes = JSON.parse(localStorage.getItem('spedia_sub_codes') || '[]'); }
@@ -906,16 +1387,9 @@
                 }).join('');
             }
 
-            const tUsers = document.getElementById('table-users');
-            if (tUsers) {
-                let ths = `<th>الكود</th><th>الاسم</th><th>الهاتف</th><th>الصف</th>`;
-                if (adminType === 'full') ths += `<th>تجديد الاشتراك</th><th>حذف</th>`;
-                tUsers.innerHTML = `<tr>${ths}</tr>` + users.map(u => {
-                    let tr = `<td>${u.code}</td><td>${u.name}</td><td>${adminType === 'restricted' ? '********' : u.phone}</td><td>${u.grade}</td>`;
-                    if (adminType === 'full') tr += `<td><button onclick="window.renewStudent('${u.code}')" style="background:#4caf50; color:#fff; border:none; padding:5px 10px; border-radius:5px; cursor:pointer;">تجديد</button></td><td><button onclick="window.deleteItemGeneric('users', '${u.fsId || u.code}', 'spedia_users', 'code')" style="background:#f44336; color:#fff; border:none; padding:5px 10px; border-radius:5px; cursor:pointer;">حذف</button></td>`;
-                    return `<tr>${tr}</tr>`;
-                }).join('');
-            }
+            window.allLoadedStudents = users;
+            if (window.updateStudentKpis) window.updateStudentKpis(users);
+            if (window.filterStudentsTable) window.filterStudentsTable();
 
             const tAtt = document.getElementById('table-attendance');
             if (tAtt) {
@@ -1078,25 +1552,305 @@
             }
         }
 
-        window.renewStudent = async function(code) {
-            if (!confirm('هل تريد تجديد اشتراك الطالب لـ 30 يوماً إضافية؟')) return;
+        window.allLoadedStudents = [];
+        window.currentStudentFilter = 'all';
+
+        window.updateStudentKpis = function(users) {
+            let total = users.length;
+            let active = 0, warning = 0, expired = 0;
+            users.forEach(u => {
+                let regTime = u.registrationDate || 0;
+                let daysPassed = regTime ? (Date.now() - regTime) / (1000 * 60 * 60 * 24) : 999;
+                let remaining = Math.max(0, 30 - Math.floor(daysPassed));
+                if (daysPassed > 30) {
+                    expired++;
+                } else if (remaining <= 5) {
+                    warning++;
+                    active++;
+                } else {
+                    active++;
+                }
+            });
+            const kTotal = document.getElementById('kpi-total-students');
+            const kActive = document.getElementById('kpi-active-subs');
+            const kWarning = document.getElementById('kpi-warning-subs');
+            const kExpired = document.getElementById('kpi-expired-subs');
+            if (kTotal) kTotal.innerText = total;
+            if (kActive) kActive.innerText = active;
+            if (kWarning) kWarning.innerText = warning;
+            if (kExpired) kExpired.innerText = expired;
+        };
+
+        window.setStudentFilter = function(filter, btn) {
+            window.currentStudentFilter = filter;
+            document.querySelectorAll('.filter-chip').forEach(b => b.classList.remove('active'));
+            if (btn) btn.classList.add('active');
+            window.filterStudentsTable();
+        };
+
+        window.filterStudentsTable = function() {
+            let q = (document.getElementById('student-search-input')?.value || '').trim().toLowerCase();
+            let filter = window.currentStudentFilter || 'all';
+            let students = window.allLoadedStudents || [];
+
+            let filtered = students.filter(u => {
+                let matchQ = !q || (
+                    (u.name && u.name.toLowerCase().includes(q)) ||
+                    (u.code && String(u.code).toLowerCase().includes(q)) ||
+                    (u.phone && String(u.phone).includes(q)) ||
+                    (u.grade && u.grade.toLowerCase().includes(q))
+                );
+                if (!matchQ) return false;
+
+                let regTime = u.registrationDate || 0;
+                let daysPassed = regTime ? (Date.now() - regTime) / (1000 * 60 * 60 * 24) : 999;
+                let remaining = Math.max(0, 30 - Math.floor(daysPassed));
+                let isExpired = daysPassed > 30;
+                let isNearExpiry = !isExpired && remaining <= 5;
+
+                if (filter === 'active') return !isExpired;
+                if (filter === 'warning') return isNearExpiry;
+                if (filter === 'expired') return isExpired;
+                return true;
+            });
+
+            window.displayStudents(filtered);
+        };
+
+        window.displayStudents = function(students) {
+            const tUsers = document.getElementById('table-users');
+            const mCards = document.getElementById('mobile-users-cards');
+            let adminType = sessionStorage.getItem('adminType');
+
+            if (!students || students.length === 0) {
+                if (tUsers) tUsers.innerHTML = `<tr><td colspan="7" style="text-align:center; padding:30px; color:#888; font-weight:700;">لا يوجد طلاب مطابقين للبحث أو الفلتر المحدد.</td></tr>`;
+                if (mCards) mCards.innerHTML = `<div style="text-align:center; padding:30px; color:#888; font-weight:700;">لا يوجد طلاب مطابقين.</div>`;
+                return;
+            }
+
+            // Desktop Table
+            if (tUsers) {
+                let ths = `<th>الكود</th><th>الطالب والصف</th><th>الهاتف والتواصل</th><th>تاريخ الاشتراك</th><th>تاريخ الانتهاء</th><th>الحالة والمتبقي</th><th>إعادة ضبط الاشتراك</th>`;
+                if (adminType === 'full') ths += `<th>حذف</th>`;
+
+                tUsers.innerHTML = `<tr>${ths}</tr>` + students.map(u => {
+                    let regTime = u.registrationDate || 0;
+                    let daysPassed = regTime ? (Date.now() - regTime) / (1000 * 60 * 60 * 24) : 999;
+                    let remaining = Math.max(0, 30 - Math.floor(daysPassed));
+                    let isExpired = daysPassed > 30;
+                    let isNearExpiry = !isExpired && remaining <= 5;
+
+                    let startDateStr = regTime ? new Date(regTime).toLocaleDateString('ar-EG') : 'غير مسجل';
+                    let expiryDateStr = regTime ? new Date(regTime + (30 * 24 * 60 * 60 * 1000)).toLocaleDateString('ar-EG') : 'منتهي';
+
+                    let badgeHtml = '';
+                    if (isExpired) {
+                        badgeHtml = `<span class="sub-badge expired"><i class="fas fa-times-circle"></i> منتهي الصلاحية</span>`;
+                    } else if (isNearExpiry) {
+                        badgeHtml = `<span class="sub-badge warning"><i class="fas fa-exclamation-triangle"></i> ينتهي قريباً (${remaining} يوم)</span>`;
+                    } else {
+                        badgeHtml = `<span class="sub-badge active"><i class="fas fa-check-circle"></i> نشط (${remaining} يوم)</span>`;
+                    }
+
+                    let cleanPhone = (u.phone || '').replace(/[^0-9]/g, '');
+                    let phoneCell = adminType === 'restricted' ? '********' : `
+                        <div style="display:flex; align-items:center; gap:8px;">
+                            <span>${u.phone || '-'}</span>
+                            ${cleanPhone ? `<a href="https://wa.me/${cleanPhone}?text=${encodeURIComponent('أهلاً بك ' + u.name + '، تذكير بخصوص اشتراكك الشهري في منصة محمد حسني التعلمية.')}" target="_blank" class="btn-wa-student" title="مراسلة واتساب"><i class="fab fa-whatsapp"></i></a>` : ''}
+                        </div>
+                    `;
+
+                    let actionsTd = `
+                        <div style="display:flex; gap:6px; align-items:center;">
+                            <button onclick="window.renewStudent('${u.code}')" class="btn-renew" title="إعادة ضبط لـ 30 يوماً من الآن">
+                                <i class="fas fa-sync-alt"></i> تجديد (30 يوم)
+                            </button>
+                            <button onclick="window.customRenewPrompt('${u.code}')" class="btn-custom-renew" title="تمديد مخصص">
+                                <i class="fas fa-ellipsis-v"></i>
+                            </button>
+                        </div>
+                    `;
+
+                    let tr = `
+                        <td><strong style="color:var(--primary-color); font-size:16px;">${u.code}</strong></td>
+                        <td>
+                            <div style="font-weight:800; color:#0f172a;">${u.name}</div>
+                            <div style="font-size:12px; color:#64748b;">${u.grade || 'غير محدد'}</div>
+                        </td>
+                        <td>${phoneCell}</td>
+                        <td style="font-size:13px; color:#475569;">${startDateStr}</td>
+                        <td style="font-size:13px; color:#475569;">${expiryDateStr}</td>
+                        <td>${badgeHtml}</td>
+                        <td>${actionsTd}</td>
+                    `;
+                    if (adminType === 'full') {
+                        tr += `<td><button onclick="window.deleteItemGeneric('users', '${u.fsId || u.code}', 'spedia_users', 'code')" class="btn-delete-student" title="حذف الطالب"><i class="fas fa-trash"></i></button></td>`;
+                    }
+                    return `<tr>${tr}</tr>`;
+                }).join('');
+            }
+
+            // Mobile Cards View
+            if (mCards) {
+                mCards.innerHTML = students.map(u => {
+                    let regTime = u.registrationDate || 0;
+                    let daysPassed = regTime ? (Date.now() - regTime) / (1000 * 60 * 60 * 24) : 999;
+                    let remaining = Math.max(0, 30 - Math.floor(daysPassed));
+                    let isExpired = daysPassed > 30;
+                    let isNearExpiry = !isExpired && remaining <= 5;
+
+                    let startDateStr = regTime ? new Date(regTime).toLocaleDateString('ar-EG') : 'غير مسجل';
+                    let expiryDateStr = regTime ? new Date(regTime + (30 * 24 * 60 * 60 * 1000)).toLocaleDateString('ar-EG') : 'منتهي';
+
+                    let badgeHtml = '';
+                    if (isExpired) {
+                        badgeHtml = `<span class="sub-badge expired"><i class="fas fa-times-circle"></i> منتهي الصلاحية</span>`;
+                    } else if (isNearExpiry) {
+                        badgeHtml = `<span class="sub-badge warning"><i class="fas fa-exclamation-triangle"></i> متبقي ${remaining} يوم</span>`;
+                    } else {
+                        badgeHtml = `<span class="sub-badge active"><i class="fas fa-check-circle"></i> متبقي ${remaining} يوم</span>`;
+                    }
+
+                    let cleanPhone = (u.phone || '').replace(/[^0-9]/g, '');
+
+                    return `
+                        <div class="mobile-user-card">
+                            <div class="mobile-card-top">
+                                <div class="mobile-card-user">
+                                    <div class="mobile-card-avatar">${(u.name || 'ط').substring(0, 2)}</div>
+                                    <div class="mobile-card-details">
+                                        <h4>${u.name}</h4>
+                                        <span>كود: <strong>${u.code}</strong> &bull; ${u.grade || ''}</span>
+                                    </div>
+                                </div>
+                                <div>${badgeHtml}</div>
+                            </div>
+                            <div class="mobile-card-info-row">
+                                <div class="mobile-card-info-item">
+                                    <strong>تاريخ الاشتراك:</strong>
+                                    <span>${startDateStr}</span>
+                                </div>
+                                <div class="mobile-card-info-item">
+                                    <strong>تاريخ الانتهاء:</strong>
+                                    <span>${expiryDateStr}</span>
+                                </div>
+                            </div>
+                            <div class="mobile-card-actions">
+                                <button onclick="window.renewStudent('${u.code}')" class="btn-renew">
+                                    <i class="fas fa-sync-alt"></i> تجديد الاشتراك (30 يوم)
+                                </button>
+                                <button onclick="window.customRenewPrompt('${u.code}')" class="btn-custom-renew" title="تمديد مخصص">
+                                    <i class="fas fa-calendar-plus"></i>
+                                </button>
+                                ${cleanPhone && adminType !== 'restricted' ? `
+                                    <a href="https://wa.me/${cleanPhone}?text=${encodeURIComponent('أهلاً بك ' + u.name + '، تذكير بخصوص اشتراكك الشهري في منصة محمد حسني التعلمية.')}" target="_blank" class="btn-wa-student" title="واتساب">
+                                        <i class="fab fa-whatsapp"></i>
+                                    </a>
+                                ` : ''}
+                                ${adminType === 'full' ? `
+                                    <button onclick="window.deleteItemGeneric('users', '${u.fsId || u.code}', 'spedia_users', 'code')" class="btn-delete-student">
+                                        <i class="fas fa-trash"></i>
+                                    </button>
+                                ` : ''}
+                            </div>
+                        </div>
+                    `;
+                }).join('');
+            }
+        };
+
+        window.renewStudent = async function(code, daysToAdd = 30) {
+            let confirmMsg = daysToAdd === 30 
+                ? 'هل تريد تجديد / إعادة ضبط اشتراك الطالب لـ 30 يوماً إضافية من اليوم؟' 
+                : `هل تريد تمديد اشتراك الطالب لـ ${daysToAdd} يوماً؟`;
+            if (!confirm(confirmMsg)) return;
             
             let users = JSON.parse(localStorage.getItem('spedia_users') || '[]');
-            let userIndex = users.findIndex(u => u.code === code);
-            if (userIndex > -1) {
-                users[userIndex].registrationDate = Date.now();
-                localStorage.setItem('spedia_users', JSON.stringify(users));
-                
-                if (window.fsData && window.fsData.updateGeneric && users[userIndex].fsId) {
-                    try {
-                        await Promise.race([window.fsData.updateGeneric('users', users[userIndex].fsId, { registrationDate: Date.now() }), new Promise((_,_r) => setTimeout(()=>_r(new Error('timeout')), 1500))]);
-                    } catch (e) { console.warn(e); }
-                }
-                alert('تم التجديد بنجاح!');
-                renderTables();
-            } else {
-                alert('الطالب غير موجود.');
+            let userIndex = users.findIndex(u => String(u.code) === String(code));
+            
+            let userObj = userIndex > -1 ? users[userIndex] : null;
+            if (!userObj && window.fsData && window.fsData.getAllUsers) {
+                try {
+                    let fbUsers = await window.fsData.getAllUsers();
+                    userObj = fbUsers.find(u => String(u.code) === String(code));
+                    if (userObj) {
+                        users.push(userObj);
+                        userIndex = users.length - 1;
+                    }
+                } catch(e) {}
             }
+
+            if (!userObj) {
+                alert('عذراً، الطالب غير موجود في النظام.');
+                return;
+            }
+
+            let newDate = Date.now();
+            if (userObj.registrationDate && daysToAdd !== 30) {
+                let currentExpiry = userObj.registrationDate + (30 * 24 * 60 * 60 * 1000);
+                if (currentExpiry > Date.now()) {
+                    newDate = userObj.registrationDate + (daysToAdd * 24 * 60 * 60 * 1000);
+                }
+            }
+
+            userObj.registrationDate = newDate;
+            users[userIndex] = userObj;
+            localStorage.setItem('spedia_users', JSON.stringify(users));
+
+            let currUser = JSON.parse(localStorage.getItem('spedia_currentUser') || 'null');
+            if (currUser && String(currUser.code) === String(code)) {
+                currUser.registrationDate = newDate;
+                localStorage.setItem('spedia_currentUser', JSON.stringify(currUser));
+            }
+            
+            if (window.fsData) {
+                try {
+                    if (window.fsData.updateUser) {
+                        await window.fsData.updateUser(code, { registrationDate: newDate });
+                    } else if (window.fsData.updateGeneric) {
+                        await window.fsData.updateGeneric('users', userObj.fsId || code, { registrationDate: newDate }, 'code');
+                    }
+                } catch (e) {
+                    console.warn("Firebase update error:", e);
+                }
+            }
+            alert(`تم تجديد وإعادة ضبط اشتراك الطالب (${userObj.name}) بنجاح!`);
+            await renderTables();
+        };
+
+        window.customRenewPrompt = async function(code) {
+            let days = prompt('أدخل عدد الأيام التي تريد تمديد الاشتراك بها (مثال: 15, 30, 60, 90):', '30');
+            if (!days) return;
+            let d = parseInt(days);
+            if (isNaN(d) || d <= 0) return alert('الرجاء إدخال رقم صحيح للأيام.');
+            await window.renewStudent(code, d);
+        };
+
+        window.renewAllStudents = async function() {
+            let users = window.allLoadedStudents || JSON.parse(localStorage.getItem('spedia_users') || '[]');
+            if (!users || users.length === 0) {
+                alert('لا يوجد طلاب مسجلين لإعادة ضبط اشتراكاتهم.');
+                return;
+            }
+            if (!confirm(`هل أنت متأكد من إعادة ضبط اشتراك جميع الطلاب (${users.length} طالب) لشهر جديد (30 يوماً من اليوم)؟`)) return;
+
+            let now = Date.now();
+            users.forEach(u => u.registrationDate = now);
+            localStorage.setItem('spedia_users', JSON.stringify(users));
+
+            if (window.fsData) {
+                try {
+                    if (window.fsData.resetAllSubscriptions) {
+                        await window.fsData.resetAllSubscriptions(now);
+                    } else if (window.fsData.updateUser) {
+                        await Promise.all(users.map(u => window.fsData.updateUser(u.code, { registrationDate: now })));
+                    }
+                } catch(e) {
+                    console.warn("Firebase batch update error:", e);
+                }
+            }
+            alert(`تم بنجاح إعادة ضبط اشتراكات جميع الطلاب (${users.length} طالب) لشهر جديد!`);
+            await renderTables();
         };
 
         window.saveFees = function(e) {

@@ -1736,10 +1736,57 @@ p, h1, h2, h3, h4, h5, h6, label, table th, table td, li {
 span, a, div {
     color: #000000;
 }
-/* Exclude buttons and badges from global black text */
-.btn-primary, .btn-primary *, .btn-join, .badge, .live-badge, .ultra-btn, .ultra-btn *, .icon-box, .icon-box * {
+/* Exclude buttons, badges, heroes and status pills from global black text */
+.btn-primary, .btn-primary *, .btn-join, .badge, .live-badge, .ultra-btn, .ultra-btn *, .icon-box, .icon-box *,
+.my-sub-hero, .my-sub-hero *, .sub-status-card *, .sub-pill, .sub-pill *, .sub-badge, .sub-badge *, 
+.btn-renew, .btn-renew *, .btn-batch-renew, .btn-batch-renew *, .btn-nav-dashboard, .btn-nav-dashboard *,
+.btn-wa-student, .btn-wa-student *, .btn-renew-whatsapp, .btn-renew-whatsapp *, .mobile-card-avatar {
     color: #ffffff !important;
 }
 .btn-icon, .btn-icon i {
     color: var(--primary-color) !important;
+}
+
+/* Global Mobile Perfection */
+html, body {
+    max-width: 100vw;
+    overflow-x: hidden;
+}
+
+@media (max-width: 768px) {
+    /* Fluid headings */
+    h1 {
+        font-size: clamp(24px, 6vw, 36px) !important;
+    }
+    h2 {
+        font-size: clamp(20px, 5vw, 28px) !important;
+    }
+    p {
+        font-size: clamp(14px, 3.5vw, 16px) !important;
+    }
+
+    /* Container padding */
+    .container, .content-area, .dashboard-main {
+        padding-left: 12px !important;
+        padding-right: 12px !important;
+    }
+
+    /* Touch targets */
+    button, .btn-primary, .ultra-btn, a.btn-join {
+        min-height: 44px;
+    }
+
+    /* Prevent tables from breaking page width */
+    table {
+        display: block;
+        width: 100% !important;
+        overflow-x: auto;
+        -webkit-overflow-scrolling: touch;
+    }
+
+    /* Fix image zoom scaling */
+    img {
+        max-width: 100%;
+        height: auto;
+    }
 }
